@@ -1,0 +1,4 @@
+期间,国家,主体,供应商,费用类型,账单总额,币种,成本中心,部门,人数,人数占比(PCT),分摊金额,校验_行状态,备注
+202606,US,Tencent America LLC,Anthem,Medical Insurance,145411.03,USD,TA1001,HR,20,0.3846153846,55927.32,OK,
+202606,US,Tencent America LLC,Anthem,Medical Insurance,145411.03,USD,TA1002,Finance,18,0.3461538462,50334.59,OK,
+202606,US,Tencent America LLC,Anthem,Medical Insurance,145411.03,USD,TA1003,Tech,14,0.2692307692,39149.12,OK,

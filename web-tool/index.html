@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FPP 小工具（MVP）</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 24px; color: #111; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    button { padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px; background: #fff; cursor: pointer; }
+    button:hover { background: #f5f5f5; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-top: 14px; }
+    pre { white-space: pre-wrap; background: #fafafa; border: 1px solid #eee; padding: 10px; border-radius: 8px; }
+    .muted { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h2>FPP 按钮式小工具（MVP）</h2>
+  <p class="muted">默认后端：<code>http://127.0.0.1:18082</code>（可改）</p>
+
+  <div class="card">
+    <h3>后端连接</h3>
+    <div class="row">
+      <input id="apiBase" style="padding:10px;border:1px solid #ccc;border-radius:8px;min-width:360px;" />
+      <button onclick="saveApi()">保存地址</button>
+      <button onclick="checkHealth()">健康检查</button>
+    </div>
+    <pre id="health">未检查</pre>
+  </div>
+
+  <div class="row">
+    <button onclick="runAction('run_full_check')">总检查</button>
+    <button onclick="runAction('run_precheck')">目录预检</button>
+    <button onclick="runAction('generate_submission_blocks')">生成提单文本块</button>
+  </div>
+
+  <div class="card">
+    <h3>上传文件直接生成文档</h3>
+    <p class="muted">上传 CSV 后直接产出所需文档（适合操作者无代码使用）。</p>
+    <div class="row">
+      <input id="uploadFile" type="file" accept=".csv,text/csv" />
+      <button onclick="uploadAndGenerate('generate_submission_blocks')">上传并生成提单文本块</button>
+      <button onclick="uploadAndGenerate('hc_check_upload')">上传并生成HC校验报告</button>
+    </div>
+    <pre id="uploadResult">等待上传...</pre>
+    <div id="fileLinks" class="muted"></div>
+  </div>
+
+  <div class="card">
+    <h3>执行结果</h3>
+    <pre id="result">等待执行...</pre>
+  </div>
+
+  <div class="card">
+    <h3>最近任务</h3>
+    <button onclick="loadLatest()">刷新最近任务</button>
+    <pre id="latest">暂无数据</pre>
+  </div>
+
+  <script>
+    const API_KEY = "fpp_api_base";
+    let API = localStorage.getItem(API_KEY) || "http://127.0.0.1:18082";
+
+    function init() {
+      document.getElementById("apiBase").value = API;
+    }
+
+    function saveApi() {
+      const val = document.getElementById("apiBase").value.trim();
+      if (!val) return;
+      API = val;
+      localStorage.setItem(API_KEY, API);
+      document.getElementById("health").textContent = `已保存：${API}`;
+    }
+
+    async function checkHealth() {
+      const el = document.getElementById("health");
+      el.textContent = "检查中...";
+      try {
+        const res = await fetch(`${API}/api/health`);
+        const data = await res.json();
+        el.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        el.textContent = `连接失败: ${err}`;
+      }
+    }
+
+    async function runAction(action) {
+      const el = document.getElementById("result");
+      el.textContent = "执行中...";
+      try {
+        const res = await fetch(`${API}/api/run`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action,
+            root: "/Users/zhangwenjing/Desktop/工作提效"
+          })
+        });
+        const data = await res.json();
+        el.textContent = JSON.stringify(data, null, 2);
+        renderLinks(data);
+        await loadLatest();
+      } catch (err) {
+        el.textContent = `请求失败: ${err}`;
+      }
+    }
+
+    function renderLinks(data) {
+      const box = document.getElementById("fileLinks");
+      if (!data || !Array.isArray(data.outputs) || data.outputs.length === 0) {
+        box.innerHTML = "未返回文件路径。";
+        return;
+      }
+      const links = data.outputs.map(p => {
+        const url = `${API}/api/files?path=${encodeURIComponent(p)}`;
+        return `<li><a href="${url}" target="_blank">${p}</a></li>`;
+      }).join("");
+      box.innerHTML = `<ul>${links}</ul>`;
+    }
+
+    async function uploadAndGenerate(action) {
+      const fileInput = document.getElementById("uploadFile");
+      const el = document.getElementById("uploadResult");
+      if (!fileInput.files || fileInput.files.length === 0) {
+        el.textContent = "请先选择CSV文件。";
+        return;
+      }
+      const file = fileInput.files[0];
+      el.textContent = "上传处理中...";
+      try {
+        const formData = new FormData();
+        formData.append("action", action);
+        formData.append("root", "/Users/zhangwenjing/Desktop/工作提效");
+        formData.append("file", file);
+        const res = await fetch(`${API}/api/upload-and-generate`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        el.textContent = JSON.stringify(data, null, 2);
+        renderLinks(data);
+      } catch (err) {
+        el.textContent = `上传失败: ${err}`;
+      }
+    }
+
+    async function loadLatest() {
+      const el = document.getElementById("latest");
+      el.textContent = "加载中...";
+      try {
+        const res = await fetch(`${API}/api/jobs/latest`);
+        const data = await res.json();
+        el.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        el.textContent = `加载失败: ${err}`;
+      }
+    }
+  </script>
+  <script>
+    init();
+  </script>
+</body>
+</html>

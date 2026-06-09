@@ -1,0 +1,1945 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMER FPP + ai | US & CAN</title>
+  <style>
+    :root { --sp-8: 8px; --sp-12: 12px; --sp-16: 16px; --sp-24: 24px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: var(--sp-24); color: #111; background: #f6f8fb; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .card { border: 1px solid #e9edf3; border-radius: 12px; padding: var(--sp-16); margin-top: var(--sp-16); background: #fff; box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04); }
+    .row { display: flex; gap: var(--sp-12); flex-wrap: wrap; margin-top: var(--sp-8); align-items: center; }
+    .app-shell { display: grid; grid-template-columns: 260px 1fr; gap: var(--sp-16); margin-top: var(--sp-16); align-items: start; }
+    .sidebar { position: sticky; top: 14px; }
+    .nav-group { margin-top: var(--sp-12); }
+    .nav-title { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+    .nav-btn { width: 100%; text-align: left; border: 1px solid #e2e8f0; background: #fff; border-radius: 8px; padding: 9px 10px; cursor: pointer; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .nav-btn.active { background: #edf5ff; border-color: #79adf5; }
+    .nav-left { display: inline-flex; align-items: center; gap: 8px; }
+    .nav-icon { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; opacity: 0.9; }
+    .nav-icon svg { width: 16px; height: 16px; stroke: #334155; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-check { color: #16a34a; font-weight: 700; visibility: hidden; }
+    .nav-check.done { visibility: visible; }
+    .nav-right { display: inline-flex; align-items: center; gap: 8px; }
+    .step-status { font-size: 11px; color: #6b7280; border: 1px solid #e2e8f0; border-radius: 999px; padding: 1px 8px; }
+    .step-status.in-progress { color: #0c4a6e; background: #e0f2fe; border-color: #bae6fd; }
+    .step-status.done { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
+    .page-tab { border: 1px solid #cfd8e3; background: #fff; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+    .page-tab.active { background: #eef8ff; border-color: #7bb4f7; }
+    .workspace { display: none; }
+    .workspace.active { display: block; }
+    .page { display: none; margin-top: var(--sp-12); }
+    .page.active { display: block; }
+    .tip { border-left: 4px solid #7bb4f7; background: #f4f9ff; padding: var(--sp-12); border-radius: 8px; font-size: 13px; color: #6b7280; }
+    .section { border: 1px solid #e9edf3; border-radius: 10px; padding: var(--sp-12); margin-top: var(--sp-12); background: #fcfdff; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03); }
+    .section-output { border-color: #bfdbfe; background: #eff6ff; }
+    .section-center { border-color: #fde68a; background: #fffbeb; }
+    .section-ledger { border-color: #c4b5fd; background: #f5f3ff; }
+    .section-schedule { border-color: #86efac; background: #f0fdf4; }
+    .desc { font-size: 12px; color: #6b7280; line-height: 1.5; margin-top: 6px; padding: var(--sp-8); border-radius: 8px; background: rgba(255,255,255,0.7); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
+    input, select, button { padding: 9px; border: 1px solid #cdd5df; border-radius: 8px; background: #fff; }
+    input { width: 100%; box-sizing: border-box; }
+    button { cursor: pointer; }
+    button:hover { background: #f2f5fa; }
+    pre { white-space: pre-wrap; background: #fafafa; border: 1px solid #eee; padding: 10px; border-radius: 8px; margin-top: 8px; }
+    .muted { color: #666; font-size: 12px; }
+    .hidden { display: none; }
+    .modal-mask { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); display: none; align-items: center; justify-content: center; z-index: 99; }
+    .modal-mask.show { display: flex; }
+    .modal { width: 520px; max-width: calc(100vw - 30px); background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #d7dee8; }
+    .modal h3 { margin: 0 0 8px; }
+    .badge { font-size: 12px; padding: 2px 8px; border: 1px solid #b5d2ff; border-radius: 999px; background: #edf5ff; }
+    .btn-primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #fff; color: #0f172a; border-color: #cbd5e1; }
+    .btn-secondary:hover { background: #f8fafc; }
+    .btn-danger { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+    .btn-danger:hover { background: #ffe4e6; }
+    .crumb { font-size: 12px; color: #475569; padding: 6px 10px; border-radius: 999px; border: 1px solid #dbeafe; background: #f8fbff; }
+    .result-summary { margin-top: 8px; font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 1px solid #dbeafe; background: #f8fbff; }
+    .result-summary.ok { border-color: #bbf7d0; background: #f0fdf4; }
+    .result-summary.err { border-color: #fecaca; background: #fef2f2; }
+    details.raw-box { margin-top: 8px; }
+    .safety { margin-top: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid #bbf7d0; background: #f0fdf4; font-size: 12px; color: #166534; }
+    .progress-wrap { margin-top: 10px; }
+    .progress-line { height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #60a5fa, #22c55e); width: 0%; }
+    .progress-text { font-size: 12px; color: #475569; margin-top: 4px; }
+    .dash-grid { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
+    .dash-card { border: 1px solid #dbeafe; background: #f8fbff; border-radius: 8px; padding: var(--sp-8); }
+    .dash-num { font-size: 20px; font-weight: 700; color: #1d4ed8; }
+    .dash-title { font-size: 12px; color: #475569; }
+    .ops-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
+    .ops-card { border: 1px solid #dbeafe; background: #ffffff; border-radius: 8px; padding: var(--sp-8); }
+    .ops-k { font-size: 12px; color: #64748b; }
+    .ops-v { font-size: 18px; font-weight: 700; color: #1e40af; margin-top: 4px; }
+    .ops-line { font-size: 12px; color: #334155; margin-top: 6px; }
+    .dashboard-section { margin-top: var(--sp-8); border: 1px solid #dbeafe; border-radius: 8px; padding: var(--sp-8); background: #ffffff; }
+    .dashboard-section h4 { margin: 0 0 6px; font-size: 13px; color: #334155; }
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .chip-btn { border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+    .chip-btn:hover { background: #eef2ff; border-color: #93c5fd; }
+    .doc-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 10px; margin-top: 8px; }
+    .doc-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #0f172a; font-size: 13px; }
+    .doc-link:hover { background: #f8fafc; border-color: #93c5fd; }
+    .month-table { margin-top: var(--sp-8); overflow-x: auto; }
+    .month-table table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .month-table th, .month-table td { border: 1px solid #dbeafe; padding: 6px; text-align: left; }
+    @media (max-width: 980px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .nav-btn { width: auto; min-width: 150px; }
+      .nav-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+      .nav-title { width: 100%; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <h1 id="title">AMER FPP + ai</h1>
+        <div class="muted" id="subtitle">AMER（US/CAN）完全独立，按效能点分页执行。</div>
+      </div>
+      <div class="row">
+        <span class="badge">US</span>
+        <span class="badge">CAN</span>
+        <select id="lang" onchange="switchLang()">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 id="connTitle">后端连接</h3>
+      <div class="row">
+        <span class="crumb" id="breadcrumb">当前：US / 文档产出</span>
+      </div>
+      <div class="row">
+        <input id="apiBase" style="min-width:300px;" placeholder="Backend URL" />
+        <input id="rootPath" style="min-width:420px;" placeholder="Workspace Root" />
+        <button class="btn-secondary" onclick="saveConfig()" id="saveBtn">保存</button>
+        <button class="btn-primary" onclick="checkHealth()" id="healthBtn">健康检查</button>
+      </div>
+      <pre id="health">-</pre>
+      <div class="safety">安全说明：本工具在本地运行，文件在本机处理，不上传外网。</div>
+    </div>
+
+    <div class="app-shell">
+      <div class="card sidebar">
+        <h3 id="countryJumpTitle">国家跳转</h3>
+        <div class="nav-group">
+          <div class="nav-title" id="navCountriesTitle">Countries</div>
+          <button id="countryTabUS" class="nav-btn active" onclick="switchCountry('US')">
+            <span class="nav-left"><span class="nav-icon" data-icon="globe"></span><span id="countryTabUSText">US Workspace</span></span>
+          </button>
+          <button id="countryTabSG" class="nav-btn" onclick="switchCountry('CAN')">
+            <span class="nav-left"><span class="nav-icon" data-icon="maple"></span><span id="countryTabSGText">CAN Workspace</span></span>
+          </button>
+        </div>
+        <div class="nav-group" id="groupUSPages">
+          <div class="nav-title" id="navUsPagesTitle">US Pages</div>
+          <button class="nav-btn active" id="usTabOutput" onclick="switchPage('us','output')">
+            <span class="nav-left"><span class="nav-icon" data-icon="file"></span><span id="usTabOutputText">文档产出</span></span><span class="nav-right"><span id="usStatusOutput" class="step-status">未开始</span><span id="usCheckOutput" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="usTabCenter" onclick="switchPage('us','center')">
+            <span class="nav-left"><span class="nav-icon" data-icon="check"></span><span id="usTabCenterText">成本中心预检</span></span><span class="nav-right"><span id="usStatusCenter" class="step-status">未开始</span><span id="usCheckCenter" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="usTabLedger" onclick="switchPage('us','ledger')">
+            <span class="nav-left"><span class="nav-icon" data-icon="ledger"></span><span id="usTabLedgerText">台账回填</span></span><span class="nav-right"><span id="usStatusLedger" class="step-status">未开始</span><span id="usCheckLedger" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="usTabSchedule" onclick="switchPage('us','schedule')">
+            <span class="nav-left"><span class="nav-icon" data-icon="clock"></span><span id="usTabScheduleText">定时预检</span></span><span class="nav-right"><span id="usStatusSchedule" class="step-status">未开始</span><span id="usCheckSchedule" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="usTabHistory" onclick="switchPage('us','history')">
+            <span class="nav-left"><span class="nav-icon" data-icon="history"></span><span id="usTabHistoryText">执行历史</span></span><span class="nav-right"><span id="usStatusHistory" class="step-status">未开始</span><span id="usCheckHistory" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="usTabQueue" onclick="switchPage('us','queue')">
+            <span class="nav-left"><span class="nav-icon" data-icon="queue"></span><span id="usTabQueueText">任务队列</span></span><span class="nav-right"><span id="usStatusQueue" class="step-status">未开始</span><span id="usCheckQueue" class="nav-check">✓</span></span>
+          </button>
+        </div>
+        <div class="nav-group hidden" id="groupSGPages">
+          <div class="nav-title" id="navCanPagesTitle">CAN Pages</div>
+          <button class="nav-btn active" id="sgTabOutput" onclick="switchPage('sg','output')">
+            <span class="nav-left"><span class="nav-icon" data-icon="file"></span><span id="sgTabOutputText">文档产出</span></span><span class="nav-right"><span id="sgStatusOutput" class="step-status">未开始</span><span id="sgCheckOutput" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="sgTabCenter" onclick="switchPage('sg','center')">
+            <span class="nav-left"><span class="nav-icon" data-icon="check"></span><span id="sgTabCenterText">成本中心预检</span></span><span class="nav-right"><span id="sgStatusCenter" class="step-status">未开始</span><span id="sgCheckCenter" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="sgTabLedger" onclick="switchPage('sg','ledger')">
+            <span class="nav-left"><span class="nav-icon" data-icon="ledger"></span><span id="sgTabLedgerText">台账回填</span></span><span class="nav-right"><span id="sgStatusLedger" class="step-status">未开始</span><span id="sgCheckLedger" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="sgTabSchedule" onclick="switchPage('sg','schedule')">
+            <span class="nav-left"><span class="nav-icon" data-icon="clock"></span><span id="sgTabScheduleText">定时预检</span></span><span class="nav-right"><span id="sgStatusSchedule" class="step-status">未开始</span><span id="sgCheckSchedule" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="sgTabHistory" onclick="switchPage('sg','history')">
+            <span class="nav-left"><span class="nav-icon" data-icon="history"></span><span id="sgTabHistoryText">执行历史</span></span><span class="nav-right"><span id="sgStatusHistory" class="step-status">未开始</span><span id="sgCheckHistory" class="nav-check">✓</span></span>
+          </button>
+          <button class="nav-btn" id="sgTabQueue" onclick="switchPage('sg','queue')">
+            <span class="nav-left"><span class="nav-icon" data-icon="queue"></span><span id="sgTabQueueText">任务队列</span></span><span class="nav-right"><span id="sgStatusQueue" class="step-status">未开始</span><span id="sgCheckQueue" class="nav-check">✓</span></span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div id="workspaceUS" class="card workspace active">
+          <h2 id="usWorkspaceTitle">US Workspace</h2>
+          <div class="tip">每个分页代表一个效能点。先做“文档产出”，再做预检/台账/定时任务。</div>
+          <div class="progress-wrap">
+            <div class="progress-line"><div id="usProgressBar" class="progress-bar"></div></div>
+            <div id="usProgressText" class="progress-text">进度：0%（0/4）</div>
+          </div>
+
+      <div id="usPageOutput" class="page active">
+        <div class="section section-output">
+          <h3>这是什么</h3>
+          <div class="desc">把 CSV 直接转成可提交文档，不修改台账。适合做提交前检查和材料准备。所有结果都可在报告文件与原始结果中复核，不是算法黑盒。</div>
+        </div>
+        <div class="section section-output">
+          <div class="row">
+            <label><input id="usMaskUpload" type="checkbox" checked /> 上传前脱敏（输出自动恢复）</label>
+          </div>
+          <div class="row">
+            <input id="usSubmissionFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('US', 'generate_submission_blocks', 'usSubmissionFile', 'usResult', 'usLinks')">生成提单文本</button>
+          </div>
+          <div class="row">
+            <input id="usHCFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('US', 'hc_check_upload', 'usHCFile', 'usResult', 'usLinks')">生成HC校验</button>
+          </div>
+          <div class="row">
+            <input id="usDocHealthFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-secondary" onclick="uploadAndGenerate('US', 'doc_health_check_upload', 'usDocHealthFile', 'usResult', 'usLinks')">文档字段健康检查（含特殊case）</button>
+          </div>
+          <div class="row">
+            <input id="usStatsFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('US', 'stats_analysis_upload', 'usStatsFile', 'usResult', 'usLinks')">统计分析（看板）</button>
+          </div>
+          <div class="row">
+            <input id="usBatchFiles" type="file" accept=".csv,text/csv" multiple />
+            <select id="usBatchAction">
+              <option value="generate_submission_blocks">批量生成提单文本</option>
+              <option value="hc_check_upload">批量生成HC校验</option>
+              <option value="doc_health_check_upload">批量文档字段健康检查</option>
+              <option value="stats_analysis_upload">批量统计分析</option>
+            </select>
+            <button class="btn-secondary" onclick="runBatchUploads('US','usBatchFiles','usBatchAction','usResult','usLinks')">批量串行执行</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="usPageCenter" class="page">
+        <div class="section section-center">
+          <h3>这是什么</h3>
+          <div class="desc">提交前自动识别失效/未维护成本中心，给出阻断清单和修复建议，避免提单失败。</div>
+        </div>
+        <div class="section section-center">
+          <div class="row">
+            <button class="btn-secondary" onclick="saveRegionTemplate('US', 'us')">保存默认模板</button>
+            <button class="btn-secondary" onclick="loadRegionTemplate('US', 'us')">读取默认模板</button>
+            <button class="btn-danger" onclick="resetRegionTemplate('US', 'us')">重置默认模板</button>
+            <button class="btn-secondary" onclick="exportRegionTemplate('US', 'us')">导出模板JSON</button>
+            <button class="btn-secondary" onclick="triggerImportTemplate('US')">导入模板JSON</button>
+            <input id="importTemplateUS" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('US', 'us', this)" />
+          </div>
+          <div class="grid-2">
+            <select id="usPeriod"></select>
+            <select id="usCountry">
+              <option value="US">US</option>
+            </select>
+            <select id="usEntity">
+              <option value="Tencent America LLC">Tencent America LLC</option>
+              <option value="Tencent Cloud LLC">Tencent Cloud LLC</option>
+              <option value="Proxima Beta U.S. LLC">Proxima Beta U.S. LLC</option>
+            </select>
+            <select id="usVendor" onchange="refreshInvoiceHints('US','us')">
+              <option value="Anthem">Anthem</option>
+              <option value="Cigna">Cigna</option>
+              <option value="Guardian">Guardian</option>
+              <option value="Kaiser">Kaiser</option>
+              <option value="Optum">Optum</option>
+              <option value="LegalShield">LegalShield</option>
+              <option value="ADP">ADP</option>
+              <option value="CYC">CYC</option>
+            </select>
+            <select id="usFeeType" onchange="refreshInvoiceHints('US','us')">
+              <option value="Medical Insurance">Medical Insurance</option>
+              <option value="Dental">Dental</option>
+              <option value="Vision STD LTD Life">Vision STD LTD Life</option>
+              <option value="FSA Weekly Claim">FSA Weekly Claim</option>
+              <option value="ID Legal Insurance">ID Legal Insurance</option>
+              <option value="HR Service Fee">HR Service Fee</option>
+            </select>
+            <input id="usInvoiceTotal" placeholder="Invoice Total" />
+            <select id="usCurrency">
+              <option value="USD">USD</option>
+            </select>
+          </div>
+          <div class="desc">操作提示：供应商和费用类型建议先点下面预设标签，金额可点“上次金额快捷标签”快速填入。</div>
+          <div id="usInvoiceHints" class="chip-row"></div>
+          <div class="chip-row">
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','anthem')">Anthem 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','cigna')">Cigna 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','guardian')">Guardian 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','kaiser')">Kaiser 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','optum')">Optum 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','legalshield')">LegalShield 预设</button>
+          </div>
+          <div class="row">
+            <input id="usP1File" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
+            <button class="btn-secondary" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行（推荐）</button>
+          </div>
+          <div class="row">
+            <input id="usP3SourceFile" type="file" accept=".csv,text/csv" />
+            <input id="usP3StatusFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runCheckCenters('US', 'us')">检查成本中心（上传状态表）</button>
+            <button class="btn-secondary" onclick="runCheckCentersDefault('US', 'us')">检查成本中心（用默认状态表）</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="usPageLedger" class="page">
+        <div class="section section-ledger">
+          <h3>这是什么</h3>
+          <div class="desc">半自动更新台账：按关键字段去重并 Upsert，降低漏更、晚更、重复录入风险。</div>
+        </div>
+        <div class="section section-ledger">
+          <div class="row">
+            <input id="usP4PrefillFile" type="file" accept=".csv,text/csv" />
+            <input id="usP4LedgerFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runUpdateLedger('US', 'us')">台账自动更新</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="usPageSchedule" class="page">
+        <div class="section section-schedule">
+          <h3>这是什么</h3>
+          <div class="desc">工作日前自动预检，优先暴露阻断问题。适合月初集中提单高峰期。</div>
+          <div class="row">
+            <button class="btn-secondary" onclick="markScheduleConfigured('US', 'us')">已完成定时配置（打勾）</button>
+          </div>
+        </div>
+        <div class="section">
+          <ul>
+            <li><a href="./工作日前置预检_定时任务说明.md" target="_blank">工作日前置预检说明</a></li>
+            <li><a href="../一键安装_工作日前置预检任务.command" target="_blank">一键安装定时任务脚本</a></li>
+            <li><a href="../工作日前置预检任务.sh" target="_blank">定时执行脚本</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="usPageHistory" class="page">
+        <div class="section section-output">
+          <div class="row" style="justify-content: space-between;">
+            <h3>1页运营看板</h3>
+            <button class="btn-primary" onclick="loadOpsDashboard('US','us')">刷新运营看板</button>
+          </div>
+          <div class="desc">6个核心指标：今日/本周处理单量、成功率、失败率、步骤平均耗时、失败原因Top3。并提供管理视角（US vs CAN、高风险占比、漏更率、阻断处理时长）。</div>
+          <div id="usOpsBoard" class="muted">点击“刷新运营看板”加载数据。</div>
+        </div>
+        <div class="section section-output">
+          <h3>执行历史筛选</h3>
+          <div class="row">
+            <select id="usHistStep">
+              <option value="">全部步骤</option>
+              <option value="output">文档产出</option>
+              <option value="analytics">统计分析</option>
+              <option value="center">成本中心预检</option>
+              <option value="ledger">台账回填</option>
+              <option value="schedule">定时预检</option>
+            </select>
+            <input id="usHistFrom" type="datetime-local" />
+            <input id="usHistTo" type="datetime-local" />
+            <button class="btn-primary" onclick="loadHistory('US','us')">查询历史</button>
+          </div>
+          <div class="desc">支持按国家、步骤、时间区间查询。默认显示最近 50 条。</div>
+          <div id="usHistoryTable" class="muted"></div>
+        </div>
+      </div>
+
+      <div id="usPageQueue" class="page">
+        <div class="section section-ledger">
+          <h3>批量任务队列（可控）</h3>
+          <div class="row">
+            <input id="usQueueFiles" type="file" accept=".csv,text/csv" multiple />
+            <select id="usQueueAction">
+              <option value="generate_submission_blocks">提单文本</option>
+              <option value="hc_check_upload">HC校验</option>
+            </select>
+            <input id="usRetryMax" type="number" min="0" max="10" value="3" style="max-width:120px;" title="自动重试次数" />
+            <button class="btn-secondary" onclick="enqueueBatch('US','us')">加入队列</button>
+            <button class="btn-primary" onclick="startQueue('US','us')">开始执行</button>
+            <button class="btn-secondary" onclick="pauseQueue('US')">暂停</button>
+            <button class="btn-secondary" onclick="resumeQueue('US','us')">继续</button>
+            <button class="btn-danger" onclick="retryFailed('US','us')">失败重试</button>
+            <button class="btn-secondary" onclick="exportQueueLog('US','us')">导出队列记录</button>
+          </div>
+          <div id="usQueueTable" class="muted"></div>
+        </div>
+      </div>
+
+          <h3>US Result</h3>
+          <div id="usSummary" class="result-summary">等待执行</div>
+          <details class="raw-box">
+            <summary>查看系统原始结果（JSON）</summary>
+            <pre id="usResult">Waiting...</pre>
+          </details>
+          <div id="usLinks" class="muted"></div>
+          <div id="usDashboard" class="section section-output muted">统计看板将在“统计分析（看板）”执行后显示。</div>
+        </div>
+
+        <div id="workspaceSG" class="card workspace">
+          <h2 id="sgWorkspaceTitle">CAN Workspace</h2>
+          <div class="tip">CAN 区与 US 区完全独立，所有输入、模板和结果都隔离。</div>
+          <div class="progress-wrap">
+            <div class="progress-line"><div id="sgProgressBar" class="progress-bar"></div></div>
+            <div id="sgProgressText" class="progress-text">进度：0%（0/4）</div>
+          </div>
+
+      <div id="sgPageOutput" class="page active">
+        <div class="section section-output">
+          <div class="row">
+            <label><input id="sgMaskUpload" type="checkbox" checked /> 上传前脱敏（输出自动恢复）</label>
+          </div>
+          <div class="row">
+            <input id="sgSubmissionFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('CAN', 'generate_submission_blocks', 'sgSubmissionFile', 'sgResult', 'sgLinks')">生成提单文本</button>
+          </div>
+          <div class="row">
+            <input id="sgHCFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('CAN', 'hc_check_upload', 'sgHCFile', 'sgResult', 'sgLinks')">生成HC校验</button>
+          </div>
+          <div class="row">
+            <input id="sgDocHealthFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-secondary" onclick="uploadAndGenerate('CAN', 'doc_health_check_upload', 'sgDocHealthFile', 'sgResult', 'sgLinks')">文档字段健康检查（含特殊case）</button>
+          </div>
+          <div class="row">
+            <input id="sgStatsFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="uploadAndGenerate('CAN', 'stats_analysis_upload', 'sgStatsFile', 'sgResult', 'sgLinks')">统计分析（看板）</button>
+          </div>
+          <div class="row">
+            <input id="sgBatchFiles" type="file" accept=".csv,text/csv" multiple />
+            <select id="sgBatchAction">
+              <option value="generate_submission_blocks">批量生成提单文本</option>
+              <option value="hc_check_upload">批量生成HC校验</option>
+              <option value="doc_health_check_upload">批量文档字段健康检查</option>
+              <option value="stats_analysis_upload">批量统计分析</option>
+            </select>
+            <button class="btn-secondary" onclick="runBatchUploads('CAN','sgBatchFiles','sgBatchAction','sgResult','sgLinks')">批量串行执行</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sgPageCenter" class="page">
+        <div class="section section-center">
+          <div class="row">
+            <button class="btn-secondary" onclick="saveRegionTemplate('CAN', 'sg')">保存默认模板</button>
+            <button class="btn-secondary" onclick="loadRegionTemplate('CAN', 'sg')">读取默认模板</button>
+            <button class="btn-danger" onclick="resetRegionTemplate('CAN', 'sg')">重置默认模板</button>
+            <button class="btn-secondary" onclick="exportRegionTemplate('CAN', 'sg')">导出模板JSON</button>
+            <button class="btn-secondary" onclick="triggerImportTemplate('CAN')">导入模板JSON</button>
+            <input id="importTemplateSG" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('CAN', 'sg', this)" />
+          </div>
+          <div class="grid-2">
+            <select id="sgPeriod"></select>
+            <select id="sgCountry">
+              <option value="CAN">CAN</option>
+            </select>
+            <select id="sgEntity">
+              <option value="Tencent Canada">Tencent Canada</option>
+              <option value="52Y_Sharp Growth (Canada) Limited">52Y_Sharp Growth (Canada) Limited</option>
+            </select>
+            <select id="sgVendor" onchange="refreshInvoiceHints('CAN','sg')">
+              <option value="SunLife">SunLife</option>
+            </select>
+            <select id="sgFeeType" onchange="refreshInvoiceHints('CAN','sg')">
+              <option value="Medical Insurance">Medical Insurance</option>
+              <option value="Employee Commercial Insurance">Employee Commercial Insurance</option>
+            </select>
+            <input id="sgInvoiceTotal" placeholder="Invoice Total" />
+            <select id="sgCurrency">
+              <option value="CAD">CAD</option>
+            </select>
+          </div>
+          <div class="desc">操作提示：尽量使用预设标签；金额可直接点下方历史快捷项回填，减少手填。</div>
+          <div id="sgInvoiceHints" class="chip-row"></div>
+          <div class="chip-row">
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('sg','sunlife')">SunLife 预设</button>
+          </div>
+          <div class="row">
+            <input id="sgP1File" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runBuildAllocation('CAN', 'sg')">自动分摊生成HC</button>
+            <button class="btn-secondary" onclick="autoFillAndRunBuild('CAN', 'sg')">自动填入并执行（推荐）</button>
+          </div>
+          <div class="row">
+            <input id="sgP3SourceFile" type="file" accept=".csv,text/csv" />
+            <input id="sgP3StatusFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runCheckCenters('CAN', 'sg')">检查成本中心（上传状态表）</button>
+            <button class="btn-secondary" onclick="runCheckCentersDefault('CAN', 'sg')">检查成本中心（用默认状态表）</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sgPageLedger" class="page">
+        <div class="section section-ledger">
+          <div class="row">
+            <input id="sgP4PrefillFile" type="file" accept=".csv,text/csv" />
+            <input id="sgP4LedgerFile" type="file" accept=".csv,text/csv" />
+            <button class="btn-primary" onclick="runUpdateLedger('CAN', 'sg')">台账自动更新</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sgPageSchedule" class="page">
+        <div class="section section-schedule">
+          <div class="row">
+            <button class="btn-secondary" onclick="markScheduleConfigured('CAN', 'sg')">已完成定时配置（打勾）</button>
+          </div>
+          <ul>
+            <li><a href="./工作日前置预检_定时任务说明.md" target="_blank">工作日前置预检说明</a></li>
+            <li><a href="../一键安装_工作日前置预检任务.command" target="_blank">一键安装定时任务脚本</a></li>
+            <li><a href="../工作日前置预检任务.sh" target="_blank">定时执行脚本</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="sgPageHistory" class="page">
+        <div class="section section-output">
+          <div class="row" style="justify-content: space-between;">
+            <h3>1页运营看板</h3>
+            <button class="btn-primary" onclick="loadOpsDashboard('CAN','sg')">刷新运营看板</button>
+          </div>
+          <div class="desc">6个核心指标：今日/本周处理单量、成功率、失败率、步骤平均耗时、失败原因Top3。并提供管理视角（US vs CAN、高风险占比、漏更率、阻断处理时长）。</div>
+          <div id="sgOpsBoard" class="muted">点击“刷新运营看板”加载数据。</div>
+        </div>
+        <div class="section section-output">
+          <h3>执行历史筛选</h3>
+          <div class="row">
+            <select id="sgHistStep">
+              <option value="">全部步骤</option>
+              <option value="output">文档产出</option>
+              <option value="analytics">统计分析</option>
+              <option value="center">成本中心预检</option>
+              <option value="ledger">台账回填</option>
+              <option value="schedule">定时预检</option>
+            </select>
+            <input id="sgHistFrom" type="datetime-local" />
+            <input id="sgHistTo" type="datetime-local" />
+            <button class="btn-primary" onclick="loadHistory('CAN','sg')">查询历史</button>
+          </div>
+          <div class="desc">支持按国家、步骤、时间区间查询。默认显示最近 50 条。</div>
+          <div id="sgHistoryTable" class="muted"></div>
+        </div>
+      </div>
+
+      <div id="sgPageQueue" class="page">
+        <div class="section section-ledger">
+          <h3>批量任务队列（可控）</h3>
+          <div class="row">
+            <input id="sgQueueFiles" type="file" accept=".csv,text/csv" multiple />
+            <select id="sgQueueAction">
+              <option value="generate_submission_blocks">提单文本</option>
+              <option value="hc_check_upload">HC校验</option>
+            </select>
+            <input id="sgRetryMax" type="number" min="0" max="10" value="3" style="max-width:120px;" title="自动重试次数" />
+            <button class="btn-secondary" onclick="enqueueBatch('CAN','sg')">加入队列</button>
+            <button class="btn-primary" onclick="startQueue('CAN','sg')">开始执行</button>
+            <button class="btn-secondary" onclick="pauseQueue('CAN')">暂停</button>
+            <button class="btn-secondary" onclick="resumeQueue('CAN','sg')">继续</button>
+            <button class="btn-danger" onclick="retryFailed('CAN','sg')">失败重试</button>
+            <button class="btn-secondary" onclick="exportQueueLog('CAN','sg')">导出队列记录</button>
+          </div>
+          <div id="sgQueueTable" class="muted"></div>
+        </div>
+      </div>
+
+          <h3>CAN Result</h3>
+          <div id="sgSummary" class="result-summary">等待执行</div>
+          <details class="raw-box">
+            <summary>查看系统原始结果（JSON）</summary>
+            <pre id="sgResult">Waiting...</pre>
+          </details>
+          <div id="sgLinks" class="muted"></div>
+          <div id="sgDashboard" class="section section-output muted">统计看板将在“统计分析（看板）”执行后显示。</div>
+        </div>
+
+        <div class="card">
+          <h3 id="docTitle">操作文档</h3>
+          <div class="doc-grid">
+            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0_网页版.html" target="_blank">记录文档1.0（网页版）</a>
+            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0.docx" target="_blank">记录文档1.0（Word）</a>
+            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0.md" target="_blank">记录文档1.0（Markdown）</a>
+            <a class="doc-link" href="./操作者操作手册.html" target="_blank">操作者操作手册（网页版）</a>
+            <a class="doc-link" href="./操作文档_按钮级说明.md" target="_blank">按钮级操作文档</a>
+            <a class="doc-link" href="./概念说明_基础产出_vs_自动化动作.md" target="_blank">概念说明：文档产出 vs 自动化</a>
+            <a class="doc-link" href="./Operator_Guide_EN.md" target="_blank">Operator Guide (EN)</a>
+            <a class="doc-link" href="./Button_Manual_EN.md" target="_blank">Button Manual (EN)</a>
+            <a class="doc-link" href="./操作者操作清单.csv" target="_blank">操作者操作清单（CSV）</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="templateModalMask" class="modal-mask">
+    <div class="modal">
+      <h3>模板校验提示</h3>
+      <div id="templateModalText" class="muted"></div>
+      <div class="row">
+        <button onclick="closeTemplateModal()">我知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="guideModalMask" class="modal-mask">
+    <div class="modal">
+      <h3>首次使用引导</h3>
+      <div id="guideText" class="muted"></div>
+      <div class="row">
+        <button class="btn-secondary" onclick="skipGuide()">跳过</button>
+        <button class="btn-primary" onclick="nextGuideStep()">下一步</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const KEY_API = "fpp_api_base";
+    const KEY_ROOT = "fpp_root_path";
+    const KEY_LANG = "fpp_lang";
+    const KEY_TEMPLATE_PREFIX = "fpp_region_template_";
+    const KEY_PROGRESS_PREFIX = "fpp_progress_";
+    const KEY_MONTHLY_PREFIX = "fpp_monthly_dashboard_";
+    const KEY_INVOICE_HISTORY = "fpp_invoice_history_v1";
+    const KEY_GUIDE_DONE = "fpp_guide_done_v1";
+    const REQUIRED_TEMPLATE_FIELDS = ["period", "country", "entity", "vendor", "feeType", "invoiceTotal", "currency"];
+    const batchQueues = {
+      US: { items: [], running: false, paused: false },
+      CAN: { items: [], running: false, paused: false }
+    };
+    let queueSeq = 1;
+    let API = localStorage.getItem(KEY_API) || "http://127.0.0.1:18082";
+    let ROOT = localStorage.getItem(KEY_ROOT) || "";
+    let currentLang = localStorage.getItem(KEY_LANG) || "zh";
+    const latestStatsSummary = { US: null, CAN: null };
+    const latestOpsData = { US: null, CAN: null };
+
+    function iconSvg(name) {
+      const map = {
+        globe: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a13 13 0 0 1 0 18"></path><path d="M12 3a13 13 0 0 0 0 18"></path></svg>',
+        maple: '<svg viewBox="0 0 24 24"><path d="M12 3l2 3 3-1-1 3 3 2-3 1v3l-4-2-4 2v-3l-3-1 3-2-1-3 3 1 2-3z"></path><path d="M12 14v7"></path></svg>',
+        file: '<svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5"></path></svg>',
+        check: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg>',
+        ledger: '<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg>',
+        clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6l4 2"></path></svg>',
+        history: '<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path><path d="M12 8v5l3 2"></path></svg>',
+        queue: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="3" rx="1"></rect><rect x="4" y="10.5" width="16" height="3" rx="1"></rect><rect x="4" y="16" width="10" height="3" rx="1"></rect></svg>'
+      };
+      return map[name] || map.file;
+    }
+
+    function renderNavIcons() {
+      document.querySelectorAll(".nav-icon[data-icon]").forEach((el) => {
+        const key = el.getAttribute("data-icon") || "file";
+        el.innerHTML = iconSvg(key);
+      });
+    }
+
+    function switchCountry(region) {
+      document.getElementById("workspaceUS").classList.toggle("active", region === "US");
+      document.getElementById("workspaceSG").classList.toggle("active", region === "CAN");
+      document.getElementById("countryTabUS").classList.toggle("active", region === "US");
+      document.getElementById("countryTabSG").classList.toggle("active", region === "CAN");
+      document.getElementById("groupUSPages").classList.toggle("hidden", region !== "US");
+      document.getElementById("groupSGPages").classList.toggle("hidden", region !== "CAN");
+      updateBreadcrumb(region, region === "US" ? "output" : "output");
+    }
+
+    function progressKey(region) { return `${KEY_PROGRESS_PREFIX}${region}`; }
+    function uiPrefix(region) { return region === "US" ? "us" : "sg"; }
+
+    function loadProgress(region) {
+      try {
+        const raw = localStorage.getItem(progressKey(region));
+        if (!raw) return { output: false, center: false, ledger: false, schedule: false, currentStep: "" };
+        return { output: false, center: false, ledger: false, schedule: false, currentStep: "", ...JSON.parse(raw) };
+      } catch (_) {
+        return { output: false, center: false, ledger: false, schedule: false, currentStep: "" };
+      }
+    }
+
+    function saveProgress(region, progress) {
+      localStorage.setItem(progressKey(region), JSON.stringify(progress));
+    }
+
+    function setStepDone(prefix, step, done) {
+      const id = `${prefix}Check${step[0].toUpperCase()}${step.slice(1)}`;
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("done", !!done);
+    }
+
+    function setStepLabel(prefix, step, label, mode) {
+      const id = `${prefix}Status${step[0].toUpperCase()}${step.slice(1)}`;
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = label;
+      el.classList.remove("in-progress", "done");
+      if (mode === "in-progress") el.classList.add("in-progress");
+      if (mode === "done") el.classList.add("done");
+    }
+
+    function updateProgressBar(region, progress) {
+      const prefix = uiPrefix(region);
+      const steps = ["output", "center", "ledger", "schedule"];
+      const completed = steps.filter((s) => !!progress[s]).length;
+      const pct = Math.round((completed / steps.length) * 100);
+      const bar = document.getElementById(`${prefix}ProgressBar`);
+      const txt = document.getElementById(`${prefix}ProgressText`);
+      if (bar) bar.style.width = `${pct}%`;
+      if (txt) {
+        txt.textContent =
+          currentLang === "en"
+            ? `Progress: ${pct}% (${completed}/${steps.length})`
+            : `进度：${pct}%（${completed}/${steps.length}）`;
+      }
+    }
+
+    function markStepDone(region, step) {
+      const prefix = uiPrefix(region);
+      const progress = loadProgress(region);
+      progress[step] = true;
+      if (progress.currentStep === step) progress.currentStep = "";
+      progress[`${step}At`] = new Date().toLocaleString();
+      saveProgress(region, progress);
+      setStepDone(prefix, step, true);
+      const ts = progress[`${step}At`]
+        ? (currentLang === "en" ? ` Done (${progress[`${step}At`]})` : ` 已完成(${progress[`${step}At`]})`)
+        : (currentLang === "en" ? "Done" : "已完成");
+      setStepLabel(prefix, step, ts, "done");
+      updateProgressBar(region, progress);
+    }
+
+    function markStepInProgress(region, step) {
+      const progress = loadProgress(region);
+      progress.currentStep = step;
+      saveProgress(region, progress);
+      refreshRegionProgressUI(region);
+    }
+
+    function clearInProgress(region, step) {
+      const progress = loadProgress(region);
+      if (progress.currentStep === step) progress.currentStep = "";
+      saveProgress(region, progress);
+      refreshRegionProgressUI(region);
+    }
+
+    function refreshRegionProgressUI(region) {
+      const prefix = uiPrefix(region);
+      const progress = loadProgress(region);
+      ["output", "center", "ledger", "schedule"].forEach((step) => {
+        setStepDone(prefix, step, !!progress[step]);
+        if (progress[step]) {
+          const ts = progress[`${step}At`]
+            ? (currentLang === "en" ? `Done (${progress[`${step}At`]})` : `已完成(${progress[`${step}At`]})`)
+            : (currentLang === "en" ? "Done" : "已完成");
+          setStepLabel(prefix, step, ts, "done");
+        } else if (progress.currentStep === step) {
+          setStepLabel(prefix, step, currentLang === "en" ? "In Progress" : "进行中", "in-progress");
+        } else {
+          setStepLabel(prefix, step, currentLang === "en" ? "Not Started" : "未开始", "");
+        }
+      });
+      updateProgressBar(region, progress);
+    }
+
+    function restoreProgressUI() {
+      ["US", "CAN"].forEach((region) => refreshRegionProgressUI(region));
+    }
+
+    function markScheduleConfigured(region, prefix) {
+      markStepDone(region, "schedule");
+      document.getElementById(`${prefix}Result`).textContent = `Marked schedule as configured for ${region}.`;
+    }
+
+    function switchPage(prefix, page) {
+      const pages = ["output", "center", "ledger", "schedule", "history", "queue"];
+      pages.forEach((p) => {
+        const pid = `${prefix}Page${p[0].toUpperCase()}${p.slice(1)}`;
+        const tid = `${prefix}Tab${p[0].toUpperCase()}${p.slice(1)}`;
+        document.getElementById(pid).classList.toggle("active", p === page);
+        document.getElementById(tid).classList.toggle("active", p === page);
+      });
+      updateBreadcrumb(prefix === "us" ? "US" : "CAN", page);
+    }
+
+    function stepLabel(step) {
+      const map = currentLang === "en"
+        ? { output: "Output", analytics: "Analytics", center: "Center Check", ledger: "Ledger Update", schedule: "Schedule Check", history: "History", queue: "Queue" }
+        : { output: "文档产出", analytics: "统计分析", center: "成本中心预检", ledger: "台账回填", schedule: "定时预检", history: "执行历史", queue: "任务队列" };
+      return map[step] || step;
+    }
+
+    function updateBreadcrumb(region, step) {
+      const el = document.getElementById("breadcrumb");
+      if (!el) return;
+      el.textContent = currentLang === "en" ? `Now: ${region} / ${stepLabel(step)}` : `当前：${region} / ${stepLabel(step)}`;
+    }
+
+    function setDefaults(prefix, region) {
+      const now = new Date();
+      const month = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
+      document.getElementById(`${prefix}Period`).value = month;
+      document.getElementById(`${prefix}Country`).value = region;
+      document.getElementById(`${prefix}Entity`).value = region === "US" ? "Tencent America LLC" : "Tencent Canada";
+      document.getElementById(`${prefix}Vendor`).value = "Anthem";
+      document.getElementById(`${prefix}FeeType`).value = "Medical Insurance";
+      document.getElementById(`${prefix}InvoiceTotal`).value = "145411.03";
+      document.getElementById(`${prefix}Currency`).value = region === "US" ? "USD" : "CAD";
+    }
+
+    function populatePeriodOptions() {
+      const now = new Date();
+      const values = [];
+      for (let i = -8; i <= 3; i += 1) {
+        const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        values.push(`${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}`);
+      }
+      ["usPeriod", "sgPeriod"].forEach((id) => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const old = sel.value;
+        sel.innerHTML = values.map((v) => `<option value="${v}">${v}</option>`).join("");
+        if (values.includes(old)) sel.value = old;
+      });
+    }
+
+    function applyBuildPreset(prefix, preset) {
+      const map = {
+        anthem: { vendor: "Anthem", feeType: "Medical Insurance", entity: "Tencent America LLC", currency: "USD" },
+        cigna: { vendor: "Cigna", feeType: "Dental", entity: "Tencent America LLC", currency: "USD" },
+        guardian: { vendor: "Guardian", feeType: "Vision STD LTD Life", entity: "Tencent America LLC", currency: "USD" },
+        kaiser: { vendor: "Kaiser", feeType: "Medical Insurance", entity: "Tencent America LLC", currency: "USD" },
+        optum: { vendor: "Optum", feeType: "FSA Weekly Claim", entity: "Tencent America LLC", currency: "USD" },
+        legalshield: { vendor: "LegalShield", feeType: "ID Legal Insurance", entity: "Tencent America LLC", currency: "USD" },
+        sunlife: { vendor: "SunLife", feeType: "Medical Insurance", entity: "Tencent Canada", currency: "CAD" }
+      };
+      const cfg = map[preset];
+      if (!cfg) return;
+      if (document.getElementById(`${prefix}Vendor`)) document.getElementById(`${prefix}Vendor`).value = cfg.vendor;
+      if (document.getElementById(`${prefix}FeeType`)) document.getElementById(`${prefix}FeeType`).value = cfg.feeType;
+      if (document.getElementById(`${prefix}Entity`)) document.getElementById(`${prefix}Entity`).value = cfg.entity;
+      if (document.getElementById(`${prefix}Currency`)) document.getElementById(`${prefix}Currency`).value = cfg.currency;
+      refreshInvoiceHints(prefix === "us" ? "US" : "CAN", prefix);
+    }
+
+    function loadInvoiceHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(KEY_INVOICE_HISTORY) || "{}");
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveInvoiceHistory(obj) {
+      localStorage.setItem(KEY_INVOICE_HISTORY, JSON.stringify(obj));
+    }
+
+    function makeInvoiceKey(region, prefix) {
+      const vendor = (document.getElementById(`${prefix}Vendor`)?.value || "").trim();
+      const fee = (document.getElementById(`${prefix}FeeType`)?.value || "").trim();
+      return `${region}|${vendor}|${fee}`;
+    }
+
+    function pushInvoiceHistory(region, prefix, amount) {
+      const val = String(amount || "").trim();
+      if (!val) return;
+      const key = makeInvoiceKey(region, prefix);
+      const all = loadInvoiceHistory();
+      const arr = Array.isArray(all[key]) ? all[key] : [];
+      const next = [val, ...arr.filter((x) => x !== val)].slice(0, 6);
+      all[key] = next;
+      saveInvoiceHistory(all);
+    }
+
+    function fillInvoice(prefix, val) {
+      const el = document.getElementById(`${prefix}InvoiceTotal`);
+      if (el) el.value = val;
+    }
+
+    function refreshInvoiceHints(region, prefix) {
+      const box = document.getElementById(`${prefix}InvoiceHints`);
+      if (!box) return;
+      const key = makeInvoiceKey(region, prefix);
+      const all = loadInvoiceHistory();
+      const arr = Array.isArray(all[key]) ? all[key] : [];
+      if (!arr.length) {
+        box.innerHTML = `<span class="muted">${currentLang === "en" ? "No recent amounts yet." : "暂无历史金额，可先执行一次后自动记录。"}</span>`;
+        return;
+      }
+      box.innerHTML = arr
+        .map((v) => `<button type="button" class="chip-btn" onclick="fillInvoice('${prefix}','${String(v).replace(/'/g, "\\'")}')">${v}</button>`)
+        .join("");
+    }
+
+    async function autoFillAndRunBuild(region, prefix) {
+      const file = document.getElementById(`${prefix}P1File`).files[0];
+      if (!file) {
+        document.getElementById(`${prefix}Result`).textContent = "请先上传人数输入CSV，再使用自动填入并执行。";
+        return;
+      }
+      loadRegionTemplate(region, prefix, true);
+      const period = document.getElementById(`${prefix}Period`).value.trim();
+      if (!period) setDefaults(prefix, region);
+      await runBuildAllocation(region, prefix);
+    }
+
+    function templateKey(region) { return `${KEY_TEMPLATE_PREFIX}${region}`; }
+
+    function collectTemplate(prefix) {
+      return {
+        period: document.getElementById(`${prefix}Period`).value.trim(),
+        country: document.getElementById(`${prefix}Country`).value.trim(),
+        entity: document.getElementById(`${prefix}Entity`).value.trim(),
+        vendor: document.getElementById(`${prefix}Vendor`).value.trim(),
+        feeType: document.getElementById(`${prefix}FeeType`).value.trim(),
+        invoiceTotal: document.getElementById(`${prefix}InvoiceTotal`).value.trim(),
+        currency: document.getElementById(`${prefix}Currency`).value.trim()
+      };
+    }
+
+    function validateTemplate(tpl) {
+      return REQUIRED_TEMPLATE_FIELDS.filter((k) => !tpl[k] || String(tpl[k]).trim() === "");
+    }
+
+    function showTemplateModal(msg) {
+      document.getElementById("templateModalText").textContent = msg;
+      document.getElementById("templateModalMask").classList.add("show");
+    }
+
+    function closeTemplateModal() {
+      document.getElementById("templateModalMask").classList.remove("show");
+    }
+
+    function applyTemplate(prefix, data) {
+      REQUIRED_TEMPLATE_FIELDS.forEach((k) => {
+        const map = { period: "Period", country: "Country", entity: "Entity", vendor: "Vendor", feeType: "FeeType", invoiceTotal: "InvoiceTotal", currency: "Currency" };
+        if (data[k] !== undefined) document.getElementById(`${prefix}${map[k]}`).value = data[k];
+      });
+    }
+
+    function saveRegionTemplate(region, prefix) {
+      const tpl = collectTemplate(prefix);
+      const missing = validateTemplate(tpl);
+      if (missing.length) {
+        showTemplateModal(`保存失败：缺少字段 ${missing.join(", ")}`);
+        return;
+      }
+      localStorage.setItem(templateKey(region), JSON.stringify(tpl));
+      document.getElementById(`${prefix}Result`).textContent = `Saved defaults for ${region}.`;
+    }
+
+    function loadRegionTemplate(region, prefix, silent = false) {
+      const raw = localStorage.getItem(templateKey(region));
+      if (!raw) {
+        if (!silent) document.getElementById(`${prefix}Result`).textContent = `No saved defaults for ${region}.`;
+        return;
+      }
+      try {
+        const tpl = JSON.parse(raw);
+        const missing = validateTemplate(tpl);
+        if (missing.length) {
+          if (!silent) showTemplateModal(`模板不完整，缺少字段: ${missing.join(", ")}`);
+          return;
+        }
+        applyTemplate(prefix, tpl);
+        if (!silent) document.getElementById(`${prefix}Result`).textContent = `Loaded defaults for ${region}.`;
+      } catch (_) {
+        if (!silent) document.getElementById(`${prefix}Result`).textContent = `Invalid template for ${region}.`;
+      }
+    }
+
+    function resetRegionTemplate(region, prefix) {
+      localStorage.removeItem(templateKey(region));
+      setDefaults(prefix, region);
+      document.getElementById(`${prefix}Result`).textContent = `Reset defaults for ${region}.`;
+    }
+
+    function triggerImportTemplate(region) {
+      const input = document.getElementById(region === "US" ? "importTemplateUS" : "importTemplateSG");
+      input.value = "";
+      input.click();
+    }
+
+    function exportRegionTemplate(region, prefix) {
+      const raw = localStorage.getItem(templateKey(region));
+      if (!raw) {
+        document.getElementById(`${prefix}Result`).textContent = `No saved defaults for ${region}.`;
+        return;
+      }
+      const payload = { version: 1, region, exportedAt: new Date().toISOString(), template: JSON.parse(raw) };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `fpp_template_${region}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.getElementById(`${prefix}Result`).textContent = `Exported defaults for ${region}.`;
+    }
+
+    async function importRegionTemplate(region, prefix, inputEl) {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+      try {
+        const parsed = JSON.parse(await file.text());
+        const tpl = parsed && parsed.template ? parsed.template : parsed;
+        const missing = validateTemplate(tpl);
+        if (missing.length) {
+          showTemplateModal(`导入失败：模板缺少字段 ${missing.join(", ")}`);
+          return;
+        }
+        localStorage.setItem(templateKey(region), JSON.stringify(tpl));
+        applyTemplate(prefix, tpl);
+        document.getElementById(`${prefix}Result`).textContent = `Imported defaults for ${region}.`;
+      } catch (e) {
+        document.getElementById(`${prefix}Result`).textContent = `Import failed: ${e}`;
+      }
+    }
+
+    function saveConfig() {
+      API = document.getElementById("apiBase").value.trim() || API;
+      ROOT = document.getElementById("rootPath").value.trim() || ROOT;
+      localStorage.setItem(KEY_API, API);
+      localStorage.setItem(KEY_ROOT, ROOT);
+      document.getElementById("health").textContent = `Saved: ${API}\nRoot: ${ROOT}`;
+    }
+
+    async function checkHealth() {
+      const el = document.getElementById("health");
+      el.textContent = "Checking...";
+      try {
+        const res = await fetch(`${API}/api/health`);
+        el.textContent = JSON.stringify(await res.json(), null, 2);
+      } catch (e) {
+        el.textContent = `Failed: ${e}`;
+      }
+    }
+
+    function showLinks(data, linksId) {
+      const box = document.getElementById(linksId);
+      if (!data || !Array.isArray(data.outputs) || !data.outputs.length) {
+        box.innerHTML = "<p>No output files</p>";
+        return;
+      }
+      box.innerHTML = "<ul>" + data.outputs.map((p) => `<li><a href=\"${API}/api/files?path=${encodeURIComponent(p)}\" target=\"_blank\">${p}</a></li>`).join("") + "</ul>";
+    }
+
+    function renderStatsDashboard(resultId, data) {
+      const prefix = resultId.startsWith("us") ? "us" : "sg";
+      const box = document.getElementById(`${prefix}Dashboard`);
+      if (!box) return;
+      const s = data && data.stats_summary;
+      if (!s) {
+        box.className = "section section-output muted";
+        box.textContent =
+          currentLang === "en"
+            ? "Dashboard appears after running 'Analytics Dashboard'."
+            : "统计看板将在“统计分析（看板）”执行后显示。";
+        return;
+      }
+      latestStatsSummary[prefix === "us" ? "US" : "CAN"] = s;
+      const top = Array.isArray(s.top_risks) ? s.top_risks : [];
+      const fail = Array.isArray(s.failure_pareto) ? s.failure_pareto : [];
+      const timing = Array.isArray(s.step_timing) ? s.step_timing : [];
+      const countries = s.country_breakdown || {};
+      box.className = "section section-output";
+      box.innerHTML = `
+        <h3>${currentLang === "en" ? "Analytics Dashboard" : "统计看板"}</h3>
+        <div class="dashboard-section">
+          <h4>${currentLang === "en" ? "A. Country Summary (Combined)" : "A. 综合统计（按国家）"}</h4>
+          <div class="dash-grid">
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Rows" : "样本行数"}</div><div class="dash-num">${s.rows ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Coverage Types" : "覆盖福利类型数"}</div><div class="dash-num">${s.coverage_type_count ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Country Breakdown" : "国家分布"}</div><div class="dash-num">${Object.entries(countries).map(([k,v])=>`${k}:${v}`).join(' | ') || '-'}</div></div>
+          </div>
+        </div>
+        <div class="dashboard-section">
+          <h4>${currentLang === "en" ? "B. Risk Scoring" : "B. 风险评分"}</h4>
+          <div class="dash-grid">
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "High Risk" : "高风险单"}</div><div class="dash-num">${s.risk_high ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Medium Risk" : "中风险单"}</div><div class="dash-num">${s.risk_mid ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Low Risk" : "低风险单"}</div><div class="dash-num">${s.risk_low ?? 0}</div></div>
+          </div>
+          <div class="desc">${currentLang === "en" ? "Top Risks" : "Top风险"}: ${top.map((x) => `L${x.row_no} ${x.vendor || "UNKNOWN"}(${x.score})`).join(currentLang === "en" ? "; " : "；") || (currentLang === "en" ? "None" : "无")}</div>
+        </div>
+        <div class="dashboard-section">
+          <h4>${currentLang === "en" ? "C. Anomaly & Stability" : "C. 异常与稳定性"}</h4>
+          <div class="dash-grid">
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Amount Outliers" : "金额异常数"}</div><div class="dash-num">${s.amount_outlier_count ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Stability Alerts" : "波动告警数"}</div><div class="dash-num">${s.stability_alert_count ?? 0}</div></div>
+            <div class="dash-card"><div class="dash-title">${currentLang === "en" ? "Periods" : "覆盖月份"}</div><div class="dash-num">${(s.periods || []).join(",") || "-"}</div></div>
+          </div>
+        </div>
+        <div class="dashboard-section">
+          <h4>${currentLang === "en" ? "D. Efficiency Timing" : "D. 时效分析"}</h4>
+          <div class="desc">${timing.join(currentLang === "en" ? "; " : "；") || (currentLang === "en" ? "None" : "无")}</div>
+        </div>
+        <div class="dashboard-section">
+          <h4>${currentLang === "en" ? "E. Failure Pareto" : "E. 失败归因"}</h4>
+          <div class="desc">${fail.join(currentLang === "en" ? "; " : "；") || (currentLang === "en" ? "None" : "无")}</div>
+        </div>
+      `;
+    }
+
+    function shouldMask(region) {
+      const id = region === "US" ? "usMaskUpload" : "sgMaskUpload";
+      const el = document.getElementById(id);
+      return !!(el && el.checked);
+    }
+
+    function monthlyKey(region) {
+      return `${KEY_MONTHLY_PREFIX}${region}`;
+    }
+
+    function loadMonthlySnapshots(region) {
+      try {
+        const raw = localStorage.getItem(monthlyKey(region));
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveMonthlySnapshots(region, data) {
+      localStorage.setItem(monthlyKey(region), JSON.stringify(data));
+    }
+
+    function detectMonthFromSummary(summary) {
+      if (!summary) return "";
+      const periods = Array.isArray(summary.periods) ? summary.periods : [];
+      const p = periods.find((x) => /^\d{6}$/.test(String(x)));
+      if (p) return p;
+      const dt = new Date();
+      return `${dt.getFullYear()}${String(dt.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function detectMonthFromFilename(name) {
+      const m = String(name || "").match(/(20\d{2}[01]\d)/);
+      if (m && /^\d{6}$/.test(m[1])) return m[1];
+      return "";
+    }
+
+    function saveMonthlySnapshot(region, prefix) {
+      const summary = latestStatsSummary[region];
+      if (!summary) {
+        document.getElementById(`${prefix}Result`).textContent = currentLang === "en" ? "Run analytics first, then save monthly snapshot." : "请先执行统计分析，再保存月度看板。";
+        return;
+      }
+      const input = document.getElementById(`${prefix}MonthKey`);
+      const month = (input.value || detectMonthFromSummary(summary)).trim();
+      if (!/^\d{6}$/.test(month)) {
+        document.getElementById(`${prefix}Result`).textContent = currentLang === "en" ? "Month must be YYYYMM." : "月份必须是 YYYYMM。";
+        return;
+      }
+      const snapshots = loadMonthlySnapshots(region);
+      snapshots[month] = { month, saved_at: new Date().toISOString(), summary };
+      saveMonthlySnapshots(region, snapshots);
+      input.value = month;
+      renderMonthlyBoard(region, prefix);
+      document.getElementById(`${prefix}Result`).textContent = currentLang === "en" ? `Monthly snapshot saved: ${month}` : `已保存月度看板：${month}`;
+    }
+
+    function renderMonthlyBoard(region, prefix) {
+      const box = document.getElementById(`${prefix}MonthBoard`);
+      const snapshots = loadMonthlySnapshots(region);
+      const rows = Object.values(snapshots).sort((a, b) => String(b.month).localeCompare(String(a.month)));
+      if (!rows.length) {
+        box.className = "month-table muted";
+        box.textContent = currentLang === "en" ? "No monthly records yet." : "暂无月度记录。";
+        return;
+      }
+      const tr = rows.map((r) => {
+        const s = r.summary || {};
+        return `<tr><td>${r.month}</td><td>${s.rows ?? 0}</td><td>${s.coverage_type_count ?? 0}</td><td>${s.risk_high ?? 0}</td><td>${s.amount_outlier_count ?? 0}</td><td>${s.stability_alert_count ?? 0}</td><td>${(r.saved_at || "").replace("T", " ")}</td></tr>`;
+      }).join("");
+      box.className = "month-table";
+      box.innerHTML = currentLang === "en"
+        ? `<table><thead><tr><th>Month</th><th>Rows</th><th>Coverage Types</th><th>High Risk</th><th>Outliers</th><th>Alerts</th><th>Saved At</th></tr></thead><tbody>${tr}</tbody></table>`
+        : `<table><thead><tr><th>月份</th><th>样本行数</th><th>当月覆盖福利类型数</th><th>高风险单</th><th>金额异常</th><th>波动告警</th><th>保存时间</th></tr></thead><tbody>${tr}</tbody></table>`;
+    }
+
+    function exportMonthlyBoard(region) {
+      const snapshots = loadMonthlySnapshots(region);
+      const rows = Object.values(snapshots).sort((a, b) => String(a.month).localeCompare(String(b.month)));
+      if (!rows.length) return;
+      const header = ["month", "rows", "coverage_type_count", "risk_high", "risk_mid", "risk_low", "amount_outlier_count", "stability_alert_count", "saved_at"];
+      const body = rows.map((r) => {
+        const s = r.summary || {};
+        return [r.month, s.rows ?? 0, s.coverage_type_count ?? 0, s.risk_high ?? 0, s.risk_mid ?? 0, s.risk_low ?? 0, s.amount_outlier_count ?? 0, s.stability_alert_count ?? 0, r.saved_at || ""].join(",");
+      });
+      const csv = [header.join(","), ...body].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `monthly_dashboard_${region}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function importRealMonthlyJson(region, prefix) {
+      const root = (ROOT || document.getElementById("rootPath").value || "").trim();
+      if (!root) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Root path is empty. Save config first." : "Root Path 为空，请先保存配置。";
+        return;
+      }
+      const fileName =
+        region === "US"
+          ? "月度看板历史_US_真实数据_202601_202605.json"
+          : "月度看板历史_CAN_真实数据_202601_202605.json";
+      const absPath = `${root}/上传输出/${fileName}`;
+      document.getElementById(`${prefix}Result`).textContent =
+        currentLang === "en" ? `Importing ${fileName}...` : `正在导入 ${fileName}...`;
+      try {
+        const url = `${API}/api/files?path=${encodeURIComponent(absPath)}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const monthly = await res.json();
+        const snapshots = loadMonthlySnapshots(region);
+        let count = 0;
+        Object.entries(monthly || {}).forEach(([month, summary]) => {
+          if (!/^\d{6}$/.test(String(month))) return;
+          snapshots[month] = {
+            month,
+            saved_at: new Date().toISOString(),
+            summary,
+          };
+          count += 1;
+        });
+        saveMonthlySnapshots(region, snapshots);
+        renderMonthlyBoard(region, prefix);
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en"
+            ? `Imported ${count} monthly records from real-data JSON.`
+            : `已从真实数据 JSON 导入 ${count} 条月度记录。`;
+      } catch (e) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en"
+            ? `Import failed: ${e}`
+            : `导入失败：${e}`;
+      }
+    }
+
+    async function importMonthlyFiles(region, prefix) {
+      const files = Array.from(document.getElementById(`${prefix}MonthlyFiles`).files || []);
+      if (!files.length) {
+        document.getElementById(`${prefix}Result`).textContent = currentLang === "en" ? "Select monthly CSV files first." : "请先选择历史月度CSV文件。";
+        return;
+      }
+      const snapshots = loadMonthlySnapshots(region);
+      for (let i = 0; i < files.length; i += 1) {
+        const f = files[i];
+        const fd = new FormData();
+        fd.append("action", "stats_analysis_upload");
+        fd.append("region", region);
+        fd.append("desensitize", shouldMask(region) ? "true" : "false");
+        fd.append("recover_output", "true");
+        if (ROOT) fd.append("root", ROOT);
+        fd.append("file", f);
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en"
+            ? `Importing monthly file: ${i + 1}/${files.length} (${f.name})`
+            : `正在导入月度文件：${i + 1}/${files.length}（${f.name}）`;
+        const data = await postForm(`${API}/api/upload-and-generate`, fd, `${prefix}Result`, `${prefix}Links`);
+        if (data && data.ok && data.stats_summary) {
+          const month = detectMonthFromFilename(f.name) || detectMonthFromSummary(data.stats_summary);
+          if (month) {
+            snapshots[month] = { month, saved_at: new Date().toISOString(), summary: data.stats_summary };
+          }
+        }
+      }
+      saveMonthlySnapshots(region, snapshots);
+      renderMonthlyBoard(region, prefix);
+      document.getElementById(`${prefix}Result`).textContent =
+        currentLang === "en" ? "Monthly batch import completed." : "历史月度批量导入完成。";
+    }
+
+    function classifyError(data, err) {
+      const txt = String((data && (data.detail || data.message)) || err || "").toLowerCase();
+      if (txt.includes("field") || txt.includes("missing") || txt.includes("缺少")) {
+        return { level: "字段错误", fix: "请检查必填字段是否完整，如期间、主体、供应商、金额、币种。" };
+      }
+      if (txt.includes("file") || txt.includes("csv") || txt.includes("not found") || txt.includes("路径")) {
+        return { level: "文件错误", fix: "请检查上传文件是否为CSV、文件是否损坏、路径是否存在。" };
+      }
+      return { level: "服务错误", fix: "请先做健康检查，确认后端在线；若持续失败请重启服务。" };
+    }
+
+    function renderSummary(data, summaryId, linksId, errMsg = "") {
+      const box = document.getElementById(summaryId);
+      if (!box) return;
+      if (data && data.ok) {
+        const count = Array.isArray(data.outputs) ? data.outputs.length : 0;
+        box.className = "result-summary ok";
+        box.textContent = `执行成功：已生成 ${count} 个输出文件。可直接点击下方下载链接。`;
+        return;
+      }
+      const c = classifyError(data, errMsg);
+      box.className = "result-summary err";
+      box.textContent = `执行失败（${c.level}）：${c.fix}`;
+      const links = document.getElementById(linksId);
+      if (links) links.innerHTML = "";
+    }
+
+    async function postForm(url, fd, resultId, linksId) {
+      const out = document.getElementById(resultId);
+      const summaryId = resultId.replace("Result", "Summary");
+      out.textContent = "Processing...";
+      renderSummary(null, summaryId, linksId, "processing");
+      try {
+        const res = await fetch(url, { method: "POST", body: fd });
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+        showLinks(data, linksId);
+        renderStatsDashboard(resultId, data);
+        renderSummary(data, summaryId, linksId);
+        return data;
+      } catch (e) {
+        out.textContent = `Request failed: ${e}`;
+        renderStatsDashboard(resultId, null);
+        renderSummary(null, summaryId, linksId, String(e));
+        return null;
+      }
+    }
+
+    async function runBatchUploads(region, fileInputId, actionSelectId, resultId, linksId) {
+      const files = Array.from(document.getElementById(fileInputId).files || []);
+      if (!files.length) {
+        document.getElementById(resultId).textContent = "请先选择多个CSV文件。";
+        return;
+      }
+      const action = document.getElementById(actionSelectId).value;
+      const out = document.getElementById(resultId);
+      out.textContent = `批量执行中：0/${files.length}`;
+      for (let i = 0; i < files.length; i += 1) {
+        const fd = new FormData();
+        fd.append("action", action);
+        fd.append("region", region);
+        fd.append("desensitize", shouldMask(region) ? "true" : "false");
+        fd.append("recover_output", "true");
+        if (ROOT) fd.append("root", ROOT);
+        fd.append("file", files[i]);
+        out.textContent = `批量执行中：${i + 1}/${files.length} (${files[i].name})`;
+        await postForm(`${API}/api/upload-and-generate`, fd, resultId, linksId);
+      }
+      markStepDone(region, "output");
+    }
+
+    function formatTime(s) {
+      if (!s) return "-";
+      return String(s).replace("T", " ");
+    }
+
+    function pct(v) {
+      return `${(Number(v || 0) * 100).toFixed(1)}%`;
+    }
+
+    function opsCompareLine(labelZh, labelEn, obj) {
+      const title = currentLang === "en" ? labelEn : labelZh;
+      return `<div class="ops-line">${title}: US ${obj.US ?? 0} | CAN ${obj.CAN ?? 0}</div>`;
+    }
+
+    function renderOpsDashboard(prefix, data) {
+      const box = document.getElementById(`${prefix}OpsBoard`);
+      if (!box) return;
+      if (!data || !data.ok) {
+        box.className = "muted";
+        box.textContent = currentLang === "en" ? "No dashboard data yet." : "暂无看板数据。";
+        return;
+      }
+      const region = prefix === "us" ? "US" : "CAN";
+      const l1 = (data.l1 && data.l1[region]) || {};
+      const top3 = Array.isArray(l1.failure_top3) ? l1.failure_top3 : [];
+      const top3Text = top3.length
+        ? top3.map((x) => `${x.type}:${x.count}`).join(" | ")
+        : (currentLang === "en" ? "No failures this week" : "本周暂无失败");
+      const avg = l1.avg_elapsed_ms || {};
+      const avgText = `output ${avg.output || 0}ms / center ${avg.center || 0}ms / ledger ${avg.ledger || 0}ms`;
+      const l2 = data.l2 || {};
+      box.className = "";
+      box.innerHTML = `
+        <div class="ops-grid">
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Today Volume" : "今日处理单量"}</div><div class="ops-v">${l1.today_volume ?? 0}</div></div>
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Week Volume" : "本周处理单量"}</div><div class="ops-v">${l1.week_volume ?? 0}</div></div>
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Success Rate" : "成功率"}</div><div class="ops-v">${pct(l1.success_rate)}</div></div>
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Failure Rate" : "失败率"}</div><div class="ops-v">${pct(l1.failure_rate)}</div></div>
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Avg Elapsed by Step" : "各步骤平均耗时"}</div><div class="ops-v" style="font-size:13px;">${avgText}</div></div>
+          <div class="ops-card"><div class="ops-k">${currentLang === "en" ? "Failure Top3" : "失败原因Top3"}</div><div class="ops-v" style="font-size:13px;">${top3Text}</div></div>
+        </div>
+        <div class="section" style="margin-top:8px;">
+          <div class="ops-k">${currentLang === "en" ? "Management View (derived from logs)" : "管理视角（基于日志推导）"}</div>
+          ${opsCompareLine("US vs CAN 本周处理单量", "US vs CAN Week Volume", l2.us_vs_can_week_volume || {US:0,CAN:0})}
+          ${opsCompareLine("US vs CAN 成功率", "US vs CAN Success Rate", {US: pct((l2.us_vs_can_success_rate||{}).US), CAN: pct((l2.us_vs_can_success_rate||{}).CAN)})}
+          ${opsCompareLine("高风险单占比", "High Risk Ratio", {US: pct((l2.high_risk_ratio||{}).US), CAN: pct((l2.high_risk_ratio||{}).CAN)})}
+          ${opsCompareLine("漏更率（回填覆盖缺口）", "Ledger Miss Rate", {US: pct((l2.ledger_miss_rate||{}).US), CAN: pct((l2.ledger_miss_rate||{}).CAN)})}
+          ${opsCompareLine("阻断处理时长(分钟)", "Block Resolution Time (mins)", l2.block_resolution_minutes || {US:0,CAN:0})}
+        </div>
+      `;
+    }
+
+    async function loadOpsDashboard(region, prefix) {
+      const box = document.getElementById(`${prefix}OpsBoard`);
+      if (box) box.textContent = currentLang === "en" ? "Loading dashboard..." : "看板加载中...";
+      try {
+        const res = await fetch(`${API}/api/dashboard/ops`);
+        const data = await res.json();
+        latestOpsData[region] = data;
+        renderOpsDashboard(prefix, data);
+      } catch (e) {
+        if (box) box.innerHTML = `<p>${currentLang === "en" ? "Load failed" : "加载失败"}: ${e}</p>`;
+      }
+    }
+
+    function renderHistoryTable(prefix, jobs) {
+      const box = document.getElementById(`${prefix}HistoryTable`);
+      if (!jobs || !jobs.length) {
+        box.innerHTML = currentLang === "en" ? "<p>No history records.</p>" : "<p>无历史记录</p>";
+        return;
+      }
+      const rows = jobs.map((j) => {
+        const ok = j.ok ? (currentLang === "en" ? "Success" : "成功") : (currentLang === "en" ? "Failed" : "失败");
+        return `<tr><td>${formatTime(j.started_at)}</td><td>${j.region || "-"}</td><td>${j.step || "-"}</td><td>${j.action || "-"}</td><td>${ok}</td><td>${j.elapsed_ms || "-"}ms</td></tr>`;
+      }).join("");
+      box.innerHTML = currentLang === "en"
+        ? `<table border="1" cellspacing="0" cellpadding="6"><thead><tr><th>Time</th><th>Region</th><th>Step</th><th>Action</th><th>Status</th><th>Elapsed</th></tr></thead><tbody>${rows}</tbody></table>`
+        : `<table border="1" cellspacing="0" cellpadding="6"><thead><tr><th>时间</th><th>国家</th><th>步骤</th><th>动作</th><th>状态</th><th>耗时</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    async function loadHistory(region, prefix) {
+      const step = document.getElementById(`${prefix}HistStep`).value;
+      const from = document.getElementById(`${prefix}HistFrom`).value;
+      const to = document.getElementById(`${prefix}HistTo`).value;
+      const qs = new URLSearchParams();
+      qs.set("region", region);
+      qs.set("limit", "100");
+      if (step) qs.set("step", step);
+      if (from) qs.set("from_time", from);
+      if (to) qs.set("to_time", to);
+      try {
+        const res = await fetch(`${API}/api/jobs?${qs.toString()}`);
+        const data = await res.json();
+        renderHistoryTable(prefix, data.jobs || []);
+        setStepDone(prefix, "history", true);
+        setStepLabel(prefix, "history", currentLang === "en" ? "Done" : "已完成", "done");
+      } catch (e) {
+        document.getElementById(`${prefix}HistoryTable`).innerHTML = `<p>加载失败: ${e}</p>`;
+      }
+    }
+
+    function renderQueueTable(region, prefix) {
+      const q = batchQueues[region];
+      const box = document.getElementById(`${prefix}QueueTable`);
+      if (!q.items.length) {
+        box.innerHTML = currentLang === "en" ? "<p>Queue is empty.</p>" : "<p>队列为空</p>";
+        return;
+      }
+      const rows = q.items.map((it) => {
+        const canCancel = it.status === "queued" || it.status === "failed";
+        const cancelBtn = canCancel
+          ? `<button class="btn-danger" onclick="cancelQueueItem('${region}', ${it.id}, '${prefix}')">${currentLang === "en" ? "Cancel" : "取消"}</button>`
+          : "-";
+        return `<tr><td>${it.id}</td><td>${it.file.name}</td><td>${it.action}</td><td>${it.status}</td><td>${it.attempts || 0}/${it.maxRetries || 0}</td><td>${it.lastRunAt || "-"}</td><td>${it.error || "-"}</td><td>${cancelBtn}</td></tr>`;
+      }).join("");
+      const runText = q.running ? (q.paused ? (currentLang === "en" ? "Paused" : "已暂停") : (currentLang === "en" ? "Running" : "运行中")) : (currentLang === "en" ? "Idle" : "空闲");
+      box.innerHTML = currentLang === "en"
+        ? `<div class="desc">Queue Status: ${runText}</div><table border="1" cellspacing="0" cellpadding="6"><thead><tr><th>ID</th><th>File</th><th>Action</th><th>Status</th><th>Retry</th><th>Last Run</th><th>Error</th><th>Operation</th></tr></thead><tbody>${rows}</tbody></table>`
+        : `<div class="desc">运行状态：${runText}</div><table border="1" cellspacing="0" cellpadding="6"><thead><tr><th>ID</th><th>文件</th><th>动作</th><th>状态</th><th>重试</th><th>最近执行</th><th>错误</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    function enqueueBatch(region, prefix) {
+      const files = Array.from(document.getElementById(`${prefix}QueueFiles`).files || []);
+      const action = document.getElementById(`${prefix}QueueAction`).value;
+      const maxRetries = parseInt(document.getElementById(`${prefix}RetryMax`).value || "3", 10);
+      if (!files.length) {
+        document.getElementById(`${prefix}Result`).textContent = "请先选择批量CSV文件。";
+        return;
+      }
+      const q = batchQueues[region];
+      files.forEach((file) => {
+        q.items.push({ id: queueSeq++, file, action, status: "queued", error: "", attempts: 0, maxRetries, lastRunAt: "" });
+      });
+      renderQueueTable(region, prefix);
+      setStepLabel(prefix, "queue", "进行中", "in-progress");
+    }
+
+    function pauseQueue(region) {
+      batchQueues[region].paused = true;
+    }
+
+    function retryFailed(region, prefix) {
+      const q = batchQueues[region];
+      q.items.forEach((it) => {
+        if (it.status === "failed") {
+          it.status = "queued";
+          it.error = "";
+          it.attempts = 0;
+        }
+      });
+      renderQueueTable(region, prefix);
+    }
+
+    function cancelQueueItem(region, itemId, prefix) {
+      const q = batchQueues[region];
+      const item = q.items.find((it) => it.id === itemId);
+      if (!item) return;
+      if (item.status === "running") {
+        document.getElementById(`${prefix}Result`).textContent = "运行中的任务不可立即取消，请先暂停后等待当前任务结束。";
+        return;
+      }
+      item.status = "cancelled";
+      item.error = "用户取消";
+      renderQueueTable(region, prefix);
+    }
+
+    async function startQueue(region, prefix) {
+      const q = batchQueues[region];
+      if (q.running) return;
+      q.running = true;
+      q.paused = false;
+      renderQueueTable(region, prefix);
+      while (true) {
+        if (q.paused) break;
+        const next = q.items.find((it) => it.status === "queued");
+        if (!next) break;
+        next.status = "running";
+        next.attempts = (next.attempts || 0) + 1;
+        next.lastRunAt = new Date().toLocaleString();
+        renderQueueTable(region, prefix);
+        const fd = new FormData();
+        fd.append("action", next.action);
+        fd.append("region", region);
+        if (ROOT) fd.append("root", ROOT);
+        fd.append("file", next.file);
+        const data = await postForm(`${API}/api/upload-and-generate`, fd, `${prefix}Result`, `${prefix}Links`);
+        if (data && data.ok) {
+          next.status = "done";
+          markStepDone(region, "output");
+        } else {
+          if ((next.attempts || 0) <= (next.maxRetries || 0)) {
+            next.status = "queued";
+            next.error = `自动重试中(${next.attempts}/${next.maxRetries})`;
+          } else {
+            next.status = "failed";
+            next.error = `执行失败，已达最大重试(${next.maxRetries})`;
+          }
+        }
+        renderQueueTable(region, prefix);
+      }
+      q.running = false;
+      renderQueueTable(region, prefix);
+      const hasFailed = q.items.some((it) => it.status === "failed");
+      if (!hasFailed && q.items.some((it) => it.status === "done")) {
+        setStepDone(prefix, "queue", true);
+        setStepLabel(prefix, "queue", "已完成", "done");
+      } else {
+        setStepLabel(prefix, "queue", "进行中", "in-progress");
+      }
+    }
+
+    function resumeQueue(region, prefix) {
+      batchQueues[region].paused = false;
+      startQueue(region, prefix);
+    }
+
+    function exportQueueLog(region, prefix) {
+      const q = batchQueues[region];
+      if (!q.items.length) {
+        document.getElementById(`${prefix}Result`).textContent = "队列为空，无可导出记录。";
+        return;
+      }
+      const header = ["id", "file", "action", "status", "attempts", "maxRetries", "lastRunAt", "error"];
+      const rows = q.items.map((it) => [
+        it.id,
+        `"${String(it.file?.name || "").replace(/"/g, '""')}"`,
+        it.action,
+        it.status,
+        it.attempts || 0,
+        it.maxRetries || 0,
+        `"${String(it.lastRunAt || "").replace(/"/g, '""')}"`,
+        `"${String(it.error || "").replace(/"/g, '""')}"`
+      ].join(","));
+      const csv = [header.join(","), ...rows].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `queue_log_${region}_${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "")}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      document.getElementById(`${prefix}Result`).textContent = `已导出 ${region} 队列记录。`;
+    }
+
+    let guideStep = 0;
+    function guideTexts() {
+      return currentLang === "en"
+        ? [
+            "Step 1: Run Health Check at top first.",
+            "Step 2: Select region + step, then upload CSV and click main action.",
+            "Step 3: Read summary and download outputs; expand raw JSON only for troubleshooting."
+          ]
+        : [
+            "第1步：先在顶部做健康检查，确认后端可用。",
+            "第2步：左侧选国家和步骤，再上传文件点击主按钮。",
+            "第3步：看结果摘要和下载链接，必要时展开原始JSON排查。"
+          ];
+    }
+    function openGuide() {
+      guideStep = 0;
+      document.getElementById("guideText").textContent = guideTexts()[guideStep];
+      document.getElementById("guideModalMask").classList.add("show");
+    }
+    function nextGuideStep() {
+      guideStep += 1;
+      if (guideStep >= guideTexts().length) {
+        skipGuide();
+        return;
+      }
+      document.getElementById("guideText").textContent = guideTexts()[guideStep];
+    }
+    function skipGuide() {
+      localStorage.setItem(KEY_GUIDE_DONE, "1");
+      document.getElementById("guideModalMask").classList.remove("show");
+    }
+
+    async function uploadAndGenerate(region, action, fileId, resultId, linksId) {
+      const file = document.getElementById(fileId).files[0];
+      if (!file) {
+        document.getElementById(resultId).textContent = "Please select CSV file.";
+        return;
+      }
+      markStepInProgress(region, "output");
+      const fd = new FormData();
+      fd.append("action", action);
+      fd.append("region", region);
+      fd.append("desensitize", shouldMask(region) ? "true" : "false");
+      fd.append("recover_output", "true");
+      if (ROOT) fd.append("root", ROOT);
+      fd.append("file", file);
+      const data = await postForm(`${API}/api/upload-and-generate`, fd, resultId, linksId);
+      if (data && data.ok) {
+        markStepDone(region, "output");
+      } else {
+        clearInProgress(region, "output");
+      }
+    }
+
+    async function runBuildAllocation(region, prefix) {
+      const file = document.getElementById(`${prefix}P1File`).files[0];
+      if (!file) {
+        document.getElementById(`${prefix}Result`).textContent = "Please select CSV file.";
+        return;
+      }
+      markStepInProgress(region, "center");
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("period", document.getElementById(`${prefix}Period`).value.trim());
+      fd.append("country", document.getElementById(`${prefix}Country`).value.trim());
+      fd.append("entity", document.getElementById(`${prefix}Entity`).value.trim());
+      fd.append("vendor", document.getElementById(`${prefix}Vendor`).value.trim());
+      fd.append("fee_type", document.getElementById(`${prefix}FeeType`).value.trim());
+      fd.append("invoice_total", document.getElementById(`${prefix}InvoiceTotal`).value.trim());
+      fd.append("currency", document.getElementById(`${prefix}Currency`).value.trim());
+      fd.append("region", region);
+      if (ROOT) fd.append("root", ROOT);
+      const data = await postForm(`${API}/api/pain/build-allocation`, fd, `${prefix}Result`, `${prefix}Links`);
+      if (data && data.ok) {
+        pushInvoiceHistory(region, prefix, document.getElementById(`${prefix}InvoiceTotal`).value.trim());
+        refreshInvoiceHints(region, prefix);
+        markStepDone(region, "center");
+      } else {
+        clearInProgress(region, "center");
+      }
+    }
+
+    async function runCheckCenters(region, prefix) {
+      const source = document.getElementById(`${prefix}P3SourceFile`).files[0];
+      const status = document.getElementById(`${prefix}P3StatusFile`).files[0];
+      if (!source || !status) {
+        document.getElementById(`${prefix}Result`).textContent = "Please select source + status CSV.";
+        return;
+      }
+      markStepInProgress(region, "center");
+      const fd = new FormData();
+      fd.append("source_file", source);
+      fd.append("status_file", status);
+      fd.append("region", region);
+      if (ROOT) fd.append("root", ROOT);
+      const data = await postForm(`${API}/api/pain/check-centers`, fd, `${prefix}Result`, `${prefix}Links`);
+      if (data && data.ok) {
+        markStepDone(region, "center");
+      } else {
+        clearInProgress(region, "center");
+      }
+    }
+
+    async function runCheckCentersDefault(region, prefix) {
+      const source = document.getElementById(`${prefix}P3SourceFile`).files[0];
+      if (!source) {
+        document.getElementById(`${prefix}Result`).textContent = "Please select source CSV.";
+        return;
+      }
+      markStepInProgress(region, "center");
+      const fd = new FormData();
+      fd.append("source_file", source);
+      fd.append("status_path", `${ROOT}/痛点攻坚实施包/成本中心状态表模板.csv`);
+      fd.append("region", region);
+      if (ROOT) fd.append("root", ROOT);
+      const data = await postForm(`${API}/api/pain/check-centers`, fd, `${prefix}Result`, `${prefix}Links`);
+      if (data && data.ok) {
+        markStepDone(region, "center");
+      } else {
+        clearInProgress(region, "center");
+      }
+    }
+
+    async function runUpdateLedger(region, prefix) {
+      const prefill = document.getElementById(`${prefix}P4PrefillFile`).files[0];
+      const ledger = document.getElementById(`${prefix}P4LedgerFile`).files[0];
+      if (!prefill) {
+        document.getElementById(`${prefix}Result`).textContent = "Please select prefill CSV.";
+        return;
+      }
+      markStepInProgress(region, "ledger");
+      const fd = new FormData();
+      fd.append("prefill_file", prefill);
+      if (ledger) fd.append("ledger_file", ledger);
+      fd.append("region", region);
+      if (ROOT) fd.append("root", ROOT);
+      const data = await postForm(`${API}/api/pain/update-ledger`, fd, `${prefix}Result`, `${prefix}Links`);
+      if (data && data.ok) {
+        markStepDone(region, "ledger");
+      } else {
+        clearInProgress(region, "ledger");
+      }
+    }
+
+    function switchLang() {
+      const lang = document.getElementById("lang").value;
+      currentLang = lang;
+      localStorage.setItem(KEY_LANG, lang);
+      if (lang === "en") {
+        document.getElementById("title").textContent = "AMER FPP + ai";
+        document.getElementById("subtitle").textContent = "AMER (US/CAN) isolated workspaces with paged efficiency actions.";
+        document.getElementById("connTitle").textContent = "Backend";
+        document.getElementById("saveBtn").textContent = "Save";
+        document.getElementById("healthBtn").textContent = "Health Check";
+        document.getElementById("countryJumpTitle").textContent = "Country Navigation";
+        document.getElementById("navCountriesTitle").textContent = "Countries";
+        document.getElementById("navUsPagesTitle").textContent = "US Pages";
+        document.getElementById("navCanPagesTitle").textContent = "CAN Pages";
+        document.getElementById("countryTabUSText").textContent = "US Workspace";
+        document.getElementById("countryTabSGText").textContent = "CAN Workspace";
+        document.getElementById("usWorkspaceTitle").textContent = "US Workspace";
+        document.getElementById("sgWorkspaceTitle").textContent = "CAN Workspace";
+      } else {
+        document.getElementById("title").textContent = "AMER FPP + ai";
+        document.getElementById("subtitle").textContent = "AMER（US/CAN）完全独立，按效能点分页执行。";
+        document.getElementById("connTitle").textContent = "后端连接";
+        document.getElementById("saveBtn").textContent = "保存";
+        document.getElementById("healthBtn").textContent = "健康检查";
+        document.getElementById("countryJumpTitle").textContent = "国家跳转";
+        document.getElementById("navCountriesTitle").textContent = "国家";
+        document.getElementById("navUsPagesTitle").textContent = "US 页面";
+        document.getElementById("navCanPagesTitle").textContent = "CAN 页面";
+        document.getElementById("countryTabUSText").textContent = "US 工作区";
+        document.getElementById("countryTabSGText").textContent = "CAN 工作区";
+        document.getElementById("usWorkspaceTitle").textContent = "US 工作区";
+        document.getElementById("sgWorkspaceTitle").textContent = "CAN 工作区";
+      }
+      const map = {
+        "文档产出": "Output",
+        "成本中心预检": "Center Check",
+        "台账回填": "Ledger Update",
+        "定时预检": "Schedule Check",
+        "执行历史": "History",
+        "任务队列": "Queue",
+        "每个分页代表一个效能点。先做“文档产出”，再做预检/台账/定时任务。": "Each tab is one efficiency step. Start with Output, then Center/Ledger/Schedule.",
+        "CAN 区与 US 区完全独立，所有输入、模板和结果都隔离。": "CAN and US workspaces are fully isolated for inputs, templates, and outputs.",
+        "安全说明：本工具在本地运行，文件在本机处理，不上传外网。": "Security: This tool runs locally. Files stay on this machine.",
+        "把 CSV 直接转成可提交文档，不修改台账。适合做提交前检查和材料准备。所有结果都可在报告文件与原始结果中复核，不是算法黑盒。": "Convert CSV to submission docs directly, without changing ledger data. All outputs can be audited via reports and raw results, so it is not a black-box algorithm.",
+        "提交前自动识别失效/未维护成本中心，给出阻断清单和修复建议，避免提单失败。": "Detect invalid or unmaintained cost centers before submission.",
+        "半自动更新台账：按关键字段去重并 Upsert，降低漏更、晚更、重复录入风险。": "Semi-automatic ledger update with de-dup and upsert.",
+        "工作日前自动预检，优先暴露阻断问题。适合月初集中提单高峰期。": "Run pre-check before workday to reveal blockers early.",
+        "这是什么": "What is this",
+        "生成提单文本": "Generate Submission Blocks",
+        "生成HC校验": "Generate HC Check",
+        "文档字段健康检查（含特殊case）": "Document Field Health Check",
+        "统计分析（看板）": "Analytics Dashboard",
+        "批量生成提单文本": "Batch: Submission Blocks",
+        "批量生成HC校验": "Batch: HC Check",
+        "批量文档字段健康检查": "Batch: Field Health Check",
+        "批量统计分析": "Batch: Analytics",
+        "批量串行执行": "Run Batch Sequentially",
+        "1页运营看板": "One-page Operations Dashboard",
+        "刷新运营看板": "Refresh Dashboard",
+        "6个核心指标：今日/本周处理单量、成功率、失败率、步骤平均耗时、失败原因Top3。并提供管理视角（US vs CAN、高风险占比、漏更率、阻断处理时长）。": "6 core metrics: today/week volume, success/failure rate, average elapsed by step, and failure top3. Plus management view (US vs CAN, high-risk ratio, ledger miss rate, and block resolution time).",
+        "点击“刷新运营看板”加载数据。": "Click 'Refresh Dashboard' to load metrics.",
+        "月度看板历史": "Monthly Dashboard History",
+        "保存本月看板": "Save Monthly Snapshot",
+        "刷新月度看板": "Refresh Monthly Dashboard",
+        "导出月度CSV": "Export Monthly CSV",
+        "一键导入真实月度JSON": "One-click Import Real Monthly JSON",
+        "一键导入历史月度数据": "One-click Import Monthly History",
+        "暂无月度记录。": "No monthly records yet.",
+        "保存默认模板": "Save Default Template",
+        "读取默认模板": "Load Default Template",
+        "重置默认模板": "Reset Default Template",
+        "导出模板JSON": "Export Template JSON",
+        "导入模板JSON": "Import Template JSON",
+        "自动分摊生成HC": "Build Allocation (HC)",
+        "自动填入并执行（推荐）": "Auto Fill and Run",
+        "检查成本中心（上传状态表）": "Check Centers (Upload Status File)",
+        "检查成本中心（用默认状态表）": "Check Centers (Use Default Status File)",
+        "台账自动更新": "Update Ledger",
+        "已完成定时配置（打勾）": "Mark Schedule Configured",
+        "查询历史": "Query History",
+        "加入队列": "Enqueue",
+        "开始执行": "Start",
+        "暂停": "Pause",
+        "继续": "Resume",
+        "失败重试": "Retry Failed",
+        "导出队列记录": "Export Queue Log",
+        "上传前脱敏（输出自动恢复）": "Mask Upload (Auto Recover Output)",
+        "全部步骤": "All Steps",
+        "操作文档": "Operator Docs",
+        "操作者使用指南": "Operator Guide",
+        "案例文档（操作者）": "Case Practice",
+        "操作流程（操作者）": "Operator Flow",
+        "使用指南（Word）": "Guide (Word)",
+        "案例演练（Word）": "Case Practice (Word)",
+        "操作流程（Word）": "Flow (Word)",
+        "按钮级操作文档": "Button-level Manual",
+        "操作者操作手册（网页版）": "Operator Manual (Web)",
+        "操作者操作清单（Excel可开）": "Operator Checklist (Excel)",
+        "概念说明：文档产出 vs 自动化": "Concept: Output vs Automation",
+        "查看系统原始结果（JSON）": "View System Raw Output (JSON)",
+        "记录文档1.0（网页版）": "Record Doc 1.0 (Web)",
+        "记录文档1.0（Word）": "Record Doc 1.0 (Word)",
+        "记录文档1.0（Markdown）": "Record Doc 1.0 (Markdown)",
+        "模板校验提示": "Template Validation",
+        "US Result": "US Result",
+        "CAN Result": "CAN Result",
+        "首次使用引导": "First-use Guide",
+        "跳过": "Skip",
+        "下一步": "Next",
+        "我知道了": "Got it"
+      };
+      const reverseMap = Object.fromEntries(Object.entries(map).map(([zh, en]) => [en, zh]));
+      document.querySelectorAll("button, h3, summary, .tip, .desc, .safety, label, li a, option").forEach((el) => {
+        const raw = (el.textContent || "").trim();
+        if (!raw) return;
+        if (lang === "en") {
+          if (map[raw]) el.textContent = map[raw];
+        } else {
+          if (reverseMap[raw]) el.textContent = reverseMap[raw];
+        }
+      });
+      const navLabels = {
+        usTabOutputText: { zh: "文档产出", en: "Output" },
+        usTabCenterText: { zh: "成本中心预检", en: "Center Check" },
+        usTabLedgerText: { zh: "台账回填", en: "Ledger Update" },
+        usTabScheduleText: { zh: "定时预检", en: "Schedule Check" },
+        usTabHistoryText: { zh: "执行历史", en: "History" },
+        usTabQueueText: { zh: "任务队列", en: "Queue" },
+        sgTabOutputText: { zh: "文档产出", en: "Output" },
+        sgTabCenterText: { zh: "成本中心预检", en: "Center Check" },
+        sgTabLedgerText: { zh: "台账回填", en: "Ledger Update" },
+        sgTabScheduleText: { zh: "定时预检", en: "Schedule Check" },
+        sgTabHistoryText: { zh: "执行历史", en: "History" },
+        sgTabQueueText: { zh: "任务队列", en: "Queue" }
+      };
+      Object.entries(navLabels).forEach(([id, txt]) => {
+        const node = document.getElementById(id);
+        if (node) node.textContent = lang === "en" ? txt.en : txt.zh;
+      });
+      const docTitle = document.getElementById("docTitle");
+      if (docTitle) docTitle.textContent = "Operator Docs / 操作文档";
+      const summaryDefault = lang === "en" ? "Waiting..." : "等待执行";
+      ["usSummary", "sgSummary"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const cur = (el.textContent || "").trim();
+        if (["等待执行", "Waiting...", "Waiting"].includes(cur)) el.textContent = summaryDefault;
+      });
+      const dashboardDefault = lang === "en"
+        ? "Dashboard appears after running 'Analytics Dashboard'."
+        : "统计看板将在“统计分析（看板）”执行后显示。";
+      ["usDashboard", "sgDashboard"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.classList.contains("muted")) el.textContent = dashboardDefault;
+      });
+      updateBreadcrumb(document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN", "output");
+      restoreProgressUI();
+      if (latestStatsSummary.US) renderStatsDashboard("usResult", { stats_summary: latestStatsSummary.US });
+      if (latestStatsSummary.CAN) renderStatsDashboard("sgResult", { stats_summary: latestStatsSummary.CAN });
+      if (latestOpsData.US) renderOpsDashboard("us", latestOpsData.US);
+      if (latestOpsData.CAN) renderOpsDashboard("sg", latestOpsData.CAN);
+    }
+
+    async function init() {
+      renderNavIcons();
+      document.getElementById("apiBase").value = API;
+      document.getElementById("rootPath").value = ROOT;
+      document.getElementById("lang").value = localStorage.getItem(KEY_LANG) || "zh";
+      switchLang();
+      populatePeriodOptions();
+      setDefaults("us", "US");
+      setDefaults("sg", "CAN");
+      applyBuildPreset("us", "anthem");
+      applyBuildPreset("sg", "sunlife");
+      refreshInvoiceHints("US", "us");
+      refreshInvoiceHints("CAN", "sg");
+      loadRegionTemplate("US", "us", true);
+      loadRegionTemplate("CAN", "sg", true);
+      restoreProgressUI();
+      setStepLabel("us", "history", currentLang === "en" ? "Not Started" : "未开始", "");
+      setStepLabel("us", "queue", currentLang === "en" ? "Not Started" : "未开始", "");
+      setStepLabel("sg", "history", currentLang === "en" ? "Not Started" : "未开始", "");
+      setStepLabel("sg", "queue", currentLang === "en" ? "Not Started" : "未开始", "");
+      renderQueueTable("US", "us");
+      renderQueueTable("CAN", "sg");
+      loadOpsDashboard("US", "us");
+      loadOpsDashboard("CAN", "sg");
+      updateBreadcrumb("US", "output");
+      if (!localStorage.getItem(KEY_GUIDE_DONE)) openGuide();
+      try {
+        const res = await fetch(`${API}/api/meta`);
+        const data = await res.json();
+        if (data.workspace_root && !ROOT) {
+          ROOT = data.workspace_root;
+          document.getElementById("rootPath").value = ROOT;
+          localStorage.setItem(KEY_ROOT, ROOT);
+        }
+      } catch (_) {}
+    }
+
+    init();
+  </script>
+</body>
+</html>

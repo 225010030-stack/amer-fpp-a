@@ -1,0 +1,1367 @@
+[
+  {
+    "ok": true,
+    "run_id": "5785e121-844c-45eb-811b-f393a53a9baa",
+    "action": "run_precheck",
+    "started_at": "2026-06-08T15:23:55",
+    "elapsed_ms": 128,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_run_precheck_20260608_152355.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152355.md",
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152355.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152355.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152355.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "2cded382-ae91-477d-8be7-1024edd67450",
+    "action": "run_precheck",
+    "started_at": "2026-06-08T15:25:36",
+    "elapsed_ms": 102,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_run_precheck_20260608_152536.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152536.md",
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152536.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152536.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152536.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "ef4f0854-5426-499c-8413-321518453ea4",
+    "action": "run_precheck",
+    "started_at": "2026-06-08T15:26:00",
+    "elapsed_ms": 101,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_run_precheck_20260608_152600.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152600.md",
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152600.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152600.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152600.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "ff5406ab-2d12-47e9-bb3d-5948798da410",
+    "action": "run_full_check",
+    "started_at": "2026-06-08T15:29:20",
+    "elapsed_ms": 183,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_run_full_check_20260608_152920.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152920.md",
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152920.md",
+      "/Users/zhangwenjing/Desktop/工作提效/HC校验输出/HC校验报告_20260608_152920.md",
+      "/Users/zhangwenjing/Desktop/工作提效/HC校验输出/HC待修复清单_20260608_152920.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152920.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152920.md",
+      "",
+      "=== Step 2/2: HC 校验（Skill-02）===",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/HC校验输出/HC校验报告_20260608_152920.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/HC校验输出/HC待修复清单_20260608_152920.md",
+      "",
+      "全部完成。输出文件夹：",
+      "1) /Users/zhangwenjing/Desktop/工作提效/目录预检输出",
+      "2) /Users/zhangwenjing/Desktop/工作提效/HC校验输出"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "3225713d-8330-46e2-b806-91f37fd87498",
+    "action": "run_precheck",
+    "started_at": "2026-06-08T15:29:26",
+    "elapsed_ms": 115,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_run_precheck_20260608_152927.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152927.md",
+      "/Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152927.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/目录预检报告_20260608_152927.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/目录预检输出/待修复清单_20260608_152927.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "946ff129-cf26-442d-b3cc-82e9fb8e2eb0",
+    "action": "generate_submission_blocks",
+    "started_at": "2026-06-08T15:29:29",
+    "elapsed_ms": 58,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_generate_submission_blocks_20260608_152929.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/FPP提单文本块.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "235796e4-2d16-4ad1-b6c7-0a692d9a21b9",
+    "action": "generate_submission_blocks",
+    "started_at": "2026-06-08T15:29:38",
+    "elapsed_ms": 55,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_generate_submission_blocks_20260608_152938.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/FPP提单文本块.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "cd20e2ab-b296-47ad-a893-30899e96db4e",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-08T15:54:57",
+    "elapsed_ms": 66,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_generate_submission_blocks_20260608_155457.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/上传输出/FPP提单文本块_20260608_155457.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "8756170e-afc3-4f3a-8bdc-a70bef12ea0b",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-08T16:03:14",
+    "elapsed_ms": 38,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_generate_submission_blocks_20260608_160314.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/上传输出/FPP提单文本块_20260608_160314.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "f84c3be1-e3ec-49f1-983b-65b1bc9c9180",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-08T16:24:56",
+    "elapsed_ms": 39,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_generate_submission_blocks_20260608_162456.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/上传输出/FPP提单文本块_SG_20260608_162456.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "6bc23c01-e227-4d57-9376-8a1e743df596",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-08T16:27:31",
+    "elapsed_ms": 41,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain3_check_centers_20260608_162731.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/成本中心有效性检查报告_SG_20260608_162731.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "76e724d4-e127-4440-97e5-eb352f293a45",
+    "action": "pain1_build_allocation",
+    "started_at": "2026-06-08T16:27:31",
+    "elapsed_ms": 40,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain1_build_allocation_20260608_162731.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/HC_Analysis_US_20260608_162731.csv"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "963c2ca1-86ea-4c4d-b568-d3022d6d01d3",
+    "action": "pain4_update_ledger",
+    "started_at": "2026-06-08T16:27:31",
+    "elapsed_ms": 42,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain4_update_ledger_20260608_162731.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Ledger updated: /Users/zhangwenjing/Desktop/工作提效/上传输出/台账_自动更新_US_20260608_162731.csv",
+      "created=3, updated=0, total=3"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "b946adf2-5bfb-4593-a7c2-88402838c5f9",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-08T16:45:55",
+    "elapsed_ms": 39,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain3_check_centers_20260608_164555.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/成本中心有效性检查报告_US_20260608_164555.md"
+    ],
+    "stderr_tail": []
+  },
+  {
+    "ok": true,
+    "run_id": "bd84cadd-a3a7-41fc-b72e-dd71e2ee1066",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-08T17:19:45",
+    "elapsed_ms": 36,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_generate_submission_blocks_20260608_171945.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/上传输出/FPP提单文本块_US_20260608_171945.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "output"
+  },
+  {
+    "ok": true,
+    "run_id": "16398375-c5d5-4618-947c-1737aaa3f4a7",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-08T17:19:46",
+    "elapsed_ms": 34,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_generate_submission_blocks_20260608_171946.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /Users/zhangwenjing/Desktop/工作提效/上传输出/FPP提单文本块_CAN_20260608_171946.md"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "output"
+  },
+  {
+    "ok": true,
+    "run_id": "9f1583f2-afa5-4bdb-b193-1636fe5c12ce",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-08T17:19:46",
+    "elapsed_ms": 35,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain3_check_centers_20260608_171946.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/成本中心有效性检查报告_US_20260608_171946.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "d6981078-0515-49b0-b9a6-9dee196653b1",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-08T17:19:46",
+    "elapsed_ms": 33,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain3_check_centers_20260608_171946.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/成本中心有效性检查报告_CAN_20260608_171946.md"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "a85a7170-b68f-4da2-9e00-8c106c70a5da",
+    "action": "pain4_update_ledger",
+    "started_at": "2026-06-08T17:19:46",
+    "elapsed_ms": 36,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain4_update_ledger_20260608_171946.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Ledger updated: /Users/zhangwenjing/Desktop/工作提效/上传输出/台账_自动更新_US_20260608_171946.csv",
+      "created=3, updated=0, total=3"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "ledger"
+  },
+  {
+    "ok": true,
+    "run_id": "5f940eb8-2adc-4820-b46f-4c7edee19910",
+    "action": "pain4_update_ledger",
+    "started_at": "2026-06-08T17:19:46",
+    "elapsed_ms": 35,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain4_update_ledger_20260608_171946.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Ledger updated: /Users/zhangwenjing/Desktop/工作提效/上传输出/台账_自动更新_CAN_20260608_171946.csv",
+      "created=3, updated=0, total=3"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "ledger"
+  },
+  {
+    "ok": true,
+    "run_id": "a11468ac-8a03-408b-b53b-07044304e6b1",
+    "action": "pain1_build_allocation",
+    "started_at": "2026-06-08T17:19:55",
+    "elapsed_ms": 40,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain1_build_allocation_20260608_171955.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/HC_Analysis_US_20260608_171955.csv"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "3d97faad-e55d-4a47-800c-1e10de3acef9",
+    "action": "pain1_build_allocation",
+    "started_at": "2026-06-08T17:19:56",
+    "elapsed_ms": 41,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_pain1_build_allocation_20260608_171956.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /Users/zhangwenjing/Desktop/工作提效/上传输出/HC_Analysis_CAN_20260608_171956.csv"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "d873eb38-06dc-4db4-9017-2a252bfae494",
+    "action": "upload_doc_health_check",
+    "started_at": "2026-06-08T17:33:13",
+    "elapsed_ms": 38,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_doc_health_check_20260608_173313.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/提单文档字段健康检查报告_US_20260608_173313.md"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/提单文档字段健康检查报告_US_20260608_173313.md",
+      "健康检查完成"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "output"
+  },
+  {
+    "ok": true,
+    "run_id": "30965553-b5b6-4ec9-b565-64ec4c06f573",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:06:27",
+    "elapsed_ms": 60,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_180627.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_180627.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_180627.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_180627.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_180627.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_180627.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_180627.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "a7b352f1-c757-48e6-98f4-1581fb69c477",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:17:49",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_181750.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181749.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181749.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181749.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181749.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181749.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181749.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "e44bdbca-6582-4072-80d7-e46680aedee0",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:17:50",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_181750.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "0bf9abef-fb8d-47cd-8189-952cdf422202",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:17:50",
+    "elapsed_ms": 66,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_181750.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "589baa2c-ef3b-44db-b7f6-25d3118c00f5",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:17:50",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_181750.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "168a79e6-be8a-456a-9aa1-aae03b039ec1",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:17:50",
+    "elapsed_ms": 51,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_181750.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_181750.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_181750.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_181750.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "53a20060-7baf-44d3-8093-a050a5ad0a68",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 48,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "cf93f3a4-f75e-46dc-add4-6a28de7cc686",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 50,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "56bda9d8-bcef-4cd8-9c3e-8db72dfb557f",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 59,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "3ac4675f-7289-4592-bf88-14f52455bd66",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 51,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "06f72236-198a-42fd-ac7e-365abed32327",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "5a3d5f2a-93f2-42ef-9594-5b0c99871d9a",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "d69b7096-fb7d-4866-959d-d4afd64dcc71",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 59,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "d7b258f2-d61c-46c5-98ac-0a52931e9ae4",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 55,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "570fb872-5677-4dc6-a37f-a41bf995c886",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T18:21:31",
+    "elapsed_ms": 57,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_182131.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_182131.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_182131.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_182131.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "5cc4ccb9-23ea-4cc1-86cc-0b4e506f2b02",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 49,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "8b367fc0-cbc0-4d8e-9493-a0a4c9daebbb",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "b6ba7595-5592-4dd9-893c-427d0ba6c105",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 55,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "180576b4-7e1e-408c-b8ad-421fa376ea41",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "db43f130-fc1b-4e76-882f-52c3f4c3bed0",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 59,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "27709b40-2044-44c3-bf6f-1748063d9d76",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "efa744e9-1df3-4368-83c6-f6b3e31aa0a9",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "fa6a855f-8adf-4cd3-81e9-c48255345922",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 57,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "362e4c26-7a70-4cc0-aa9d-fa6930371bbe",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:22:43",
+    "elapsed_ms": 58,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192243.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192243.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192243.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192243.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "b45d8fce-553f-4f76-b567-6b33f61f600b",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192324.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "66cb2aca-4b1e-40fe-b18c-68942fbed0dd",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 57,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192324.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "120089a0-4a87-4485-a65a-587e5b1c2b1d",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 56,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192324.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "744a72ed-2a8b-4898-83a4-a3c348577885",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 59,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192324.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "5795e9f2-096f-44dd-aafb-23a371e81d4a",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 62,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192324.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "b30a794e-dde2-4f28-8789-fbc2b4a552ed",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:24",
+    "elapsed_ms": 74,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192325.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192324.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192324.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192324.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192324.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192324.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192324.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "cbc920fe-145c-4b76-8b71-e3126fd3fb90",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:25",
+    "elapsed_ms": 62,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192325.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "e5f79fb7-668e-402e-b44a-ca47999c3ff7",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:25",
+    "elapsed_ms": 75,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192325.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "13526419-de7e-455c-836f-2ce4967ba9fa",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:23:25",
+    "elapsed_ms": 61,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192325.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192325.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192325.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192325.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "38ec46a3-a117-43bf-b448-7690d82283ba",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:49",
+    "elapsed_ms": 48,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192849.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192849.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192849.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192849.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192849.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192849.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192849.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "a59d756e-4d83-4885-8e4c-e55706a0d8ef",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:49",
+    "elapsed_ms": 53,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192849.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192849.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192849.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192849.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192849.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192849.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "3b898635-fb15-4570-921b-0e9681c58a08",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 62,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "2a28c60f-ccfd-4d54-9545-27e408abeff7",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 62,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_CAN_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_CAN_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_CAN_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "CAN",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "4d653ed5-98b5-47d3-b087-f2d07345cc57",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 61,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "ef2dcd54-e132-41aa-aafd-5380e914385d",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 54,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "3d23f99f-8763-4994-8a7e-9e368457c387",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 55,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "5b90537f-919b-46ae-a903-15a8d804bb83",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 61,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "a26c406d-f422-488c-8981-29f07d393f17",
+    "action": "upload_stats_analysis",
+    "started_at": "2026-06-08T19:28:50",
+    "elapsed_ms": 54,
+    "root": "/Users/zhangwenjing/Desktop/工作提效",
+    "exit_code": 0,
+    "log_file": "/Users/zhangwenjing/Desktop/工作提效/运行日志/run_upload_stats_analysis_20260608_192850.md",
+    "outputs": [
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "/Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stdout_tail": [
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效分析报告_US_20260608_192850.md",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_风险评分明细_US_20260608_192850.csv",
+      "DONE: /Users/zhangwenjing/Desktop/工作提效/上传输出/统计提效_看板摘要_US_20260608_192850.json"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "analytics"
+  }
+]

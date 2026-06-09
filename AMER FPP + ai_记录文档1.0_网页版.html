@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMER FPP + ai 记录文档 1.0</title>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f4f6fb; color: #0f172a; }
+    .wrap { max-width: 980px; margin: 24px auto; padding: 0 16px; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+    h1 { margin: 0 0 10px; font-size: 30px; }
+    h2 { margin: 0 0 8px; font-size: 20px; }
+    h3 { margin: 12px 0 6px; font-size: 16px; }
+    p, li { line-height: 1.65; }
+    .meta { color: #64748b; font-size: 14px; }
+    .ok { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; }
+    .warn { background: #fff7ed; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid #cbd5e1; margin-right: 6px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .btn { text-decoration: none; border: 1px solid #cbd5e1; color: #0f172a; background: #fff; padding: 8px 12px; border-radius: 8px; font-size: 14px; }
+    .btn:hover { background: #f8fafc; border-color: #93c5fd; }
+    @media print {
+      body { background: #fff; }
+      .wrap { max-width: 100%; margin: 0; padding: 0; }
+      .card { border: none; border-radius: 0; padding: 0; margin-bottom: 12px; }
+      .actions { display: none; }
+      a { color: #111; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>AMER FPP + ai 记录文档 1.0</h1>
+      <div class="meta">更新时间：2026-06-09 ｜ 适用范围：US / CAN 本地执行版（网页 + 脚本）</div>
+      <p class="ok"><strong>当前结论：</strong>这是可落地的流程工具，不是只展示的 AI 界面。</p>
+      <div class="actions">
+        <a class="btn" href="./AMER FPP + ai_记录文档1.0.md" target="_blank">打开 Markdown</a>
+        <a class="btn" href="./AMER FPP + ai_记录文档1.0.docx" target="_blank">打开 Word</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>0. 当前真实状态</h2>
+      <ul>
+        <li>已完成：本地脚本、后端接口、网页入口、批量队列、执行历史、字段健康检查、脱敏与恢复、统计分析。</li>
+        <li>已完成：US/CAN 流程隔离、双语界面、操作者文档、讲解版文档、发布包整理。</li>
+        <li><strong>未完成：</strong>企业机器人（KnotBot）生产部署与联调（仅完成方案、配置文档、Webhook接口与指令映射代码）。</li>
+      </ul>
+      <p class="warn">机器人未部署前，主路径仍是“本地网页 + 本地后端”；该路径可用且可推广。</p>
+    </div>
+
+    <div class="card">
+      <h2>1. 可落实工作场景（非虚假界面）</h2>
+      <h3>场景A：提单前材料产出</h3>
+      <ul>
+        <li>网页按钮：文档产出 → 生成提单文本 / 生成HC校验</li>
+        <li>脚本：<code>generate_fpp_submission_blocks.py</code>、<code>check_hc_analysis.py</code></li>
+      </ul>
+      <h3>场景B：成本中心自动分摊（痛点1）</h3>
+      <ul>
+        <li>网页按钮：成本中心预检 → 自动分摊生成HC</li>
+        <li>计算：分摊金额 = Invoice Total × (成本中心人数 / 主体总人数)</li>
+      </ul>
+      <h3>场景C：失效中心拦截（痛点3）</h3>
+      <ul>
+        <li>网页按钮：检查成本中心（上传状态表 / 默认状态表）</li>
+      </ul>
+      <h3>场景D：台账自动回填（痛点4）</h3>
+      <ul>
+        <li>网页按钮：台账自动更新（去重 + Upsert）</li>
+      </ul>
+      <h3>场景E：字段健康检查 + 统计看板 + 脱敏上传</h3>
+      <ul>
+        <li>字段健康检查可识别历史特殊 case；统计看板支持风险、异常、时效、失败归因；脱敏上传支持输出恢复。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>2. 关键问答与交付总结</h2>
+      <ul>
+        <li>你要求先解决 4 个痛点：已全部有按钮化落地路径。</li>
+        <li>你要求非终端使用：已支持一键启动网页、本地后端、跨电脑路径适配。</li>
+        <li>你要求双语+美观+分国家：已支持并持续修正中英切换细节。</li>
+        <li>你要求“非黑盒”：页面已加入“步骤与计算方式”可视化说明。</li>
+        <li>你要求机器人：已准备方案与接口，<strong>但生产部署未完成</strong>。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>3. 对外口径（可直接复用）</h2>
+      <p>AMER FPP + ai 当前是本地可执行自动化工具，已覆盖文档产出、预检、分摊、台账、统计与复盘。机器人接入方案和接口已准备，但生产部署尚未完成；在此之前，操作者可通过一键启动网页完成全流程并兑现效率收益。</p>
+    </div>
+  </div>
+</body>
+</html>

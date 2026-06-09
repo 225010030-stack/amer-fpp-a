@@ -1,0 +1,13 @@
+{
+  "msgtype": "news",
+  "news": {
+    "articles": [
+      {
+        "title": "【应用发布】AMER FPP + ai 提交流程提效平台",
+        "description": "US/CAN流程分离，上传模板即可生成提单文本、分摊HC、成本中心校验与台账更新。",
+        "url": "http://127.0.0.1:18081/upload-docs.html",
+        "picurl": ""
+      }
+    ]
+  }
+}

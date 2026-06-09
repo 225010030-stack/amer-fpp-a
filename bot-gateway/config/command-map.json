@@ -1,0 +1,8 @@
+{
+  "总检查": "run_full_check",
+  "目录预检": "run_precheck",
+  "hc校验": "run_hc_check",
+  "hc检查": "run_hc_check",
+  "生成提单文本块": "generate_submission_blocks",
+  "提单文本块": "generate_submission_blocks"
+}

@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    WORKSPACE_ROOT=/app
+
+WORKDIR /app
+
+COPY bot-gateway/requirements.txt /tmp/requirements.txt
+RUN python -m pip install --upgrade pip && \
+    python -m pip install -r /tmp/requirements.txt
+
+EXPOSE 18082
+
+CMD ["python", "-m", "uvicorn", "main:app", "--app-dir", "bot-gateway", "--host", "0.0.0.0", "--port", "18082"]

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMER FPP + ai 讲解版手册</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 24px; line-height: 1.6; color: #111; }
+    h1, h2 { margin-bottom: 8px; }
+    .card { border: 1px solid #dbe2ea; border-radius: 10px; padding: 12px; margin-top: 12px; background: #fafcff; }
+    code { background: #f1f5f9; padding: 1px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>AMER FPP + ai（你先学会，再讲给别人）</h1>
+  <p>这份是“讲解版”手册：目标不是看完文档，而是你能用 10 分钟讲明白这个工具。</p>
+
+  <div class="card">
+    <h2>1) 你自己先跑通（5分钟）</h2>
+    <ol>
+      <li>双击 <code>一键重启并打开上传文档页.command</code></li>
+      <li>打开页面后点击 <code>健康检查</code>，确认 <code>ok: true</code></li>
+      <li>进入 <code>US Workspace -> 文档产出</code></li>
+      <li>上传 <code>提单预填表模板.csv</code>，点击 <code>生成提单文本</code></li>
+      <li>在结果区点击下载链接</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>2) 你给别人讲的时候就讲这三句</h2>
+    <ul>
+      <li>先选国家（US/CAN），两个区域互不影响。</li>
+      <li>左边每个菜单就是一步流程，不用记命令。</li>
+      <li>每一步都是：上传模板 -> 点按钮 -> 下载结果。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>3) 关键功能你要能解释</h2>
+    <ul>
+      <li><strong>脱敏上传</strong>：文档产出页顶部勾选 <code>上传前脱敏（输出自动恢复）</code>。</li>
+      <li><strong>输出恢复</strong>：系统自动生成恢复版文件（文件名带 <code>_恢复版</code>）。</li>
+      <li><strong>统计看板</strong>：点 <code>统计分析（看板）</code>，看样本数/异常数/风险分布/失败归因。</li>
+      <li><strong>自动填入并执行</strong>：在成本中心预检页，给新手最省心。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>4) 常见问题（你先会答）</h2>
+    <ul>
+      <li><code>Failed to fetch</code>：服务没启动，重新双击启动脚本。</li>
+      <li>没有输出链接：CSV 为空或字段不匹配模板。</li>
+      <li>看不到新按钮：浏览器强刷 <code>Cmd + Shift + R</code>。</li>
+    </ul>
+  </div>
+</body>
+</html>
