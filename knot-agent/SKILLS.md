@@ -1,6 +1,10 @@
 # Knot Skills 配置（智能体开发 → Skills 页）
 
-在 Knot 智能体开发页创建 4 个 Skill，每个 Skill 的说明如下。  
+> **ZIP 上传包已生成**：见 `knot-agent/skill-upload-packs/zips/`  
+> 详细步骤：`knot-agent/skill-upload-packs/README_上传说明.md`
+
+在 Knot 工作区 → Skills → **上传 Skill** → 选择 **ZIP 包上传**，逐个上传 5 个 zip。
+
 **注意**：Skill 只做说明与路由；实际计算必须由 Client「执行命令」跑 `knot-chat/*.sh`，禁止 LLM 手算。
 
 ---

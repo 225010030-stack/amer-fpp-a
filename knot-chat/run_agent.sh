@@ -23,8 +23,12 @@ AMER FPP 四痛点指令（复制到 Knot chat 即可）：
   痛点3 / 检查成本中心    成本中心有效性报告
   痛点4 / 台账更新        台账自动 upsert
 
-【演示】
-  US演示 / 四痛点演示     按固定顺序跑 US 闭环样例
+【演示 / 引导】
+  主菜单 / SOP / 菜单    按 SOP 环节展示需要什么文件（HR助手同款）
+  US演示 / 四痛点演示     样例闭环
+  网页入口               复杂上传时用 upload-docs 四按钮
+
+  也可直接发数字 0-7（见主菜单）
 
 规则：所有结果以脚本 stdout 中 DONE: 路径为准，禁止口头编造。
 EOF
@@ -57,6 +61,33 @@ case "$CMD" in
     ;;
   US演示|四痛点演示|demo_us|闭环演示)
     bash "$ROOT/knot-chat/run_demo_us.sh"
+    ;;
+  主菜单|SOP|菜单|menu)
+    bash "$ROOT/knot-chat/run_sop_menu.sh"
+    ;;
+  网页入口|网页|web)
+    bash "$ROOT/knot-chat/run_web_guide.sh"
+    ;;
+  1)
+    bash "$ROOT/knot-chat/run_precheck.sh" "$@"
+    ;;
+  2)
+    bash "$ROOT/knot-chat/run_pain1_allocation.sh" "$@"
+    ;;
+  3)
+    bash "$ROOT/knot-chat/run_hc_check.sh" "$@"
+    ;;
+  4)
+    bash "$ROOT/knot-chat/generate_submission_blocks.sh" "$@"
+    ;;
+  5)
+    bash "$ROOT/knot-chat/run_pain3_check_centers.sh" "$@"
+    ;;
+  6)
+    bash "$ROOT/knot-chat/run_pain4_update_ledger.sh" "$@"
+    ;;
+  7)
+    bash "$ROOT/knot-chat/run_full_check.sh" "$@"
     ;;
   *)
     echo "ERROR: 未知指令 [$CMD]"
