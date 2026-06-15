@@ -1363,5 +1363,160 @@
     "stderr_tail": [],
     "region": "US",
     "step": "analytics"
+  },
+  {
+    "ok": true,
+    "run_id": "0c9d3768-8e84-42dc-9c67-4ea371e5a9c8",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-09T08:15:09",
+    "elapsed_ms": 25,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain3_check_centers_20260609_081509.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /app/上传输出/成本中心有效性检查报告_US_20260609_081509.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "b383c1ad-1a82-4355-ab77-9ba49f563775",
+    "action": "pain1_build_allocation",
+    "started_at": "2026-06-09T08:16:12",
+    "elapsed_ms": 22,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain1_build_allocation_20260609_081612.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /app/上传输出/HC_Analysis_US_20260609_081612.csv"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "be8c6470-ed36-4c39-aa25-730ba73d9afb",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-09T08:17:31",
+    "elapsed_ms": 22,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_upload_generate_submission_blocks_20260609_081731.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /app/上传输出/FPP提单文本块_US_20260609_081731.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "output"
+  },
+  {
+    "ok": true,
+    "run_id": "a18b5d3a-030d-48d4-80c7-92d56e61b3a4",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-09T08:19:34",
+    "elapsed_ms": 23,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain3_check_centers_20260609_081934.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /app/上传输出/成本中心有效性检查报告_US_20260609_081934.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "bb887d22-7631-4805-8d35-dd5b9b922c41",
+    "action": "pain4_update_ledger",
+    "started_at": "2026-06-09T08:20:25",
+    "elapsed_ms": 21,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain4_update_ledger_20260609_082025.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Ledger updated: /app/上传输出/台账_自动更新_US_20260609_082025.csv",
+      "created=11, updated=627, total=11"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "ledger"
+  },
+  {
+    "ok": true,
+    "run_id": "7b6a89e1-24fd-4485-8771-e611bf6171c9",
+    "action": "pain1_build_allocation",
+    "started_at": "2026-06-09T08:24:10",
+    "elapsed_ms": 21,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain1_build_allocation_20260609_082410.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /app/上传输出/HC_Analysis_US_20260609_082410.csv"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "353888ed-8bf1-4c24-98c9-785805060900",
+    "action": "upload_generate_submission_blocks",
+    "started_at": "2026-06-09T08:27:04",
+    "elapsed_ms": 25,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_upload_generate_submission_blocks_20260609_082704.md",
+    "outputs": [],
+    "stdout_tail": [
+      "生成完成: /app/上传输出/FPP提单文本块_US_20260609_082704.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "output"
+  },
+  {
+    "ok": true,
+    "run_id": "612b8ade-8d37-4dbb-9cf7-1d0c11e004cf",
+    "action": "pain3_check_centers",
+    "started_at": "2026-06-09T08:27:33",
+    "elapsed_ms": 21,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain3_check_centers_20260609_082734.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Generated: /app/上传输出/成本中心有效性检查报告_US_20260609_082733.md"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "center"
+  },
+  {
+    "ok": true,
+    "run_id": "175ea798-9ba2-4615-98ec-ad4f7f9d5275",
+    "action": "pain4_update_ledger",
+    "started_at": "2026-06-09T08:28:37",
+    "elapsed_ms": 23,
+    "root": "/app",
+    "exit_code": 0,
+    "log_file": "/app/运行日志/run_pain4_update_ledger_20260609_082837.md",
+    "outputs": [],
+    "stdout_tail": [
+      "Ledger updated: /app/上传输出/台账_自动更新_US_20260609_082837.csv",
+      "created=11, updated=627, total=11"
+    ],
+    "stderr_tail": [],
+    "region": "US",
+    "step": "ledger"
   }
 ]

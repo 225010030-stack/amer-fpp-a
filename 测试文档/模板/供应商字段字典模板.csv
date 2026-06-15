@@ -1,0 +1,6 @@
+国家,供应商,费用类型,FPP场景,Document Category,合同号,默认交易币种,默认支付币种,Payment Description模板,Invoice策略,默认审批部门,默认Center,Requester,Business Reviewer,必传附件清单,可选附件清单,常见驳回原因,备注
+US,Anthem,Medical Insurance,Pure Service,Contract-based Payment,,USD,USD,{期间}_Anthem_{主体},With Invoice,,,,,,发票PDF;HC Analysis;分摊明细,邮件正文截图,期间不一致;附件缺失;描述不规范,
+US,Cigna,Dental,Pure Service,Contract-based Payment,,USD,USD,{期间}_Cigna_{主体},With Invoice,,,,,,发票PDF;HC Analysis;分摊明细,对账说明,金额校验失败;币种填错,
+US,Guardian,Vision/Life,Pure Service,Contract-based Payment,,USD,USD,{期间}_Guardian_{主体},With Invoice,,,,,,发票PDF;HC Analysis;分摊明细,补充说明函,成本中心失效;附件不完整,
+US,CYC,HR Service Fee,Pure Service,Contract-based Payment,,USD,USD,{期间}_CYC_HRFee_{主体},With Invoice,,,,,,账单PDF;费用明细;分摊表,邮件确认截图,期间错放;金额合计不等,
+CA,SunLife,Medical Insurance,Salary Benefits Reimbursement,Contract-based Payment,,CAD,CAD,{期间}_SunLife_CA,With Invoice,,,,,,发票PDF;Excel明细;分摊表,对账邮件,GST/HST处理不一致;期间错误,

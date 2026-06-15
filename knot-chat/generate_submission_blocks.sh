@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck disable=SC1091
+source "$(dirname "$0")/_common.sh"
 cd "$ROOT"
-mkdir -p "$ROOT/上传输出"
-INPUT="${1:-$ROOT/提单预填表模板.csv}"
-OUT="$ROOT/上传输出/FPP提单文本块_$(date +%Y%m%d_%H%M%S).md"
+INPUT="$(demo_or "$DEMO_ROOT/US/US_prefill_202605.csv" "$ROOT/提单预填表模板.csv")"
+INPUT="${1:-$INPUT}"
+OUT="$UPLOAD_OUT/FPP提单文本块_$(timestamp).md"
 python3 "$ROOT/generate_fpp_submission_blocks.py" --input "$INPUT" --output "$OUT"
 echo "DONE: $OUT"

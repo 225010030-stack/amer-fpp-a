@@ -32,19 +32,39 @@ BOT_GATEWAY_TOKEN = os.getenv("BOT_GATEWAY_TOKEN", "").strip()
 SENSITIVE_COLUMNS = ["主体", "Requester", "Business Reviewer", "Department", "Center", "合同号", "Payment Description"]
 
 ALLOWED_ACTIONS = {
+    "run_agent_help": ["bash", "./knot-chat/run_agent.sh", "帮助"],
     "run_precheck": ["bash", "./knot-chat/run_precheck.sh"],
     "run_hc_check": ["bash", "./knot-chat/run_hc_check.sh"],
     "run_full_check": ["bash", "./knot-chat/run_full_check.sh"],
     "generate_submission_blocks": ["bash", "./knot-chat/generate_submission_blocks.sh"],
+    "run_pain1_allocation": ["bash", "./knot-chat/run_pain1_allocation.sh"],
+    "run_pain3_check_centers": ["bash", "./knot-chat/run_pain3_check_centers.sh"],
+    "run_pain4_update_ledger": ["bash", "./knot-chat/run_pain4_update_ledger.sh"],
+    "run_demo_us": ["bash", "./knot-chat/run_demo_us.sh"],
 }
 
 DEFAULT_COMMAND_MAP = {
+    "帮助": "run_agent_help",
     "总检查": "run_full_check",
     "目录预检": "run_precheck",
+    "预检": "run_precheck",
     "hc校验": "run_hc_check",
     "hc检查": "run_hc_check",
+    "痛点1": "run_pain1_allocation",
+    "自动分摊": "run_pain1_allocation",
+    "分摊": "run_pain1_allocation",
+    "痛点2": "generate_submission_blocks",
     "生成提单文本块": "generate_submission_blocks",
     "提单文本块": "generate_submission_blocks",
+    "痛点3": "run_pain3_check_centers",
+    "检查成本中心": "run_pain3_check_centers",
+    "成本中心检查": "run_pain3_check_centers",
+    "痛点4": "run_pain4_update_ledger",
+    "台账更新": "run_pain4_update_ledger",
+    "台账自动更新": "run_pain4_update_ledger",
+    "us演示": "run_demo_us",
+    "四痛点演示": "run_demo_us",
+    "闭环演示": "run_demo_us",
 }
 
 app = FastAPI(title="FPP Bot Gateway", version="0.1.0")
@@ -682,7 +702,7 @@ def webhook_knotbot(
     if not action:
         return WebhookResponse(
             ok=False,
-            message="未识别指令。可用指令：总检查、目录预检、HC校验、生成提单文本块",
+            message="未识别指令。可用：帮助、US演示、痛点1-4、目录预检、HC校验、总检查、生成提单文本块",
         )
 
     result = run_action(RunRequest(action=action, root=str(WORKSPACE_ROOT)))

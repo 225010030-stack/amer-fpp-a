@@ -1,0 +1,23 @@
+{
+  "帮助": "run_agent:帮助",
+  "目录预检": "run_agent:目录预检",
+  "预检": "run_agent:目录预检",
+  "hc校验": "run_agent:HC校验",
+  "hc检查": "run_agent:HC校验",
+  "总检查": "run_agent:总检查",
+  "痛点1": "run_agent:痛点1",
+  "自动分摊": "run_agent:痛点1",
+  "分摊": "run_agent:痛点1",
+  "痛点2": "run_agent:痛点2",
+  "生成提单文本块": "run_agent:痛点2",
+  "提单文本块": "run_agent:痛点2",
+  "痛点3": "run_agent:痛点3",
+  "检查成本中心": "run_agent:痛点3",
+  "成本中心检查": "run_agent:痛点3",
+  "痛点4": "run_agent:痛点4",
+  "台账更新": "run_agent:痛点4",
+  "台账自动更新": "run_agent:痛点4",
+  "us演示": "run_agent:US演示",
+  "四痛点演示": "run_agent:US演示",
+  "闭环演示": "run_agent:US演示"
+}
