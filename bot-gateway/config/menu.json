@@ -1,0 +1,78 @@
+{
+  "title": "AMER FPP 账单助手",
+  "welcome": "你好！我是 AMER FPP 账单助手。请点击下方选项开始，或输入关键词。所有结果以脚本输出文件为准，不会编造。",
+  "recommended_order": "4 → 2 → 3 → 5 → 6",
+  "items": [
+    {
+      "id": "0",
+      "label": "US四痛点演示",
+      "subtitle": "内置样例 · 培训首选",
+      "action": "run_demo_us",
+      "files": "无需准备文件",
+      "output": "上传输出/ 下多类 DONE 文件"
+    },
+    {
+      "id": "1",
+      "label": "目录预检",
+      "subtitle": "环节1 Source",
+      "action": "run_precheck",
+      "files": "USA/CAN 当月目录，或月份 202606",
+      "output": "目录预检输出/预检报告_*.md"
+    },
+    {
+      "id": "2",
+      "label": "自动分摊",
+      "subtitle": "环节2 · 痛点1",
+      "action": "run_pain1_allocation",
+      "files": "成本中心人数输入.csv + 期间/账单额",
+      "output": "上传输出/HC_Analysis_*.csv"
+    },
+    {
+      "id": "3",
+      "label": "HC校验",
+      "subtitle": "环节2 校验",
+      "action": "run_hc_check",
+      "files": "HC_Analysis CSV",
+      "output": "HC校验输出/HC校验报告_*.md"
+    },
+    {
+      "id": "4",
+      "label": "生成提单文本块",
+      "subtitle": "环节3 · 痛点2",
+      "action": "generate_submission_blocks",
+      "files": "提单预填表.csv",
+      "output": "上传输出/FPP提单文本块_*.md"
+    },
+    {
+      "id": "5",
+      "label": "检查成本中心",
+      "subtitle": "环节4 · 痛点3",
+      "action": "run_pain3_check_centers",
+      "files": "HC源文件 + 成本中心状态表",
+      "output": "上传输出/成本中心有效性检查报告_*.md"
+    },
+    {
+      "id": "6",
+      "label": "台账更新",
+      "subtitle": "环节5 · 痛点4",
+      "action": "run_pain4_update_ledger",
+      "files": "提单预填表 + 台账 CSV",
+      "output": "上传输出/台账_自动更新_*.csv"
+    },
+    {
+      "id": "7",
+      "label": "总检查",
+      "subtitle": "目录预检 + HC校验",
+      "action": "run_full_check",
+      "files": "同 1 + 3",
+      "output": "两份报告"
+    }
+  ],
+  "footer_links": [
+    { "label": "主菜单", "action": "show_menu" },
+    { "label": "US演示", "action": "run_demo_us" },
+    { "label": "多文件上传", "href": "upload-docs.html" },
+    { "label": "有帮助", "text": "感谢反馈" },
+    { "label": "需要人工支持", "text": "请联系流程负责人 annawzhang" }
+  ]
+}

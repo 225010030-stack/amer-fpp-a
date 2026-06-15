@@ -16,7 +16,8 @@ cat <<EOF
    curl http://127.0.0.1:18082/api/health
 
 3) 浏览器打开（内网部署后替换域名）：
-   http://127.0.0.1:18081/upload-docs.html
+   http://127.0.0.1:18081/upload-docs.html   ← 多文件上传四按钮
+   http://127.0.0.1:18081/chat-menu.html    ← ★ 点击选择菜单（HR同款）
 
 4) 页面对应关系：
    - 成本中心预检 → 自动分摊生成HC / 检查成本中心

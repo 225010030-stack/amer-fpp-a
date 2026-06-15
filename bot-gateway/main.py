@@ -28,11 +28,14 @@ UPLOAD_INPUT_DIR = WORKSPACE_ROOT / "上传输入"
 UPLOAD_OUTPUT_DIR = WORKSPACE_ROOT / "上传输出"
 CONFIG_DIR = WORKSPACE_ROOT / "bot-gateway" / "config"
 COMMAND_MAP_FILE = CONFIG_DIR / "command-map.json"
+MENU_FILE = CONFIG_DIR / "menu.json"
 BOT_GATEWAY_TOKEN = os.getenv("BOT_GATEWAY_TOKEN", "").strip()
 SENSITIVE_COLUMNS = ["主体", "Requester", "Business Reviewer", "Department", "Center", "合同号", "Payment Description"]
 
 ALLOWED_ACTIONS = {
     "run_agent_help": ["bash", "./knot-chat/run_agent.sh", "帮助"],
+    "run_sop_menu": ["bash", "./knot-chat/run_sop_menu.sh"],
+    "run_web_guide": ["bash", "./knot-chat/run_web_guide.sh"],
     "run_precheck": ["bash", "./knot-chat/run_precheck.sh"],
     "run_hc_check": ["bash", "./knot-chat/run_hc_check.sh"],
     "run_full_check": ["bash", "./knot-chat/run_full_check.sh"],
@@ -45,6 +48,10 @@ ALLOWED_ACTIONS = {
 
 DEFAULT_COMMAND_MAP = {
     "帮助": "run_agent_help",
+    "主菜单": "run_sop_menu",
+    "菜单": "run_sop_menu",
+    "sop": "run_sop_menu",
+    "网页入口": "run_web_guide",
     "总检查": "run_full_check",
     "目录预检": "run_precheck",
     "预检": "run_precheck",
@@ -412,6 +419,13 @@ def meta() -> dict[str, Any]:
         "workspace_root": str(WORKSPACE_ROOT),
         "actions": sorted(ALLOWED_ACTIONS.keys()),
     }
+
+
+@app.get("/api/menu")
+def menu_api() -> dict[str, Any]:
+    if MENU_FILE.exists():
+        return json.loads(MENU_FILE.read_text(encoding="utf-8"))
+    return {"title": "AMER FPP", "items": [], "welcome": "menu.json not found"}
 
 
 @app.post("/api/run")
