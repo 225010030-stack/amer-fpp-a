@@ -13,9 +13,9 @@ run_help() {
 AMER FPP 四痛点指令（复制到 Knot chat 即可）：
 
 【预检类】
-  目录预检              检查 FPP 目录结构（默认当前月）
+  目录预检 <YYYYMM>      检查 FPP 目录结构（月份必填，如 202607）
   HC校验                校验 HC Analysis CSV
-  总检查                目录预检 + HC校验
+  总检查 <YYYYMM>        目录预检 + HC校验（月份必填）
 
 【四痛点】
   痛点1 / 自动分摊      生成 HC_Analysis CSV（默认演示样例）

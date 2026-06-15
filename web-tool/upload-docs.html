@@ -791,9 +791,6 @@
     }
 
     function setDefaults(prefix, region) {
-      const now = new Date();
-      const month = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
-      document.getElementById(`${prefix}Period`).value = month;
       document.getElementById(`${prefix}Country`).value = region;
       document.getElementById(`${prefix}Entity`).value = region === "US" ? "Tencent America LLC" : "Tencent Canada";
       document.getElementById(`${prefix}Vendor`).value = "Anthem";
@@ -813,7 +810,9 @@
         const sel = document.getElementById(id);
         if (!sel) return;
         const old = sel.value;
-        sel.innerHTML = values.map((v) => `<option value="${v}">${v}</option>`).join("");
+        sel.innerHTML =
+          `<option value="">${currentLang === "en" ? "Select period YYYYMM" : "请选择账单月 YYYYMM"}</option>` +
+          values.map((v) => `<option value="${v}">${v}</option>`).join("");
         if (values.includes(old)) sel.value = old;
       });
     }
@@ -894,7 +893,10 @@
       }
       loadRegionTemplate(region, prefix, true);
       const period = document.getElementById(`${prefix}Period`).value.trim();
-      if (!period) setDefaults(prefix, region);
+      if (!period) {
+        document.getElementById(`${prefix}Result`).textContent = "请先在下拉框选择账单月（YYYYMM），系统不会自动默认月份。";
+        return;
+      }
       await runBuildAllocation(region, prefix);
     }
 
@@ -1652,6 +1654,12 @@
       const file = document.getElementById(`${prefix}P1File`).files[0];
       if (!file) {
         document.getElementById(`${prefix}Result`).textContent = "Please select CSV file.";
+        return;
+      }
+      const period = document.getElementById(`${prefix}Period`).value.trim();
+      if (!period) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Select billing period (YYYYMM) first." : "请先选择账单月（YYYYMM），系统不会自动默认。";
         return;
       }
       markStepInProgress(region, "center");
