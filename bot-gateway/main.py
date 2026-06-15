@@ -32,27 +32,10 @@ BOT_GATEWAY_TOKEN = os.getenv("BOT_GATEWAY_TOKEN", "").strip()
 SENSITIVE_COLUMNS = ["主体", "Requester", "Business Reviewer", "Department", "Center", "合同号", "Payment Description"]
 
 ALLOWED_ACTIONS = {
-    "run_precheck": [
-        "python3",
-        ".cursor/skills/skill-01-directory-precheck/scripts/run_precheck.py",
-        "--root",
-        ".",
-    ],
-    "run_hc_check": [
-        "python3",
-        ".cursor/skills/skill-02-hc-analysis-check/scripts/run_hc_check.py",
-        "--root",
-        ".",
-    ],
-    "run_full_check": ["./一键运行_总检查_skill01+02.command"],
-    "generate_submission_blocks": [
-        "python3",
-        "./generate_fpp_submission_blocks.py",
-        "--input",
-        "./提单预填表模板.csv",
-        "--output",
-        "./FPP提单文本块.md",
-    ],
+    "run_precheck": ["bash", "./knot-chat/run_precheck.sh"],
+    "run_hc_check": ["bash", "./knot-chat/run_hc_check.sh"],
+    "run_full_check": ["bash", "./knot-chat/run_full_check.sh"],
+    "generate_submission_blocks": ["bash", "./knot-chat/generate_submission_blocks.sh"],
 }
 
 DEFAULT_COMMAND_MAP = {
