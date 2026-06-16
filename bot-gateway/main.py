@@ -82,6 +82,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+try:
+    from wecom.router import router as wecom_router
+
+    app.include_router(wecom_router, prefix="/api/wecom", tags=["wecom"])
+except ImportError:
+    wecom_router = None
+
 
 class RunRequest(BaseModel):
     action: str
