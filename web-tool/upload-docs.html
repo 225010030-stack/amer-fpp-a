@@ -156,6 +156,27 @@
     .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .chip-btn { border: 1px solid #d9d9d9; background: #fafafa; border-radius: 999px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
     .chip-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .form-grid-labeled { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 14px 16px; margin-top: 10px; }
+    .form-field label {
+      display: block; font-size: 13px; color: #1f2937; margin-bottom: 0; font-weight: 600; line-height: 1.35;
+    }
+    .form-field .field-hint {
+      display: block; font-size: 11px; color: #64748b; margin: 4px 0 7px; line-height: 1.45;
+    }
+    .form-field input, .form-field select { width: 100%; min-height: 38px; }
+    .form-field input::placeholder { color: #94a3b8; opacity: 1; }
+    .form-field select.select-empty { color: #94a3b8; }
+    .form-field select option { color: #1f2937; }
+    .form-field select option[value=""] { color: #94a3b8; }
+    .form-field select:disabled { background: #f3f4f6; color: #374151; cursor: not-allowed; }
+    .form-field.file-field input[type="file"] { padding: 8px; font-size: 12px; }
+    .pref-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+    .btn-ghost { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; padding: 7px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+    .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+    .vendor-preset-label { font-size: 12px; color: #64748b; margin: 12px 0 6px; }
+    .advanced-prefs { margin-top: 12px; font-size: 12px; color: #64748b; }
+    .advanced-prefs summary { cursor: pointer; color: #475569; font-weight: 500; }
+    .period-invalid { border-color: #ff7875 !important; background: #fff2f0; }
     .dash-grid, .ops-grid { display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
     .dash-card, .ops-card { border: 1px solid #f0f0f0; background: #fafafa; border-radius: 8px; padding: 10px; }
     .dash-num, .ops-v { font-size: 18px; font-weight: 700; color: var(--brand); }
@@ -370,65 +391,115 @@
           <div class="desc" data-i18n="descCenter">分摊人数并检查成本中心有效性，避免提单失败。</div>
         </div>
         <div class="section section-center">
-          <div class="row">
-            <button class="btn-secondary" onclick="saveRegionTemplate('US', 'us')">保存默认模板</button>
-            <button class="btn-secondary" onclick="loadRegionTemplate('US', 'us')">读取默认模板</button>
-            <button class="btn-danger" onclick="resetRegionTemplate('US', 'us')">重置默认模板</button>
-            <button class="btn-secondary" onclick="exportRegionTemplate('US', 'us')">导出模板JSON</button>
-            <button class="btn-secondary" onclick="triggerImportTemplate('US')">导入模板JSON</button>
-            <input id="importTemplateUS" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('US', 'us', this)" />
+          <div class="desc" data-i18n="descCenterForm">账单月请按 YYYYMM 手输（可填任意月份）；账单总额每月不同，请手动输入，系统不会写死默认值。</div>
+          <div class="form-grid-labeled">
+            <div class="form-field">
+              <label for="usPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
+              <span class="field-hint" data-i18n="hintPeriod">6 位数字，例 202607 = 2026 年 7 月（可填任意未来/过去月份）</span>
+              <input id="usPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
+                data-i18n-placeholder="phPeriodInput" placeholder="在此输入，如 202607" onblur="normalizePeriodInput('us')" />
+            </div>
+            <div class="form-field">
+              <label for="usCountry" data-i18n="labelCountry">国家</label>
+              <span class="field-hint" data-i18n="hintCountry">本工作区固定 US，无需修改</span>
+              <select id="usCountry" disabled><option value="US">US</option></select>
+            </div>
+            <div class="form-field">
+              <label for="usEntity" data-i18n="labelEntity">主体 Entity</label>
+              <span class="field-hint" data-i18n="hintEntity">请下拉选择，或点下方 Anthem 等快捷按钮</span>
+              <select id="usEntity" class="select-empty" onchange="syncSelectEmptyState('usEntity')">
+                <option value="" data-i18n="phEntity">— 请选择主体 —</option>
+                <option value="Tencent America LLC">Tencent America LLC</option>
+                <option value="Tencent Cloud LLC">Tencent Cloud LLC</option>
+                <option value="Proxima Beta U.S. LLC">Proxima Beta U.S. LLC</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="usVendor" data-i18n="labelVendor">供应商 Vendor</label>
+              <span class="field-hint" data-i18n="hintVendor">请下拉选择，或点下方供应商快捷按钮</span>
+              <select id="usVendor" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usVendor')">
+                <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
+                <option value="Anthem">Anthem</option>
+                <option value="Cigna">Cigna</option>
+                <option value="Guardian">Guardian</option>
+                <option value="Kaiser">Kaiser</option>
+                <option value="Optum">Optum</option>
+                <option value="LegalShield">LegalShield</option>
+                <option value="ADP">ADP</option>
+                <option value="CYC">CYC</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="usFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
+              <span class="field-hint" data-i18n="hintFeeType">与供应商匹配，如 Medical Insurance / Dental</span>
+              <select id="usFeeType" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usFeeType')">
+                <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
+                <option value="Medical Insurance">Medical Insurance</option>
+                <option value="Dental">Dental</option>
+                <option value="Vision STD LTD Life">Vision STD LTD Life</option>
+                <option value="FSA Weekly Claim">FSA Weekly Claim</option>
+                <option value="ID Legal Insurance">ID Legal Insurance</option>
+                <option value="HR Service Fee">HR Service Fee</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="usInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
+              <span class="field-hint" data-i18n="hintInvoice">每月金额不同，必填；执行成功后可点下方历史金额快速填入</span>
+              <input id="usInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
+                data-i18n-placeholder="phInvoiceInput" placeholder="在此输入本月总额，如 145411.03" />
+            </div>
+            <div class="form-field">
+              <label for="usCurrency" data-i18n="labelCurrency">币种 Currency</label>
+              <span class="field-hint" data-i18n="hintCurrency">US 通常为 USD</span>
+              <select id="usCurrency" onchange="syncSelectEmptyState('usCurrency')">
+                <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
           </div>
-          <div class="grid-2">
-            <select id="usPeriod"></select>
-            <select id="usCountry">
-              <option value="US">US</option>
-            </select>
-            <select id="usEntity">
-              <option value="Tencent America LLC">Tencent America LLC</option>
-              <option value="Tencent Cloud LLC">Tencent Cloud LLC</option>
-              <option value="Proxima Beta U.S. LLC">Proxima Beta U.S. LLC</option>
-            </select>
-            <select id="usVendor" onchange="refreshInvoiceHints('US','us')">
-              <option value="Anthem">Anthem</option>
-              <option value="Cigna">Cigna</option>
-              <option value="Guardian">Guardian</option>
-              <option value="Kaiser">Kaiser</option>
-              <option value="Optum">Optum</option>
-              <option value="LegalShield">LegalShield</option>
-              <option value="ADP">ADP</option>
-              <option value="CYC">CYC</option>
-            </select>
-            <select id="usFeeType" onchange="refreshInvoiceHints('US','us')">
-              <option value="Medical Insurance">Medical Insurance</option>
-              <option value="Dental">Dental</option>
-              <option value="Vision STD LTD Life">Vision STD LTD Life</option>
-              <option value="FSA Weekly Claim">FSA Weekly Claim</option>
-              <option value="ID Legal Insurance">ID Legal Insurance</option>
-              <option value="HR Service Fee">HR Service Fee</option>
-            </select>
-            <input id="usInvoiceTotal" placeholder="Invoice Total" />
-            <select id="usCurrency">
-              <option value="USD">USD</option>
-            </select>
-          </div>
-          <div class="desc">操作提示：供应商和费用类型建议先点下面预设标签，金额可点“上次金额快捷标签”快速填入。</div>
-          <div id="usInvoiceHints" class="chip-row"></div>
+          <div class="vendor-preset-label" data-i18n="labelVendorPreset">供应商快捷（只改供应商/费用类型/主体，不改金额）：</div>
           <div class="chip-row">
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','anthem')">Anthem 预设</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','cigna')">Cigna 预设</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','guardian')">Guardian 预设</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','kaiser')">Kaiser 预设</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','optum')">Optum 预设</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','legalshield')">LegalShield 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','anthem')">Anthem</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','cigna')">Cigna</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','guardian')">Guardian</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','kaiser')">Kaiser</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','optum')">Optum</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','legalshield')">LegalShield</button>
           </div>
-          <div class="row">
-            <input id="usP1File" type="file" accept=".csv,text/csv" />
+          <div id="usInvoiceHints" class="chip-row"></div>
+          <div class="pref-toolbar">
+            <button type="button" class="btn-ghost" data-i18n="btnLoadVendorPrefs" onclick="loadRegionTemplate('US', 'us')">载入上次供应商设置</button>
+            <button type="button" class="btn-ghost" data-i18n="btnSaveVendorPrefs" onclick="saveRegionTemplate('US', 'us')">记住当前供应商设置</button>
+            <button type="button" class="btn-ghost" data-i18n="btnClearMonthly" onclick="clearMonthlyFields('us', 'US')">清空本月输入</button>
+          </div>
+          <details class="advanced-prefs">
+            <summary data-i18n="advPrefsSummary">高级：导出 / 导入设置 JSON（换电脑时用）</summary>
+            <div class="row" style="margin-top:8px;">
+              <button type="button" class="btn-ghost" onclick="exportRegionTemplate('US', 'us')">导出 JSON</button>
+              <button type="button" class="btn-ghost" onclick="triggerImportTemplate('US')">导入 JSON</button>
+              <input id="importTemplateUS" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('US', 'us', this)" />
+            </div>
+          </details>
+          <div class="row" style="align-items:flex-end;">
+            <div class="form-field file-field" style="flex:1;min-width:220px;">
+              <label for="usP1File" data-i18n="labelP1File">人数 CSV（P1 自动分摊）</label>
+              <span class="field-hint" data-i18n="hintP1File">例 IN_US_P1_人数_202607.csv</span>
+              <input id="usP1File" type="file" accept=".csv,text/csv" />
+            </div>
             <button class="btn-primary" data-i18n="btnBuildHC" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
             <button class="btn-secondary" data-i18n="btnAutoRun" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行（推荐）</button>
           </div>
-          <div class="row">
-            <input id="usP3SourceFile" type="file" accept=".csv,text/csv" />
-            <input id="usP3StatusFile" type="file" accept=".csv,text/csv" />
+          <div class="row" style="align-items:flex-end;">
+            <div class="form-field file-field" style="flex:1;min-width:200px;">
+              <label for="usP3SourceFile" data-i18n="labelP3Source">HC 源文件</label>
+              <span class="field-hint" data-i18n="hintP3Source">通常为上一步产出的 HC_Analysis CSV</span>
+              <input id="usP3SourceFile" type="file" accept=".csv,text/csv" />
+            </div>
+            <div class="form-field file-field" style="flex:1;min-width:200px;">
+              <label for="usP3StatusFile" data-i18n="labelP3Status">成本中心状态表</label>
+              <span class="field-hint" data-i18n="hintP3Status">例 IN_US_P3_成本中心状态表_202607.csv</span>
+              <input id="usP3StatusFile" type="file" accept=".csv,text/csv" />
+            </div>
             <button class="btn-primary" data-i18n="btnCheckCenter" onclick="runCheckCenters('US', 'us')">检查成本中心（上传状态表）</button>
             <button class="btn-secondary" data-i18n="btnCheckCenterDefault" onclick="runCheckCentersDefault('US', 'us')">检查成本中心（默认状态表）</button>
           </div>
@@ -563,48 +634,98 @@
 
       <div id="sgPageCenter" class="page">
         <div class="section section-center">
-          <div class="row">
-            <button class="btn-secondary" onclick="saveRegionTemplate('CAN', 'sg')">保存默认模板</button>
-            <button class="btn-secondary" onclick="loadRegionTemplate('CAN', 'sg')">读取默认模板</button>
-            <button class="btn-danger" onclick="resetRegionTemplate('CAN', 'sg')">重置默认模板</button>
-            <button class="btn-secondary" onclick="exportRegionTemplate('CAN', 'sg')">导出模板JSON</button>
-            <button class="btn-secondary" onclick="triggerImportTemplate('CAN')">导入模板JSON</button>
-            <input id="importTemplateSG" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('CAN', 'sg', this)" />
+          <div class="desc" data-i18n="descCenterForm">账单月请按 YYYYMM 手输（可填任意月份）；账单总额每月不同，请手动输入，系统不会写死默认值。</div>
+          <div class="form-grid-labeled">
+            <div class="form-field">
+              <label for="sgPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
+              <span class="field-hint" data-i18n="hintPeriod">6 位数字，例 202607 = 2026 年 7 月（可填任意未来/过去月份）</span>
+              <input id="sgPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
+                data-i18n-placeholder="phPeriodInput" placeholder="在此输入，如 202607" onblur="normalizePeriodInput('sg')" />
+            </div>
+            <div class="form-field">
+              <label for="sgCountry" data-i18n="labelCountry">国家</label>
+              <span class="field-hint" data-i18n="hintCountryCAN">本工作区固定 CAN，无需修改</span>
+              <select id="sgCountry" disabled><option value="CAN">CAN</option></select>
+            </div>
+            <div class="form-field">
+              <label for="sgEntity" data-i18n="labelEntity">主体 Entity</label>
+              <span class="field-hint" data-i18n="hintEntity">请下拉选择，或点下方 SunLife 快捷按钮</span>
+              <select id="sgEntity" class="select-empty" onchange="syncSelectEmptyState('sgEntity')">
+                <option value="" data-i18n="phEntity">— 请选择主体 —</option>
+                <option value="Tencent Canada">Tencent Canada</option>
+                <option value="52Y_Sharp Growth (Canada) Limited">52Y_Sharp Growth (Canada) Limited</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="sgVendor" data-i18n="labelVendor">供应商 Vendor</label>
+              <span class="field-hint" data-i18n="hintVendor">请下拉选择，或点下方 SunLife 快捷按钮</span>
+              <select id="sgVendor" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgVendor')">
+                <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
+                <option value="SunLife">SunLife</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="sgFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
+              <span class="field-hint" data-i18n="hintFeeType">与供应商匹配，如 Medical Insurance</span>
+              <select id="sgFeeType" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgFeeType')">
+                <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
+                <option value="Medical Insurance">Medical Insurance</option>
+                <option value="Employee Commercial Insurance">Employee Commercial Insurance</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="sgInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
+              <span class="field-hint" data-i18n="hintInvoice">每月金额不同，必填；执行成功后可点下方历史金额快速填入</span>
+              <input id="sgInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
+                data-i18n-placeholder="phInvoiceInput" placeholder="在此输入本月总额，如 50000.00" />
+            </div>
+            <div class="form-field">
+              <label for="sgCurrency" data-i18n="labelCurrency">币种 Currency</label>
+              <span class="field-hint" data-i18n="hintCurrencyCAN">CAN 通常为 CAD</span>
+              <select id="sgCurrency" onchange="syncSelectEmptyState('sgCurrency')">
+                <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
+                <option value="CAD">CAD</option>
+              </select>
+            </div>
           </div>
-          <div class="grid-2">
-            <select id="sgPeriod"></select>
-            <select id="sgCountry">
-              <option value="CAN">CAN</option>
-            </select>
-            <select id="sgEntity">
-              <option value="Tencent Canada">Tencent Canada</option>
-              <option value="52Y_Sharp Growth (Canada) Limited">52Y_Sharp Growth (Canada) Limited</option>
-            </select>
-            <select id="sgVendor" onchange="refreshInvoiceHints('CAN','sg')">
-              <option value="SunLife">SunLife</option>
-            </select>
-            <select id="sgFeeType" onchange="refreshInvoiceHints('CAN','sg')">
-              <option value="Medical Insurance">Medical Insurance</option>
-              <option value="Employee Commercial Insurance">Employee Commercial Insurance</option>
-            </select>
-            <input id="sgInvoiceTotal" placeholder="Invoice Total" />
-            <select id="sgCurrency">
-              <option value="CAD">CAD</option>
-            </select>
-          </div>
-          <div class="desc">操作提示：尽量使用预设标签；金额可直接点下方历史快捷项回填，减少手填。</div>
-          <div id="sgInvoiceHints" class="chip-row"></div>
+          <div class="vendor-preset-label" data-i18n="labelVendorPreset">供应商快捷（只改供应商/费用类型/主体，不改金额）：</div>
           <div class="chip-row">
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('sg','sunlife')">SunLife 预设</button>
+            <button type="button" class="chip-btn" onclick="applyBuildPreset('sg','sunlife')">SunLife</button>
           </div>
-          <div class="row">
-            <input id="sgP1File" type="file" accept=".csv,text/csv" />
+          <div id="sgInvoiceHints" class="chip-row"></div>
+          <div class="pref-toolbar">
+            <button type="button" class="btn-ghost" data-i18n="btnLoadVendorPrefs" onclick="loadRegionTemplate('CAN', 'sg')">载入上次供应商设置</button>
+            <button type="button" class="btn-ghost" data-i18n="btnSaveVendorPrefs" onclick="saveRegionTemplate('CAN', 'sg')">记住当前供应商设置</button>
+            <button type="button" class="btn-ghost" data-i18n="btnClearMonthly" onclick="clearMonthlyFields('sg', 'CAN')">清空本月输入</button>
+          </div>
+          <details class="advanced-prefs">
+            <summary data-i18n="advPrefsSummary">高级：导出 / 导入设置 JSON（换电脑时用）</summary>
+            <div class="row" style="margin-top:8px;">
+              <button type="button" class="btn-ghost" onclick="exportRegionTemplate('CAN', 'sg')">导出 JSON</button>
+              <button type="button" class="btn-ghost" onclick="triggerImportTemplate('CAN')">导入 JSON</button>
+              <input id="importTemplateSG" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('CAN', 'sg', this)" />
+            </div>
+          </details>
+          <div class="row" style="align-items:flex-end;">
+            <div class="form-field file-field" style="flex:1;min-width:220px;">
+              <label for="sgP1File" data-i18n="labelP1File">人数 CSV（P1 自动分摊）</label>
+              <span class="field-hint" data-i18n="hintP1FileCAN">例 IN_CAN_P1_人数_202607.csv</span>
+              <input id="sgP1File" type="file" accept=".csv,text/csv" />
+            </div>
             <button class="btn-primary" onclick="runBuildAllocation('CAN', 'sg')">自动分摊生成HC</button>
             <button class="btn-secondary" onclick="autoFillAndRunBuild('CAN', 'sg')">自动填入并执行（推荐）</button>
           </div>
-          <div class="row">
-            <input id="sgP3SourceFile" type="file" accept=".csv,text/csv" />
-            <input id="sgP3StatusFile" type="file" accept=".csv,text/csv" />
+          <div class="row" style="align-items:flex-end;">
+            <div class="form-field file-field" style="flex:1;min-width:200px;">
+              <label for="sgP3SourceFile" data-i18n="labelP3Source">HC 源文件</label>
+              <span class="field-hint" data-i18n="hintP3Source">通常为上一步产出的 HC_Analysis CSV</span>
+              <input id="sgP3SourceFile" type="file" accept=".csv,text/csv" />
+            </div>
+            <div class="form-field file-field" style="flex:1;min-width:200px;">
+              <label for="sgP3StatusFile" data-i18n="labelP3Status">成本中心状态表</label>
+              <span class="field-hint" data-i18n="hintP3StatusCAN">例 IN_CAN_P3_成本中心状态表_202607.csv</span>
+              <input id="sgP3StatusFile" type="file" accept=".csv,text/csv" />
+            </div>
             <button class="btn-primary" onclick="runCheckCenters('CAN', 'sg')">检查成本中心（上传状态表）</button>
             <button class="btn-secondary" onclick="runCheckCentersDefault('CAN', 'sg')">检查成本中心（用默认状态表）</button>
           </div>
@@ -724,7 +845,8 @@
     const KEY_MONTHLY_PREFIX = "fpp_monthly_dashboard_";
     const KEY_INVOICE_HISTORY = "fpp_invoice_history_v1";
     const KEY_GUIDE_DONE = "fpp_guide_done_v1";
-    const REQUIRED_TEMPLATE_FIELDS = ["period", "country", "entity", "vendor", "feeType", "invoiceTotal", "currency"];
+    const REQUIRED_TEMPLATE_FIELDS = ["entity", "vendor", "feeType", "currency"];
+    const RUN_REQUIRED_FIELDS = ["period", "invoiceTotal"];
     const batchQueues = {
       US: { items: [], running: false, paused: false },
       CAN: { items: [], running: false, paused: false }
@@ -982,29 +1104,57 @@
 
     function setDefaults(prefix, region) {
       document.getElementById(`${prefix}Country`).value = region;
-      document.getElementById(`${prefix}Entity`).value = region === "US" ? "Tencent America LLC" : "Tencent Canada";
-      document.getElementById(`${prefix}Vendor`).value = "Anthem";
-      document.getElementById(`${prefix}FeeType`).value = "Medical Insurance";
-      document.getElementById(`${prefix}InvoiceTotal`).value = "145411.03";
-      document.getElementById(`${prefix}Currency`).value = region === "US" ? "USD" : "CAD";
+      document.getElementById(`${prefix}Period`).value = "";
+      document.getElementById(`${prefix}InvoiceTotal`).value = "";
+      ["Entity", "Vendor", "FeeType", "Currency"].forEach((f) => {
+        const el = document.getElementById(`${prefix}${f}`);
+        if (el) el.value = "";
+      });
+      const pel = document.getElementById(`${prefix}Period`);
+      if (pel) pel.classList.remove("period-invalid");
+      syncSelectEmptyStates(prefix);
     }
 
-    function populatePeriodOptions() {
+    function syncSelectEmptyState(id) {
+      const el = document.getElementById(id);
+      if (!el || el.tagName !== "SELECT") return;
+      el.classList.toggle("select-empty", !String(el.value || "").trim());
+    }
+
+    function syncSelectEmptyStates(prefix) {
+      ["Entity", "Vendor", "FeeType", "Currency"].forEach((f) => syncSelectEmptyState(`${prefix}${f}`));
+    }
+
+    function normalizePeriodInput(prefix) {
+      const el = document.getElementById(`${prefix}Period`);
+      if (!el) return "";
+      const normalized = String(el.value || "").replace(/\D/g, "").slice(0, 6);
+      el.value = normalized;
+      el.classList.toggle("period-invalid", normalized.length > 0 && !validatePeriodYYYYMM(normalized));
+      return normalized;
+    }
+
+    function validatePeriodYYYYMM(period) {
+      const p = String(period || "").trim();
+      if (!/^\d{6}$/.test(p)) return false;
+      const month = parseInt(p.slice(4, 6), 10);
+      return month >= 1 && month <= 12;
+    }
+
+    function initPeriodFields() {
       const now = new Date();
-      const values = [];
-      for (let i = -8; i <= 3; i += 1) {
-        const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-        values.push(`${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}`);
-      }
-      ["usPeriod", "sgPeriod"].forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const old = sel.value;
-        sel.innerHTML =
-          `<option value="">${currentLang === "en" ? "Select period YYYYMM" : "请选择账单月 YYYYMM"}</option>` +
-          values.map((v) => `<option value="${v}">${v}</option>`).join("");
-        if (values.includes(old)) sel.value = old;
-      });
+      const hint = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
+      if (I18N.zh) I18N.zh.phPeriodInput = `在此输入，如 ${hint}`;
+      if (I18N.en) I18N.en.phPeriodInput = `Type here, e.g. ${hint}`;
+    }
+
+    function clearMonthlyFields(prefix, region) {
+      document.getElementById(`${prefix}Period`).value = "";
+      document.getElementById(`${prefix}InvoiceTotal`).value = "";
+      const pel = document.getElementById(`${prefix}Period`);
+      if (pel) pel.classList.remove("period-invalid");
+      document.getElementById(`${prefix}Result`).textContent =
+        currentLang === "en" ? `Cleared billing month and amount for ${region}.` : `已清空 ${region} 本月账单月与金额（供应商设置保留）。`;
     }
 
     function applyBuildPreset(prefix, preset) {
@@ -1023,6 +1173,7 @@
       if (document.getElementById(`${prefix}FeeType`)) document.getElementById(`${prefix}FeeType`).value = cfg.feeType;
       if (document.getElementById(`${prefix}Entity`)) document.getElementById(`${prefix}Entity`).value = cfg.entity;
       if (document.getElementById(`${prefix}Currency`)) document.getElementById(`${prefix}Currency`).value = cfg.currency;
+      syncSelectEmptyStates(prefix);
       refreshInvoiceHints(prefix === "us" ? "US" : "CAN", prefix);
     }
 
@@ -1067,10 +1218,11 @@
       const all = loadInvoiceHistory();
       const arr = Array.isArray(all[key]) ? all[key] : [];
       if (!arr.length) {
-        box.innerHTML = `<span class="muted">${currentLang === "en" ? "No recent amounts yet." : "暂无历史金额，可先执行一次后自动记录。"}</span>`;
+        box.innerHTML = `<span class="muted">${currentLang === "en" ? "No recent amounts for this vendor yet." : "该供应商暂无历史金额；执行成功后会自动记录，点击即可填入。"}</span>`;
         return;
       }
-      box.innerHTML = arr
+      const label = currentLang === "en" ? "Recent amounts (click to fill): " : "最近用过的金额（点击填入）：";
+      box.innerHTML = `<span class="muted" style="align-self:center;margin-right:4px;">${label}</span>` + arr
         .map((v) => `<button type="button" class="chip-btn" onclick="fillInvoice('${prefix}','${String(v).replace(/'/g, "\\'")}')">${v}</button>`)
         .join("");
     }
@@ -1082,9 +1234,10 @@
         return;
       }
       loadRegionTemplate(region, prefix, true);
-      const period = document.getElementById(`${prefix}Period`).value.trim();
-      if (!period) {
-        document.getElementById(`${prefix}Result`).textContent = "请先在下拉框选择账单月（YYYYMM），系统不会自动默认月份。";
+      const period = normalizePeriodInput(prefix);
+      if (!validatePeriodYYYYMM(period)) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Enter billing period as YYYYMM (e.g. 202607)." : "请先输入账单月 YYYYMM（例 202607）。";
         return;
       }
       await runBuildAllocation(region, prefix);
@@ -1094,13 +1247,18 @@
 
     function collectTemplate(prefix) {
       return {
-        period: document.getElementById(`${prefix}Period`).value.trim(),
         country: document.getElementById(`${prefix}Country`).value.trim(),
         entity: document.getElementById(`${prefix}Entity`).value.trim(),
         vendor: document.getElementById(`${prefix}Vendor`).value.trim(),
         feeType: document.getElementById(`${prefix}FeeType`).value.trim(),
-        invoiceTotal: document.getElementById(`${prefix}InvoiceTotal`).value.trim(),
         currency: document.getElementById(`${prefix}Currency`).value.trim()
+      };
+    }
+
+    function collectRunFields(prefix) {
+      return {
+        period: normalizePeriodInput(prefix),
+        invoiceTotal: document.getElementById(`${prefix}InvoiceTotal`).value.trim()
       };
     }
 
@@ -1118,47 +1276,73 @@
     }
 
     function applyTemplate(prefix, data) {
-      REQUIRED_TEMPLATE_FIELDS.forEach((k) => {
-        const map = { period: "Period", country: "Country", entity: "Entity", vendor: "Vendor", feeType: "FeeType", invoiceTotal: "InvoiceTotal", currency: "Currency" };
-        if (data[k] !== undefined) document.getElementById(`${prefix}${map[k]}`).value = data[k];
+      const map = { country: "Country", entity: "Entity", vendor: "Vendor", feeType: "FeeType", currency: "Currency" };
+      Object.keys(map).forEach((k) => {
+        if (data[k] !== undefined && data[k] !== "") {
+          const el = document.getElementById(`${prefix}${map[k]}`);
+          if (el) el.value = data[k];
+        }
       });
+      syncSelectEmptyStates(prefix);
+    }
+
+    function validateRunSelects(prefix) {
+      const checks = [
+        { id: `${prefix}Entity`, key: "needEntity" },
+        { id: `${prefix}Vendor`, key: "needVendor" },
+        { id: `${prefix}FeeType`, key: "needFeeType" },
+        { id: `${prefix}Currency`, key: "needCurrency" }
+      ];
+      for (const c of checks) {
+        const el = document.getElementById(c.id);
+        if (!el || !String(el.value || "").trim()) {
+          return t(c.key);
+        }
+      }
+      return "";
     }
 
     function saveRegionTemplate(region, prefix) {
       const tpl = collectTemplate(prefix);
       const missing = validateTemplate(tpl);
       if (missing.length) {
-        showTemplateModal(`保存失败：缺少字段 ${missing.join(", ")}`);
+        showTemplateModal(
+          currentLang === "en"
+            ? `Save failed: missing ${missing.join(", ")}`
+            : `保存失败：请先选择 ${missing.join("、")}`
+        );
         return;
       }
       localStorage.setItem(templateKey(region), JSON.stringify(tpl));
-      document.getElementById(`${prefix}Result`).textContent = `Saved defaults for ${region}.`;
+      document.getElementById(`${prefix}Result`).textContent =
+        currentLang === "en"
+          ? `Saved vendor settings for ${region} (month & amount not saved).`
+          : `已记住 ${region} 供应商设置（账单月与金额需每月手填）。`;
     }
 
     function loadRegionTemplate(region, prefix, silent = false) {
       const raw = localStorage.getItem(templateKey(region));
       if (!raw) {
-        if (!silent) document.getElementById(`${prefix}Result`).textContent = `No saved defaults for ${region}.`;
+        if (!silent) {
+          document.getElementById(`${prefix}Result`).textContent =
+            currentLang === "en" ? `No saved vendor settings for ${region}.` : `${region} 暂无已保存的供应商设置。`;
+        }
         return;
       }
       try {
         const tpl = JSON.parse(raw);
-        const missing = validateTemplate(tpl);
-        if (missing.length) {
-          if (!silent) showTemplateModal(`模板不完整，缺少字段: ${missing.join(", ")}`);
-          return;
-        }
         applyTemplate(prefix, tpl);
-        if (!silent) document.getElementById(`${prefix}Result`).textContent = `Loaded defaults for ${region}.`;
+        refreshInvoiceHints(region, prefix);
+        if (!silent) {
+          document.getElementById(`${prefix}Result`).textContent =
+            currentLang === "en" ? `Loaded vendor settings for ${region}.` : `已载入 ${region} 上次供应商设置。`;
+        }
       } catch (_) {
-        if (!silent) document.getElementById(`${prefix}Result`).textContent = `Invalid template for ${region}.`;
+        if (!silent) {
+          document.getElementById(`${prefix}Result`).textContent =
+            currentLang === "en" ? `Invalid saved settings for ${region}.` : `${region} 保存的设置已损坏，请重新保存。`;
+        }
       }
-    }
-
-    function resetRegionTemplate(region, prefix) {
-      localStorage.removeItem(templateKey(region));
-      setDefaults(prefix, region);
-      document.getElementById(`${prefix}Result`).textContent = `Reset defaults for ${region}.`;
     }
 
     function triggerImportTemplate(region) {
@@ -1194,12 +1378,18 @@
         const tpl = parsed && parsed.template ? parsed.template : parsed;
         const missing = validateTemplate(tpl);
         if (missing.length) {
-          showTemplateModal(`导入失败：模板缺少字段 ${missing.join(", ")}`);
+          showTemplateModal(
+            currentLang === "en"
+              ? `Import failed: missing ${missing.join(", ")}`
+              : `导入失败：缺少字段 ${missing.join("、")}`
+          );
           return;
         }
         localStorage.setItem(templateKey(region), JSON.stringify(tpl));
         applyTemplate(prefix, tpl);
-        document.getElementById(`${prefix}Result`).textContent = `Imported defaults for ${region}.`;
+        refreshInvoiceHints(region, prefix);
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? `Imported vendor settings for ${region}.` : `已导入 ${region} 供应商设置。`;
       } catch (e) {
         document.getElementById(`${prefix}Result`).textContent = `Import failed: ${e}`;
       }
@@ -1841,16 +2031,27 @@
         document.getElementById(`${prefix}Result`).textContent = "Please select CSV file.";
         return;
       }
-      const period = document.getElementById(`${prefix}Period`).value.trim();
-      if (!period) {
+      const period = normalizePeriodInput(prefix);
+      if (!validatePeriodYYYYMM(period)) {
         document.getElementById(`${prefix}Result`).textContent =
-          currentLang === "en" ? "Select billing period (YYYYMM) first." : "请先选择账单月（YYYYMM），系统不会自动默认。";
+          currentLang === "en" ? "Enter billing period as YYYYMM (e.g. 202607)." : "请先输入账单月 YYYYMM（例 202607）。";
+        return;
+      }
+      const invoiceTotal = document.getElementById(`${prefix}InvoiceTotal`).value.trim().replace(/,/g, "");
+      if (!invoiceTotal || Number.isNaN(Number(invoiceTotal)) || Number(invoiceTotal) <= 0) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Enter this month's invoice total (amount changes every month)." : "请输入本月账单总额（每月金额不同，无默认值）。";
+        return;
+      }
+      const selectErr = validateRunSelects(prefix);
+      if (selectErr) {
+        document.getElementById(`${prefix}Result`).textContent = selectErr;
         return;
       }
       markStepInProgress(region, "center");
       const fd = new FormData();
       fd.append("file", file);
-      fd.append("period", document.getElementById(`${prefix}Period`).value.trim());
+      fd.append("period", period);
       fd.append("country", document.getElementById(`${prefix}Country`).value.trim());
       fd.append("entity", document.getElementById(`${prefix}Entity`).value.trim());
       fd.append("vendor", document.getElementById(`${prefix}Vendor`).value.trim());
@@ -1980,6 +2181,46 @@
         maskUpload: "上传前脱敏（输出自动恢复）",
         descOutput: "把 CSV 转为可提交文档，不修改台账；结果可下载复核。",
         descCenter: "分摊人数并检查成本中心有效性，避免提单失败。",
+        descCenterForm: "账单月请按 YYYYMM 手输（可填任意月份）；账单总额每月不同，请手动输入，系统不会写死默认值。",
+        labelPeriod: "账单月 YYYYMM",
+        hintPeriod: "6 位数字，例 202607 = 2026 年 7 月（可填任意未来/过去月份）",
+        hintCountry: "本工作区固定 US，无需修改",
+        hintCountryCAN: "本工作区固定 CAN，无需修改",
+        hintEntity: "请下拉选择，或点下方 Anthem 等快捷按钮",
+        hintVendor: "请下拉选择，或点下方供应商快捷按钮",
+        hintFeeType: "与供应商匹配，如 Medical Insurance / Dental",
+        hintCurrency: "US 通常为 USD",
+        hintCurrencyCAN: "CAN 通常为 CAD",
+        hintInvoice: "每月金额不同，必填；执行成功后可点下方历史金额快速填入",
+        phPeriodInput: "在此输入，如 202607",
+        phInvoiceInput: "在此输入本月总额，如 145411.03",
+        phEntity: "— 请选择主体 —",
+        phVendor: "— 请选择供应商 —",
+        phFeeType: "— 请选择费用类型 —",
+        phCurrency: "— 请选择币种 —",
+        needEntity: "请先选择主体 Entity（下拉或快捷按钮）",
+        needVendor: "请先选择供应商 Vendor（下拉或快捷按钮）",
+        needFeeType: "请先选择费用类型 Fee Type",
+        needCurrency: "请先选择币种 Currency",
+        labelP1File: "人数 CSV（P1 自动分摊）",
+        hintP1File: "例 IN_US_P1_人数_202607.csv",
+        hintP1FileCAN: "例 IN_CAN_P1_人数_202607.csv",
+        labelP3Source: "HC 源文件",
+        hintP3Source: "通常为上一步产出的 HC_Analysis CSV",
+        labelP3Status: "成本中心状态表",
+        hintP3Status: "例 IN_US_P3_成本中心状态表_202607.csv",
+        hintP3StatusCAN: "例 IN_CAN_P3_成本中心状态表_202607.csv",
+        labelCountry: "国家",
+        labelEntity: "主体 Entity",
+        labelVendor: "供应商 Vendor",
+        labelFeeType: "费用类型 Fee Type",
+        labelInvoiceTotal: "账单总额 Invoice Total",
+        labelCurrency: "币种 Currency",
+        labelVendorPreset: "供应商快捷（只改供应商/费用类型/主体，不改金额）：",
+        btnLoadVendorPrefs: "载入上次供应商设置",
+        btnSaveVendorPrefs: "记住当前供应商设置",
+        btnClearMonthly: "清空本月输入",
+        advPrefsSummary: "高级：导出 / 导入设置 JSON（换电脑时用）",
         descLedger: "半自动更新台账，去重 Upsert，降低漏更风险。",
         descSchedule: "工作日前自动预检，适合月初高峰期（管理员配置）。",
         whatIsThis: "本步说明",
@@ -2041,6 +2282,46 @@
         maskUpload: "Mask upload (auto recover output)",
         descOutput: "Convert CSV to submission docs without changing ledger.",
         descCenter: "Allocate headcount and validate cost centers before submit.",
+        descCenterForm: "Enter billing month as YYYYMM (any month). Invoice total changes every month — type it manually; no hardcoded default.",
+        labelPeriod: "Billing month YYYYMM",
+        hintPeriod: "6 digits, e.g. 202607 = Jul 2026 (any past/future month OK)",
+        labelCountry: "Country",
+        labelEntity: "Entity",
+        labelVendor: "Vendor",
+        labelFeeType: "Fee Type",
+        labelInvoiceTotal: "Invoice Total",
+        hintInvoice: "Required each month; click a history chip below after a successful run",
+        phPeriodInput: "Type here, e.g. 202607",
+        phInvoiceInput: "Type invoice total, e.g. 145411.03",
+        phEntity: "— Select entity —",
+        phVendor: "— Select vendor —",
+        phFeeType: "— Select fee type —",
+        phCurrency: "— Select currency —",
+        needEntity: "Select Entity first (dropdown or shortcut chip).",
+        needVendor: "Select Vendor first (dropdown or shortcut chip).",
+        needFeeType: "Select Fee Type first.",
+        needCurrency: "Select Currency first.",
+        hintCountry: "Fixed to US in this workspace.",
+        hintCountryCAN: "Fixed to CAN in this workspace.",
+        hintEntity: "Pick from dropdown or use a vendor shortcut below.",
+        hintVendor: "Pick from dropdown or use a shortcut chip below.",
+        hintFeeType: "Must match vendor, e.g. Medical Insurance / Dental.",
+        hintCurrency: "Usually USD for US.",
+        hintCurrencyCAN: "Usually CAD for CAN.",
+        labelP1File: "Headcount CSV (P1 allocation)",
+        hintP1File: "e.g. IN_US_P1_人数_202607.csv",
+        hintP1FileCAN: "e.g. IN_CAN_P1_人数_202607.csv",
+        labelP3Source: "HC source file",
+        hintP3Source: "Usually HC_Analysis CSV from previous step",
+        labelP3Status: "Cost center status file",
+        hintP3Status: "e.g. IN_US_P3_成本中心状态表_202607.csv",
+        hintP3StatusCAN: "e.g. IN_CAN_P3_成本中心状态表_202607.csv",
+        labelCurrency: "Currency",
+        labelVendorPreset: "Vendor shortcuts (vendor/fee/entity only, not amount):",
+        btnLoadVendorPrefs: "Load saved vendor settings",
+        btnSaveVendorPrefs: "Save vendor settings",
+        btnClearMonthly: "Clear month & amount",
+        advPrefsSummary: "Advanced: export / import settings JSON",
         descLedger: "Semi-auto ledger upsert to reduce missed updates.",
         descSchedule: "Workday pre-check before peak submit (admin setup).",
         whatIsThis: "About this step",
@@ -2074,7 +2355,14 @@
       document.documentElement.lang = currentLang === "en" ? "en" : "zh-CN";
       document.querySelectorAll("[data-i18n]").forEach((el) => {
         const key = el.getAttribute("data-i18n");
-        if (key && el.id !== "usSummary" && el.id !== "sgSummary") el.textContent = t(key);
+        if (key && el.id !== "usSummary" && el.id !== "sgSummary") {
+          if (el.tagName === "OPTION") el.textContent = t(key);
+          else el.textContent = t(key);
+        }
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (key) el.placeholder = t(key);
       });
       ["usSummary", "sgSummary"].forEach((id) => {
         const el = document.getElementById(id);
@@ -2092,6 +2380,7 @@
     function switchLang() {
       currentLang = document.getElementById("lang").value;
       localStorage.setItem(KEY_LANG, currentLang);
+      initPeriodFields();
       applyI18n();
       restoreProgressUI();
       refreshKpiForRegion(document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN");
@@ -2111,15 +2400,14 @@
       document.getElementById("rootPath").value = ROOT;
       document.getElementById("lang").value = localStorage.getItem(KEY_LANG) || "zh";
       switchLang();
-      populatePeriodOptions();
       setDefaults("us", "US");
       setDefaults("sg", "CAN");
-      applyBuildPreset("us", "anthem");
-      applyBuildPreset("sg", "sunlife");
       refreshInvoiceHints("US", "us");
       refreshInvoiceHints("CAN", "sg");
       loadRegionTemplate("US", "us", true);
       loadRegionTemplate("CAN", "sg", true);
+      syncSelectEmptyStates("us");
+      syncSelectEmptyStates("sg");
       restoreProgressUI();
       renderQueueTable("US", "us");
       renderQueueTable("CAN", "sg");
