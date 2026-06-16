@@ -34,6 +34,11 @@ def match_profile(data: dict, country: str, vendor: str = "", fee_type: str = ""
     if not candidates:
         raise ValueError(f"No profiles for country {country}")
 
+    if not vendor_q and not fee_q:
+        default_key = data["defaults"].get(country)
+        if default_key and default_key in profiles:
+            return profiles[default_key]
+
     if vendor_q:
         candidates = [p for p in candidates if p.get("vendor", "").lower() == vendor_q]
     if fee_q:

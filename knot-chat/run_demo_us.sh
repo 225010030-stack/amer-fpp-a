@@ -9,21 +9,21 @@ DEMO_PERIOD="202605"
 DEMO_INVOICE="145411.03"
 
 echo "STEP 1/4 痛点2 生成提单文本"
-bash "$ROOT/knot-chat/generate_submission_blocks.sh" "$DEMO_ROOT/US/US_prefill_202605.csv"
+bash "$ROOT/knot-chat/generate_submission_blocks.sh" "$(demo_path US P2)"
 
 echo "STEP 2/4 痛点1 自动分摊 (US)"
 bash "$ROOT/knot-chat/run_pain1_allocation.sh" "$DEMO_PERIOD" US "$DEMO_INVOICE"
 
 echo "STEP 3/4 痛点3 检查成本中心 (US)"
 bash "$ROOT/knot-chat/run_pain3_check_centers.sh" \
-  "$DEMO_ROOT/公共/20260608_171946_pain3_source_HC_Analysis_统一模板.csv" \
-  "$DEMO_ROOT/公共/20260608_162731_pain3_status_成本中心状态表模板.csv" \
+  "$(demo_path US P3_HC)" \
+  "$(demo_path US P3_STATUS)" \
   US
 
 echo "STEP 4/4 痛点4 台账更新 (US)"
 bash "$ROOT/knot-chat/run_pain4_update_ledger.sh" \
-  "$DEMO_ROOT/US/US_prefill_202605.csv" \
-  "$DEMO_ROOT/公共/20260608_162731_pain4_ledger_台账模板.csv" \
+  "$(demo_path US P2)" \
+  "$(demo_path US P4)" \
   US
 
 echo "DONE: US demo loop completed. See $UPLOAD_OUT/ (files tagged _US_)"
