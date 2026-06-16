@@ -16,14 +16,15 @@ bash /data/workspace/amer-fpp-a/knot-chat/run_agent.sh <指令> [参数]
 
 ### 同步代码（仅当报找不到文件时）
 
-**禁止**：搜索记忆、查历史工作区、git clone、猜测 OHRTranslate 等其他项目路径。  
 **只允许**执行：
 
 ```bash
 bash /data/workspace/amer-fpp-a/knot-chat/sync_workspace.sh
 ```
 
-同步成功后立即执行业务指令，不要再探测。
+或 API：`POST /api/sync`（bot-gateway 已启用时）
+
+网页按钮任务会自动 `git pull`（`AUTO_SYNC_ON_RUN=true`），一般无需手动 sync。
 
 ### Client 工具
 

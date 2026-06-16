@@ -1944,6 +1944,11 @@
           document.getElementById("rootPath").value = ROOT;
           localStorage.setItem(KEY_ROOT, ROOT);
         }
+        if (data.default_api_base && (API.includes("127.0.0.1") || !localStorage.getItem(KEY_API))) {
+          API = data.default_api_base;
+          document.getElementById("apiBase").value = API;
+          localStorage.setItem(KEY_API, API);
+        }
       } catch (_) {}
     }
 

@@ -13,10 +13,12 @@ from pathlib import Path
 from typing import Any, Optional
 from urllib.parse import unquote
 
-from fastapi import FastAPI, File, Form, Header, HTTPException, Query, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+
+from repo_sync import auto_sync_enabled, git_head, last_sync_status, sync_workspace
 
 
 WORKSPACE_ROOT = Path(
@@ -30,6 +32,8 @@ CONFIG_DIR = WORKSPACE_ROOT / "bot-gateway" / "config"
 COMMAND_MAP_FILE = CONFIG_DIR / "command-map.json"
 MENU_FILE = CONFIG_DIR / "menu.json"
 BOT_GATEWAY_TOKEN = os.getenv("BOT_GATEWAY_TOKEN", "").strip()
+DEFAULT_API_BASE = os.getenv("DEFAULT_API_BASE", "").strip()
+PUBLIC_WEB_BASE = os.getenv("PUBLIC_WEB_BASE", "").strip()
 SENSITIVE_COLUMNS = ["主体", "Requester", "Business Reviewer", "Department", "Center", "合同号", "Payment Description"]
 
 ALLOWED_ACTIONS = {
@@ -265,8 +269,14 @@ def resolve_action_from_text(text: str) -> Optional[str]:
     return None
 
 
+def maybe_sync_repo(root: Optional[Path] = None) -> dict[str, Any]:
+    target = root or WORKSPACE_ROOT
+    return sync_workspace(target)
+
+
 def run_action(req: RunRequest) -> dict[str, Any]:
     ensure_dirs()
+    sync_info = maybe_sync_repo()
     if req.action not in ALLOWED_ACTIONS:
         raise HTTPException(status_code=400, detail=f"Unsupported action: {req.action}")
 
@@ -336,6 +346,8 @@ def run_action(req: RunRequest) -> dict[str, Any]:
         "outputs": extract_output_paths(result.stdout or "", root),
         "stdout_tail": (result.stdout or "").splitlines()[-10:],
         "stderr_tail": (result.stderr or "").splitlines()[-10:],
+        "sync": sync_info,
+        "git_commit": git_head(root),
     }
     jobs = load_jobs()
     jobs.append(entry)
@@ -345,6 +357,7 @@ def run_action(req: RunRequest) -> dict[str, Any]:
 
 def run_cmd(cmd: list[str], cwd: Path, action: str, meta: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     ensure_dirs()
+    sync_info = maybe_sync_repo(cwd)
     run_id = str(uuid.uuid4())
     started = datetime.now()
     result = subprocess.run(cmd, cwd=str(cwd), capture_output=True, text=True, check=False)
@@ -394,6 +407,8 @@ def run_cmd(cmd: list[str], cwd: Path, action: str, meta: Optional[dict[str, Any
         "outputs": extract_output_paths(result.stdout or "", cwd),
         "stdout_tail": (result.stdout or "").splitlines()[-10:],
         "stderr_tail": (result.stderr or "").splitlines()[-10:],
+        "sync": sync_info,
+        "git_commit": git_head(cwd),
     }
     if meta:
         entry.update(meta)
@@ -420,12 +435,35 @@ def health() -> dict[str, Any]:
 
 
 @app.get("/api/meta")
-def meta() -> dict[str, Any]:
+def meta(request: Request) -> dict[str, Any]:
+    inferred_api = DEFAULT_API_BASE
+    if not inferred_api:
+        host = request.headers.get("x-forwarded-host") or request.headers.get("host") or ""
+        if host and "18081" in host:
+            inferred_api = f"{request.url.scheme}://{host.replace('18081', '18082')}"
+        elif host:
+            inferred_api = f"{request.url.scheme}://{host}"
     return {
         "ok": True,
+        "product": "AMER FPP + ai",
         "workspace_root": str(WORKSPACE_ROOT),
+        "git_commit": git_head(WORKSPACE_ROOT),
+        "auto_sync_on_run": auto_sync_enabled(),
+        "last_sync": last_sync_status(),
+        "default_api_base": inferred_api.rstrip("/") if inferred_api else "",
+        "public_web_base": PUBLIC_WEB_BASE,
+        "web_pages": {
+            "upload_docs": "/upload-docs.html",
+            "chat_menu": "/chat-menu.html",
+        },
         "actions": sorted(ALLOWED_ACTIONS.keys()),
     }
+
+
+@app.post("/api/sync")
+def sync_repo_api() -> dict[str, Any]:
+    result = sync_workspace(WORKSPACE_ROOT, force=True)
+    return {"ok": bool(result.get("ok")), "sync": result}
 
 
 @app.get("/api/menu")

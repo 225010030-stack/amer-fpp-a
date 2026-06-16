@@ -12,6 +12,11 @@ from wecom.client import WeComClient
 from wecom.config import WeComConfig
 from wecom.parser import WeComMessage
 
+try:
+    from repo_sync import sync_workspace
+except ImportError:
+    sync_workspace = None
+
 USER_STATE_FILE = "wecom_user_state.json"
 
 
@@ -57,6 +62,9 @@ def execute_agent_text(workspace_root: Path, text: str) -> dict[str, Any]:
     text = (text or "").strip()
     if not text:
         return {"ok": False, "message": "空指令", "outputs": []}
+
+    if sync_workspace is not None:
+        sync_workspace(workspace_root)
 
     run_agent = workspace_root / "knot-chat" / "run_agent.sh"
     if not run_agent.exists():

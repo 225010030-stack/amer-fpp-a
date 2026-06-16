@@ -2,7 +2,7 @@
 # 固定路径同步工蜂代码（禁止智能体自行搜索/clone）
 set -euo pipefail
 
-ROOT="/data/workspace/amer-fpp-a"
+ROOT="${WORKSPACE_ROOT:-/data/workspace/amer-fpp-a}"
 
 if [[ ! -d "$ROOT" ]]; then
   echo "ERROR: 目录不存在: $ROOT"
