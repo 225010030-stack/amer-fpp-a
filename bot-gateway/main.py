@@ -15,7 +15,8 @@ from urllib.parse import unquote
 
 from fastapi import FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from repo_sync import auto_sync_enabled, git_head, last_sync_status, sync_workspace
@@ -31,6 +32,7 @@ UPLOAD_OUTPUT_DIR = WORKSPACE_ROOT / "上传输出"
 CONFIG_DIR = WORKSPACE_ROOT / "bot-gateway" / "config"
 COMMAND_MAP_FILE = CONFIG_DIR / "command-map.json"
 MENU_FILE = CONFIG_DIR / "menu.json"
+WEB_TOOL_DIR = WORKSPACE_ROOT / "web-tool"
 BOT_GATEWAY_TOKEN = os.getenv("BOT_GATEWAY_TOKEN", "").strip()
 DEFAULT_API_BASE = os.getenv("DEFAULT_API_BASE", "").strip()
 PUBLIC_WEB_BASE = os.getenv("PUBLIC_WEB_BASE", "").strip()
@@ -974,3 +976,17 @@ def files(path: str = Query(..., description="Absolute path under workspace")) -
     if not p.exists() or not p.is_file():
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(path=str(p), filename=p.name)
+
+
+@app.get("/")
+def web_root() -> RedirectResponse:
+    return RedirectResponse(url="/upload-docs.html")
+
+
+@app.get("/index.html")
+def web_index() -> RedirectResponse:
+    return RedirectResponse(url="/upload-docs.html")
+
+
+if WEB_TOOL_DIR.is_dir():
+    app.mount("/", StaticFiles(directory=str(WEB_TOOL_DIR), html=True), name="web")

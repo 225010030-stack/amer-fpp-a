@@ -622,7 +622,25 @@
       CAN: { items: [], running: false, paused: false }
     };
     let queueSeq = 1;
-    let API = localStorage.getItem(KEY_API) || "http://127.0.0.1:18082";
+
+    function inferDefaultApi() {
+      const host = window.location.hostname || "";
+      const onRemote = host && host !== "127.0.0.1" && host !== "localhost";
+      if (onRemote) return window.location.origin;
+      return "http://127.0.0.1:18082";
+    }
+
+    function normalizeApiBase(raw) {
+      const val = (raw || "").trim();
+      if (!val) return inferDefaultApi();
+      // 18081 是静态网页端口，不是 API
+      if (val.includes(":18081")) {
+        return val.replace(":18081", ":18082");
+      }
+      return val.replace(/\/$/, "");
+    }
+
+    let API = normalizeApiBase(localStorage.getItem(KEY_API) || inferDefaultApi());
     let ROOT = localStorage.getItem(KEY_ROOT) || "";
     let currentLang = localStorage.getItem(KEY_LANG) || "zh";
     const latestStatsSummary = { US: null, CAN: null };
@@ -1945,11 +1963,18 @@
           localStorage.setItem(KEY_ROOT, ROOT);
         }
         if (data.default_api_base && (API.includes("127.0.0.1") || !localStorage.getItem(KEY_API))) {
-          API = data.default_api_base;
+          API = normalizeApiBase(data.default_api_base);
           document.getElementById("apiBase").value = API;
           localStorage.setItem(KEY_API, API);
         }
       } catch (_) {}
+      // 预览域下同源 API，避免 Health Check 连不上
+      const host = window.location.hostname || "";
+      if (host && host !== "127.0.0.1" && host !== "localhost") {
+        API = window.location.origin;
+        document.getElementById("apiBase").value = API;
+        localStorage.setItem(KEY_API, API);
+      }
     }
 
     init();

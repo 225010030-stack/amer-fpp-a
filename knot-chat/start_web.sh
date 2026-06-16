@@ -44,11 +44,13 @@ sleep 1
 
 WEB_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18081/upload-docs.html 2>/dev/null || echo "000")
 API_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18082/api/health 2>/dev/null || echo "000")
+UNIFIED_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18082/upload-docs.html 2>/dev/null || echo "000")
 
 echo "DONE: backend http://127.0.0.1:18082/api/health (HTTP $API_CODE)"
-echo "DONE: web http://127.0.0.1:18081/upload-docs.html (HTTP $WEB_CODE)"
-echo "DONE: menu http://127.0.0.1:18081/chat-menu.html"
+echo "DONE: web     http://127.0.0.1:18081/upload-docs.html (HTTP $WEB_CODE)"
+echo "DONE: ★预览请用 18082 单端口（网页+API同域）: http://127.0.0.1:18082/upload-docs.html (HTTP $UNIFIED_CODE)"
+echo "DONE: menu http://127.0.0.1:18082/chat-menu.html"
 echo "DONE: WORKSPACE_ROOT=$WORKSPACE_ROOT"
-if [[ "$WEB_CODE" != "200" || "$API_CODE" != "200" ]]; then
+if [[ "$API_CODE" != "200" || "$UNIFIED_CODE" != "200" ]]; then
   echo "WARN: 服务未就绪，查看 运行日志/backend.log 与 web.log"
 fi
