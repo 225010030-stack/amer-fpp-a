@@ -31,23 +31,19 @@ sleep 2
 echo ""
 echo "=== 3) 本机健康检查（必须在 Knot 工作区终端跑） ==="
 WEB_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18081/upload-docs.html || echo "000")
-API_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18082/api/health || echo "000")
+API_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18081/api/health || echo "000")
 echo "upload-docs.html  HTTP $WEB_CODE  (期望 200)"
-echo "api/health        HTTP $API_CODE  (期望 200)"
+echo "api/health        HTTP $API_CODE  (期望 200，同端口 18081)"
 
 if [[ "$WEB_CODE" != "200" || "$API_CODE" != "200" ]]; then
   echo ""
   echo "ERROR: 服务未就绪，查看日志："
   echo "  tail -30 $ROOT/运行日志/backend.log"
-  echo "  tail -30 $ROOT/运行日志/web.log"
   exit 1
 fi
 
 echo ""
-echo "=== 4) Knot 预览链接怎么填 ==="
-echo "★ 推荐：预览端口选 18082（网页+API 同域，Health Check 才能过）"
-echo "浏览器地址："
+echo "=== 4) Knot 预览链接 ==="
+echo "预览端口 ${SERVICE_PORT:-18081}（网页+API 同域）"
 echo "  https://预览域名/upload-docs.html"
-echo ""
-echo "不要只开 index.html（旧 MVP 页）；index 会自动跳到 upload-docs。"
-echo "Backend URL 应填预览域名本身（同域），不要填 127.0.0.1:18081。"
+echo "Backend URL 填预览域名本身，Root Path: /data/workspace/amer-fpp-a"

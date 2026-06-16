@@ -625,18 +625,16 @@
 
     function inferDefaultApi() {
       const host = window.location.hostname || "";
+      const port = window.location.port || "";
       const onRemote = host && host !== "127.0.0.1" && host !== "localhost";
       if (onRemote) return window.location.origin;
-      return "http://127.0.0.1:18082";
+      if (port === "18081" || port === "18082") return window.location.origin;
+      return "http://127.0.0.1:18081";
     }
 
     function normalizeApiBase(raw) {
       const val = (raw || "").trim();
       if (!val) return inferDefaultApi();
-      // 18081 是静态网页端口，不是 API
-      if (val.includes(":18081")) {
-        return val.replace(":18081", ":18082");
-      }
       return val.replace(/\/$/, "");
     }
 
@@ -1046,7 +1044,12 @@
       el.textContent = "Checking...";
       try {
         const res = await fetch(`${API}/api/health`);
-        el.textContent = JSON.stringify(await res.json(), null, 2);
+        const text = await res.text();
+        try {
+          el.textContent = JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+          el.textContent = `Failed: 返回不是 JSON（请在工作区执行 git pull && bash knot-chat/start_web.sh 后刷新）\nHTTP ${res.status}\n${text.slice(0, 400)}`;
+        }
       } catch (e) {
         el.textContent = `Failed: ${e}`;
       }
