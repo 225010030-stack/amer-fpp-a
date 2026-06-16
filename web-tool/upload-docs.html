@@ -5,218 +5,351 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AMER FPP + ai | US & CAN</title>
   <style>
-    :root { --sp-8: 8px; --sp-12: 12px; --sp-16: 16px; --sp-24: 24px; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: var(--sp-24); color: #111; background: #f6f8fb; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .card { border: 1px solid #e9edf3; border-radius: 12px; padding: var(--sp-16); margin-top: var(--sp-16); background: #fff; box-shadow: 0 3px 14px rgba(15, 23, 42, 0.04); }
-    .row { display: flex; gap: var(--sp-12); flex-wrap: wrap; margin-top: var(--sp-8); align-items: center; }
-    .app-shell { display: grid; grid-template-columns: 260px 1fr; gap: var(--sp-16); margin-top: var(--sp-16); align-items: start; }
-    .sidebar { position: sticky; top: 14px; }
-    .nav-group { margin-top: var(--sp-12); }
-    .nav-title { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
-    .nav-btn { width: 100%; text-align: left; border: 1px solid #e2e8f0; background: #fff; border-radius: 8px; padding: 9px 10px; cursor: pointer; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .nav-btn.active { background: #edf5ff; border-color: #79adf5; }
-    .nav-left { display: inline-flex; align-items: center; gap: 8px; }
-    .nav-icon { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; opacity: 0.9; }
-    .nav-icon svg { width: 16px; height: 16px; stroke: #334155; stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .nav-check { color: #16a34a; font-weight: 700; visibility: hidden; }
-    .nav-check.done { visibility: visible; }
-    .nav-right { display: inline-flex; align-items: center; gap: 8px; }
-    .step-status { font-size: 11px; color: #6b7280; border: 1px solid #e2e8f0; border-radius: 999px; padding: 1px 8px; }
-    .step-status.in-progress { color: #0c4a6e; background: #e0f2fe; border-color: #bae6fd; }
-    .step-status.done { color: #166534; background: #dcfce7; border-color: #bbf7d0; }
-    .page-tab { border: 1px solid #cfd8e3; background: #fff; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
-    .page-tab.active { background: #eef8ff; border-color: #7bb4f7; }
+    :root {
+      --sp-8: 8px; --sp-12: 12px; --sp-16: 16px; --sp-24: 24px;
+      --brand: #1677ff;
+      --brand-light: #e8f3ff;
+      --bg-app: #eef2f8;
+      --bg-sidebar: #ffffff;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --border: #e5eaf2;
+      --sidebar-w: 240px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-primary); background: var(--bg-app); font-size: 14px;
+    }
+    .app-layout { display: flex; min-height: 100vh; }
+    .app-sidebar {
+      width: var(--sidebar-w); flex-shrink: 0; background: var(--bg-sidebar);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    }
+    .brand-box { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+    .brand-logo {
+      width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #1677ff, #69b1ff);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .brand-title { font-size: 15px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .brand-sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4; }
+    .side-section { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+    .side-section-title {
+      padding: 4px 16px 8px; font-size: 11px; font-weight: 600; color: #94a3b8;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .side-nav-list { display: flex; flex-direction: column; gap: 2px; padding: 0 8px; }
+    .step-item, .step-mini {
+      width: 100%; border: none; background: transparent; border-radius: 8px;
+      cursor: pointer; text-align: left; color: #374151; font-size: 13px;
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin: 0;
+    }
+    .step-item:hover, .step-mini:hover { background: #f8fafc; }
+    .step-item.active, .step-mini.active {
+      background: var(--brand-light); color: var(--brand); font-weight: 600;
+      box-shadow: inset 3px 0 0 var(--brand);
+    }
+    .step-item.done .step-num { background: #dcfce7; color: #166534; border-color: #86efac; }
+    .step-num {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px; border: 1px solid #d1d5db;
+      display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+    }
+    .step-item.active .step-num { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .step-body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+    .step-title { font-size: 13px; line-height: 1.3; }
+    .step-badge { font-size: 10px; color: #64748b; }
+    .step-badge.in-progress { color: #0369a1; }
+    .step-badge.done { color: #15803d; }
+    .step-connector, .stepper-extra { display: none; }
+    .side-extra { padding: 8px 8px 0; display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-footer { margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--border); }
+    .sidebar-footer select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 8px; }
+
+    .app-main { flex: 1; min-width: 0; padding: 20px 24px 32px; overflow-x: hidden; }
+    .main-header { margin-bottom: 16px; }
+    .breadcrumb-line { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+    .breadcrumb-line span { color: #cbd5e1; margin: 0 6px; }
+    .title-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .title-row h1 { margin: 0; font-size: 22px; font-weight: 700; color: #111827; }
+    .tag-pill {
+      font-size: 11px; padding: 3px 10px; border-radius: 4px; background: #fff7e6;
+      color: #d48806; border: 1px solid #ffe58f; font-weight: 500;
+    }
+    .header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+    .kpi-row { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .kpi-card {
+      background: #fff; border-radius: 10px; border: 1px solid var(--border);
+      padding: 14px 16px; box-shadow: 0 1px 4px rgba(15,23,42,0.04);
+    }
+    .kpi-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: #111827; line-height: 1; }
+    .kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 6px; }
+
+    .pill-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .pill-tab {
+      padding: 8px 18px; border-radius: 999px; border: 1px solid var(--border);
+      background: #fff; font-size: 13px; color: #374151; cursor: pointer;
+    }
+    .pill-tab.active { background: #3ba8a9; color: #fff; border-color: #3ba8a9; font-weight: 600; }
+
+    .conn-panel {
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 16px; overflow: hidden;
+    }
+    .conn-panel summary {
+      padding: 12px 16px; cursor: pointer; font-weight: 600; font-size: 13px;
+      color: #374151; list-style: none; user-select: none;
+    }
+    .conn-panel summary::-webkit-details-marker { display: none; }
+    .conn-panel-body { padding: 0 16px 16px; border-top: 1px solid #f1f5f9; }
+    .conn-panel pre { max-height: 80px; overflow: auto; font-size: 11px; }
+
+    .content-panel {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    }
     .workspace { display: none; }
     .workspace.active { display: block; }
-    .page { display: none; margin-top: var(--sp-12); }
+    .workspace > h2 { display: none; }
+    .tip {
+      border-left: 3px solid var(--brand); background: #f8fbff; padding: 10px 14px;
+      border-radius: 0 8px 8px 0; font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;
+    }
+    .progress-wrap { margin-bottom: 16px; }
+    .progress-line { height: 6px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, #1677ff, #36cfc9); width: 0%; transition: width 0.3s; }
+    .progress-text { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+
+    .page { display: none; }
     .page.active { display: block; }
-    .tip { border-left: 4px solid #7bb4f7; background: #f4f9ff; padding: var(--sp-12); border-radius: 8px; font-size: 13px; color: #6b7280; }
-    .section { border: 1px solid #e9edf3; border-radius: 10px; padding: var(--sp-12); margin-top: var(--sp-12); background: #fcfdff; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03); }
-    .section-output { border-color: #bfdbfe; background: #eff6ff; }
-    .section-center { border-color: #fde68a; background: #fffbeb; }
-    .section-ledger { border-color: #c4b5fd; background: #f5f3ff; }
-    .section-schedule { border-color: #86efac; background: #f0fdf4; }
-    .desc { font-size: 12px; color: #6b7280; line-height: 1.5; margin-top: 6px; padding: var(--sp-8); border-radius: 8px; background: rgba(255,255,255,0.7); }
+    .section {
+      border: 1px solid #f0f0f0; border-radius: 10px; padding: 16px; margin-top: 14px; background: #fafbfc;
+    }
+    .section-output { border-color: #dbeafe; background: #f8fbff; }
+    .section-center { border-color: #fef3c7; background: #fffdf5; }
+    .section-ledger { border-color: #e9d5ff; background: #faf5ff; }
+    .section-schedule { border-color: #bbf7d0; background: #f6ffed; }
+    .section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; }
+    .desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-top: 4px; }
+    .row { display: flex; gap: var(--sp-12); flex-wrap: wrap; margin-top: var(--sp-8); align-items: center; }
     .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
-    input, select, button { padding: 9px; border: 1px solid #cdd5df; border-radius: 8px; background: #fff; }
-    input { width: 100%; box-sizing: border-box; }
+    input, select, button { padding: 9px 12px; border: 1px solid #d9d9d9; border-radius: 8px; background: #fff; font-size: 13px; }
+    input { width: 100%; }
     button { cursor: pointer; }
-    button:hover { background: #f2f5fa; }
-    pre { white-space: pre-wrap; background: #fafafa; border: 1px solid #eee; padding: 10px; border-radius: 8px; margin-top: 8px; }
-    .muted { color: #666; font-size: 12px; }
-    .hidden { display: none; }
-    .modal-mask { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); display: none; align-items: center; justify-content: center; z-index: 99; }
-    .modal-mask.show { display: flex; }
-    .modal { width: 520px; max-width: calc(100vw - 30px); background: #fff; border-radius: 12px; padding: 14px; border: 1px solid #d7dee8; }
-    .modal h3 { margin: 0 0 8px; }
-    .badge { font-size: 12px; padding: 2px 8px; border: 1px solid #b5d2ff; border-radius: 999px; background: #edf5ff; }
-    .btn-primary { background: #2563eb; color: #fff; border-color: #2563eb; }
-    .btn-primary:hover { background: #1d4ed8; }
-    .btn-secondary { background: #fff; color: #0f172a; border-color: #cbd5e1; }
-    .btn-secondary:hover { background: #f8fafc; }
-    .btn-danger { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
-    .btn-danger:hover { background: #ffe4e6; }
-    .crumb { font-size: 12px; color: #475569; padding: 6px 10px; border-radius: 999px; border: 1px solid #dbeafe; background: #f8fbff; }
-    .result-summary { margin-top: 8px; font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 1px solid #dbeafe; background: #f8fbff; }
-    .result-summary.ok { border-color: #bbf7d0; background: #f0fdf4; }
-    .result-summary.err { border-color: #fecaca; background: #fef2f2; }
+    button:hover { filter: brightness(0.97); }
+    .btn-primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .btn-primary:hover { background: #0958d9; }
+    .btn-secondary { background: #fff; color: #374151; border-color: #d9d9d9; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn-danger { background: #fff1f0; color: #cf1322; border-color: #ffa39e; }
+    pre { white-space: pre-wrap; background: #fafafa; border: 1px solid #eee; padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 12px; }
+    .muted { color: var(--text-secondary); font-size: 12px; }
+    .hidden { display: none !important; }
+    .safety { margin-top: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid #b7eb8f; background: #f6ffed; font-size: 12px; color: #389e0d; }
+    .result-summary { margin-top: 8px; font-size: 13px; padding: 10px 12px; border-radius: 8px; border: 1px solid #dbeafe; background: #f8fbff; }
+    .result-summary.ok { border-color: #b7eb8f; background: #f6ffed; }
+    .result-summary.err { border-color: #ffa39e; background: #fff2f0; }
     details.raw-box { margin-top: 8px; }
-    .safety { margin-top: 8px; padding: 8px 10px; border-radius: 8px; border: 1px solid #bbf7d0; background: #f0fdf4; font-size: 12px; color: #166534; }
-    .progress-wrap { margin-top: 10px; }
-    .progress-line { height: 8px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
-    .progress-bar { height: 100%; background: linear-gradient(90deg, #60a5fa, #22c55e); width: 0%; }
-    .progress-text { font-size: 12px; color: #475569; margin-top: 4px; }
-    .dash-grid { display: grid; grid-template-columns: repeat(3, minmax(160px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
-    .dash-card { border: 1px solid #dbeafe; background: #f8fbff; border-radius: 8px; padding: var(--sp-8); }
-    .dash-num { font-size: 20px; font-weight: 700; color: #1d4ed8; }
-    .dash-title { font-size: 12px; color: #475569; }
-    .ops-grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: var(--sp-8); margin-top: var(--sp-8); }
-    .ops-card { border: 1px solid #dbeafe; background: #ffffff; border-radius: 8px; padding: var(--sp-8); }
-    .ops-k { font-size: 12px; color: #64748b; }
-    .ops-v { font-size: 18px; font-weight: 700; color: #1e40af; margin-top: 4px; }
-    .ops-line { font-size: 12px; color: #334155; margin-top: 6px; }
-    .dashboard-section { margin-top: var(--sp-8); border: 1px solid #dbeafe; border-radius: 8px; padding: var(--sp-8); background: #ffffff; }
-    .dashboard-section h4 { margin: 0 0 6px; font-size: 13px; color: #334155; }
     .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    .chip-btn { border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
-    .chip-btn:hover { background: #eef2ff; border-color: #93c5fd; }
-    .doc-grid { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 10px; margin-top: 8px; }
-    .doc-link { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #0f172a; font-size: 13px; }
-    .doc-link:hover { background: #f8fafc; border-color: #93c5fd; }
-    .month-table { margin-top: var(--sp-8); overflow-x: auto; }
+    .chip-btn { border: 1px solid #d9d9d9; background: #fafafa; border-radius: 999px; padding: 6px 12px; font-size: 12px; cursor: pointer; }
+    .chip-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .dash-grid, .ops-grid { display: grid; grid-template-columns: repeat(3, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+    .dash-card, .ops-card { border: 1px solid #f0f0f0; background: #fafafa; border-radius: 8px; padding: 10px; }
+    .dash-num, .ops-v { font-size: 18px; font-weight: 700; color: var(--brand); }
+    .dash-title, .ops-k { font-size: 11px; color: var(--text-secondary); }
+    .dashboard-section { margin-top: 10px; border: 1px solid #f0f0f0; border-radius: 8px; padding: 12px; }
+    .month-table { margin-top: 10px; overflow-x: auto; }
     .month-table table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .month-table th, .month-table td { border: 1px solid #dbeafe; padding: 6px; text-align: left; }
-    @media (max-width: 980px) {
-      .app-shell { grid-template-columns: 1fr; }
-      .sidebar { position: static; }
-      .nav-btn { width: auto; min-width: 150px; }
-      .nav-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-      .nav-title { width: 100%; margin-bottom: 0; }
+    .month-table th, .month-table td { border: 1px solid #f0f0f0; padding: 8px; }
+    .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 99; }
+    .modal-mask.show { display: flex; }
+    .modal { width: 520px; max-width: calc(100vw - 30px); background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+    .container, .card, .app-shell, .workspace-toolbar, .country-pills, .stepper-bar, .crumb { all: unset; }
+    @media (max-width: 960px) {
+      .app-layout { flex-direction: column; }
+      .app-sidebar { width: 100%; height: auto; position: static; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="row" style="justify-content: space-between;">
-      <div>
-        <h1 id="title">AMER FPP + ai</h1>
-        <div class="muted" id="subtitle">AMER（US/CAN）完全独立，按效能点分页执行。</div>
+  <div class="app-layout">
+    <aside class="app-sidebar">
+      <div class="brand-box">
+        <div class="brand-logo">FPP</div>
+        <div class="brand-title" id="title">AMER FPP + ai</div>
+        <div class="brand-sub" id="subtitle" data-i18n="subtitle">AMER（US/CAN）完全独立，按步骤执行月度流程。</div>
       </div>
-      <div class="row">
-        <span class="badge">US</span>
-        <span class="badge">CAN</span>
+
+      <div class="side-section">
+        <button type="button" id="countryTabUS" class="step-item active" style="margin:0 8px 4px;" onclick="switchCountry('US')">
+          <span class="step-num">🇺🇸</span>
+          <span id="countryTabUSText" data-i18n="countryUS">US 工作区</span>
+        </button>
+        <div id="usStepper" class="side-nav-list">
+          <button type="button" id="usTabOutput" class="step-item active" onclick="switchPage('us','output')">
+            <span class="step-num">1</span>
+            <span class="step-body">
+              <span id="usTabOutputText" class="step-title" data-i18n="stepOutput">文档产出</span>
+              <span id="usStatusOutput" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+          <button type="button" id="usTabCenter" class="step-item" onclick="switchPage('us','center')">
+            <span class="step-num">2</span>
+            <span class="step-body">
+              <span id="usTabCenterText" class="step-title" data-i18n="stepCenter">成本中心预检</span>
+              <span id="usStatusCenter" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+          <button type="button" id="usTabLedger" class="step-item" onclick="switchPage('us','ledger')">
+            <span class="step-num">3</span>
+            <span class="step-body">
+              <span id="usTabLedgerText" class="step-title" data-i18n="stepLedger">台账回填</span>
+              <span id="usStatusLedger" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+        </div>
+        <div class="side-extra">
+          <button type="button" id="usTabSchedule" class="step-mini" onclick="switchPage('us','schedule')" data-i18n="stepSchedule">定时预检</button>
+          <button type="button" id="usTabHistory" class="step-mini" onclick="switchPage('us','history')" data-i18n="stepHistory">执行历史</button>
+          <button type="button" id="usTabQueue" class="step-mini" onclick="switchPage('us','queue')" data-i18n="stepQueue">任务队列</button>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <button type="button" id="countryTabSG" class="step-item" style="margin:0 8px 4px;" onclick="switchCountry('CAN')">
+          <span class="step-num">🇨🇦</span>
+          <span id="countryTabSGText" data-i18n="countryCAN">CAN 工作区</span>
+        </button>
+        <div id="sgStepper" class="side-nav-list hidden">
+          <button type="button" id="sgTabOutput" class="step-item active" onclick="switchPage('sg','output')">
+            <span class="step-num">1</span>
+            <span class="step-body">
+              <span id="sgTabOutputText" class="step-title" data-i18n="stepOutput">文档产出</span>
+              <span id="sgStatusOutput" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+          <button type="button" id="sgTabCenter" class="step-item" onclick="switchPage('sg','center')">
+            <span class="step-num">2</span>
+            <span class="step-body">
+              <span id="sgTabCenterText" class="step-title" data-i18n="stepCenter">成本中心预检</span>
+              <span id="sgStatusCenter" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+          <button type="button" id="sgTabLedger" class="step-item" onclick="switchPage('sg','ledger')">
+            <span class="step-num">3</span>
+            <span class="step-body">
+              <span id="sgTabLedgerText" class="step-title" data-i18n="stepLedger">台账回填</span>
+              <span id="sgStatusLedger" class="step-badge" data-i18n="notStarted">未开始</span>
+            </span>
+          </button>
+        </div>
+        <div class="side-extra hidden" id="sgSideExtra">
+          <button type="button" id="sgTabSchedule" class="step-mini" onclick="switchPage('sg','schedule')" data-i18n="stepSchedule">定时预检</button>
+          <button type="button" id="sgTabHistory" class="step-mini" onclick="switchPage('sg','history')" data-i18n="stepHistory">执行历史</button>
+          <button type="button" id="sgTabQueue" class="step-mini" onclick="switchPage('sg','queue')" data-i18n="stepQueue">任务队列</button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
         <select id="lang" onchange="switchLang()">
           <option value="zh">中文</option>
           <option value="en">English</option>
         </select>
       </div>
-    </div>
+    </aside>
 
-    <div class="card">
-      <h3 id="connTitle">后端连接</h3>
-      <div class="row">
-        <span class="crumb" id="breadcrumb">当前：US / 文档产出</span>
-      </div>
-      <div class="row">
-        <input id="apiBase" style="min-width:300px;" placeholder="Backend URL" />
-        <input id="rootPath" style="min-width:420px;" placeholder="Workspace Root" />
-        <button class="btn-secondary" onclick="saveConfig()" id="saveBtn">保存</button>
-        <button class="btn-primary" onclick="checkHealth()" id="healthBtn">健康检查</button>
-      </div>
-      <pre id="health">-</pre>
-      <div class="safety">安全说明：本工具在本地运行，文件在本机处理，不上传外网。</div>
-    </div>
+    <main class="app-main">
+      <header class="main-header">
+        <div class="breadcrumb-line" id="breadcrumb">当前：US / 文档产出</div>
+        <div class="title-row">
+          <h1 id="mainPageTitle">US 工作区</h1>
+          <span class="tag-pill" id="regionTag">US · FPP 月度</span>
+          <div class="header-actions">
+            <button class="btn-secondary btn-sm" onclick="document.getElementById('connPanel').open=true" data-i18n="connTitle">后端连接</button>
+          </div>
+        </div>
+        <div class="pill-tabs" id="pillTabs">
+          <button type="button" class="pill-tab active" data-pill="output" onclick="switchPageFromPill('output')" data-i18n="stepOutput">文档产出</button>
+          <button type="button" class="pill-tab" data-pill="center" onclick="switchPageFromPill('center')" data-i18n="stepCenter">成本中心预检</button>
+          <button type="button" class="pill-tab" data-pill="ledger" onclick="switchPageFromPill('ledger')" data-i18n="stepLedger">台账回填</button>
+          <button type="button" class="pill-tab" data-pill="history" onclick="switchPageFromPill('history')" data-i18n="stepHistory">执行历史</button>
+        </div>
+      </header>
 
-    <div class="app-shell">
-      <div class="card sidebar">
-        <h3 id="countryJumpTitle">国家跳转</h3>
-        <div class="nav-group">
-          <div class="nav-title" id="navCountriesTitle">Countries</div>
-          <button id="countryTabUS" class="nav-btn active" onclick="switchCountry('US')">
-            <span class="nav-left"><span class="nav-icon" data-icon="globe"></span><span id="countryTabUSText">US Workspace</span></span>
-          </button>
-          <button id="countryTabSG" class="nav-btn" onclick="switchCountry('CAN')">
-            <span class="nav-left"><span class="nav-icon" data-icon="maple"></span><span id="countryTabSGText">CAN Workspace</span></span>
-          </button>
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-label" data-i18n="kpiProgress">流程进度</div>
+          <div class="kpi-value" id="kpiProgress">0%</div>
+          <div class="kpi-sub" id="kpiProgressSub">0/4</div>
         </div>
-        <div class="nav-group" id="groupUSPages">
-          <div class="nav-title" id="navUsPagesTitle">US Pages</div>
-          <button class="nav-btn active" id="usTabOutput" onclick="switchPage('us','output')">
-            <span class="nav-left"><span class="nav-icon" data-icon="file"></span><span id="usTabOutputText">文档产出</span></span><span class="nav-right"><span id="usStatusOutput" class="step-status">未开始</span><span id="usCheckOutput" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="usTabCenter" onclick="switchPage('us','center')">
-            <span class="nav-left"><span class="nav-icon" data-icon="check"></span><span id="usTabCenterText">成本中心预检</span></span><span class="nav-right"><span id="usStatusCenter" class="step-status">未开始</span><span id="usCheckCenter" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="usTabLedger" onclick="switchPage('us','ledger')">
-            <span class="nav-left"><span class="nav-icon" data-icon="ledger"></span><span id="usTabLedgerText">台账回填</span></span><span class="nav-right"><span id="usStatusLedger" class="step-status">未开始</span><span id="usCheckLedger" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="usTabSchedule" onclick="switchPage('us','schedule')">
-            <span class="nav-left"><span class="nav-icon" data-icon="clock"></span><span id="usTabScheduleText">定时预检</span></span><span class="nav-right"><span id="usStatusSchedule" class="step-status">未开始</span><span id="usCheckSchedule" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="usTabHistory" onclick="switchPage('us','history')">
-            <span class="nav-left"><span class="nav-icon" data-icon="history"></span><span id="usTabHistoryText">执行历史</span></span><span class="nav-right"><span id="usStatusHistory" class="step-status">未开始</span><span id="usCheckHistory" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="usTabQueue" onclick="switchPage('us','queue')">
-            <span class="nav-left"><span class="nav-icon" data-icon="queue"></span><span id="usTabQueueText">任务队列</span></span><span class="nav-right"><span id="usStatusQueue" class="step-status">未开始</span><span id="usCheckQueue" class="nav-check">✓</span></span>
-          </button>
+        <div class="kpi-card">
+          <div class="kpi-label" data-i18n="kpiStep1">步骤① 文档产出</div>
+          <div class="kpi-value" id="kpiOutput">—</div>
+          <div class="kpi-sub" id="kpiOutputSub" data-i18n="notStarted">未开始</div>
         </div>
-        <div class="nav-group hidden" id="groupSGPages">
-          <div class="nav-title" id="navCanPagesTitle">CAN Pages</div>
-          <button class="nav-btn active" id="sgTabOutput" onclick="switchPage('sg','output')">
-            <span class="nav-left"><span class="nav-icon" data-icon="file"></span><span id="sgTabOutputText">文档产出</span></span><span class="nav-right"><span id="sgStatusOutput" class="step-status">未开始</span><span id="sgCheckOutput" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="sgTabCenter" onclick="switchPage('sg','center')">
-            <span class="nav-left"><span class="nav-icon" data-icon="check"></span><span id="sgTabCenterText">成本中心预检</span></span><span class="nav-right"><span id="sgStatusCenter" class="step-status">未开始</span><span id="sgCheckCenter" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="sgTabLedger" onclick="switchPage('sg','ledger')">
-            <span class="nav-left"><span class="nav-icon" data-icon="ledger"></span><span id="sgTabLedgerText">台账回填</span></span><span class="nav-right"><span id="sgStatusLedger" class="step-status">未开始</span><span id="sgCheckLedger" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="sgTabSchedule" onclick="switchPage('sg','schedule')">
-            <span class="nav-left"><span class="nav-icon" data-icon="clock"></span><span id="sgTabScheduleText">定时预检</span></span><span class="nav-right"><span id="sgStatusSchedule" class="step-status">未开始</span><span id="sgCheckSchedule" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="sgTabHistory" onclick="switchPage('sg','history')">
-            <span class="nav-left"><span class="nav-icon" data-icon="history"></span><span id="sgTabHistoryText">执行历史</span></span><span class="nav-right"><span id="sgStatusHistory" class="step-status">未开始</span><span id="sgCheckHistory" class="nav-check">✓</span></span>
-          </button>
-          <button class="nav-btn" id="sgTabQueue" onclick="switchPage('sg','queue')">
-            <span class="nav-left"><span class="nav-icon" data-icon="queue"></span><span id="sgTabQueueText">任务队列</span></span><span class="nav-right"><span id="sgStatusQueue" class="step-status">未开始</span><span id="sgCheckQueue" class="nav-check">✓</span></span>
-          </button>
+        <div class="kpi-card">
+          <div class="kpi-label" data-i18n="kpiStep2">步骤② 成本中心</div>
+          <div class="kpi-value" id="kpiCenter">—</div>
+          <div class="kpi-sub" id="kpiCenterSub" data-i18n="notStarted">未开始</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label" data-i18n="kpiStep3">步骤③ 台账</div>
+          <div class="kpi-value" id="kpiLedger">—</div>
+          <div class="kpi-sub" id="kpiLedgerSub" data-i18n="notStarted">未开始</div>
         </div>
       </div>
 
-      <div>
-        <div id="workspaceUS" class="card workspace active">
-          <h2 id="usWorkspaceTitle">US Workspace</h2>
-          <div class="tip">每个分页代表一个效能点。先做“文档产出”，再做预检/台账/定时任务。</div>
-          <div class="progress-wrap">
+      <details class="conn-panel" id="connPanel">
+        <summary data-i18n="connTitle">后端连接</summary>
+        <div class="conn-panel-body">
+          <div class="row">
+            <input id="apiBase" style="min-width:280px;flex:1;" placeholder="Backend URL" />
+            <input id="rootPath" style="min-width:280px;flex:1;" placeholder="Workspace Root" />
+            <button class="btn-secondary" onclick="saveConfig()" id="saveBtn" data-i18n="saveBtn">保存</button>
+            <button class="btn-primary" onclick="checkHealth()" id="healthBtn" data-i18n="healthBtn">健康检查</button>
+          </div>
+          <pre id="health">-</pre>
+          <div class="safety" data-i18n="safetyNote">安全说明：本工具在本地运行，文件在本机处理，不上传外网。</div>
+        </div>
+      </details>
+
+      <div class="content-panel">
+        <div id="workspaceUS" class="workspace active">
+          <h2 id="usWorkspaceTitle" data-i18n="workspaceUS">US 工作区</h2>
+          <div class="tip" data-i18n="tipWorkflow">推荐顺序：① 文档产出 → ② 成本中心预检 → ③ 台账回填（US 与 CAN 各自独立）。</div>
+          <div class="progress-wrap hidden">
             <div class="progress-line"><div id="usProgressBar" class="progress-bar"></div></div>
-            <div id="usProgressText" class="progress-text">进度：0%（0/4）</div>
+            <div id="usProgressText" class="progress-text hidden">进度：0%（0/4）</div>
           </div>
 
       <div id="usPageOutput" class="page active">
         <div class="section section-output">
-          <h3>这是什么</h3>
-          <div class="desc">把 CSV 直接转成可提交文档，不修改台账。适合做提交前检查和材料准备。所有结果都可在报告文件与原始结果中复核，不是算法黑盒。</div>
+          <h3 data-i18n="whatIsThis">本步说明</h3>
+          <div class="desc" data-i18n="descOutput">把 CSV 转为可提交文档，不修改台账；结果可下载复核。</div>
         </div>
         <div class="section section-output">
           <div class="row">
-            <label><input id="usMaskUpload" type="checkbox" checked /> 上传前脱敏（输出自动恢复）</label>
+            <label><input id="usMaskUpload" type="checkbox" checked /> <span data-i18n="maskUpload">上传前脱敏（输出自动恢复）</span></label>
           </div>
           <div class="row">
             <input id="usSubmissionFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="uploadAndGenerate('US', 'generate_submission_blocks', 'usSubmissionFile', 'usResult', 'usLinks')">生成提单文本</button>
+            <button class="btn-primary" data-i18n="btnGenSubmission" onclick="uploadAndGenerate('US', 'generate_submission_blocks', 'usSubmissionFile', 'usResult', 'usLinks')">生成提单文本</button>
           </div>
           <div class="row">
             <input id="usHCFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="uploadAndGenerate('US', 'hc_check_upload', 'usHCFile', 'usResult', 'usLinks')">生成HC校验</button>
+            <button class="btn-primary" data-i18n="btnGenHC" onclick="uploadAndGenerate('US', 'hc_check_upload', 'usHCFile', 'usResult', 'usLinks')">生成HC校验</button>
           </div>
           <div class="row">
             <input id="usDocHealthFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-secondary" onclick="uploadAndGenerate('US', 'doc_health_check_upload', 'usDocHealthFile', 'usResult', 'usLinks')">文档字段健康检查（含特殊case）</button>
+            <button class="btn-secondary" data-i18n="btnDocHealth" onclick="uploadAndGenerate('US', 'doc_health_check_upload', 'usDocHealthFile', 'usResult', 'usLinks')">文档字段健康检查</button>
           </div>
           <div class="row">
             <input id="usStatsFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="uploadAndGenerate('US', 'stats_analysis_upload', 'usStatsFile', 'usResult', 'usLinks')">统计分析（看板）</button>
+            <button class="btn-primary" data-i18n="btnStats" onclick="uploadAndGenerate('US', 'stats_analysis_upload', 'usStatsFile', 'usResult', 'usLinks')">统计分析（看板）</button>
           </div>
           <div class="row">
             <input id="usBatchFiles" type="file" accept=".csv,text/csv" multiple />
@@ -226,15 +359,15 @@
               <option value="doc_health_check_upload">批量文档字段健康检查</option>
               <option value="stats_analysis_upload">批量统计分析</option>
             </select>
-            <button class="btn-secondary" onclick="runBatchUploads('US','usBatchFiles','usBatchAction','usResult','usLinks')">批量串行执行</button>
+            <button class="btn-secondary" data-i18n="btnBatchRun" onclick="runBatchUploads('US','usBatchFiles','usBatchAction','usResult','usLinks')">批量串行执行</button>
           </div>
         </div>
       </div>
 
       <div id="usPageCenter" class="page">
         <div class="section section-center">
-          <h3>这是什么</h3>
-          <div class="desc">提交前自动识别失效/未维护成本中心，给出阻断清单和修复建议，避免提单失败。</div>
+          <h3 data-i18n="whatIsThis">本步说明</h3>
+          <div class="desc" data-i18n="descCenter">分摊人数并检查成本中心有效性，避免提单失败。</div>
         </div>
         <div class="section section-center">
           <div class="row">
@@ -290,46 +423,39 @@
           </div>
           <div class="row">
             <input id="usP1File" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
-            <button class="btn-secondary" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行（推荐）</button>
+            <button class="btn-primary" data-i18n="btnBuildHC" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
+            <button class="btn-secondary" data-i18n="btnAutoRun" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行（推荐）</button>
           </div>
           <div class="row">
             <input id="usP3SourceFile" type="file" accept=".csv,text/csv" />
             <input id="usP3StatusFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="runCheckCenters('US', 'us')">检查成本中心（上传状态表）</button>
-            <button class="btn-secondary" onclick="runCheckCentersDefault('US', 'us')">检查成本中心（用默认状态表）</button>
+            <button class="btn-primary" data-i18n="btnCheckCenter" onclick="runCheckCenters('US', 'us')">检查成本中心（上传状态表）</button>
+            <button class="btn-secondary" data-i18n="btnCheckCenterDefault" onclick="runCheckCentersDefault('US', 'us')">检查成本中心（默认状态表）</button>
           </div>
         </div>
       </div>
 
       <div id="usPageLedger" class="page">
         <div class="section section-ledger">
-          <h3>这是什么</h3>
-          <div class="desc">半自动更新台账：按关键字段去重并 Upsert，降低漏更、晚更、重复录入风险。</div>
+          <h3 data-i18n="whatIsThis">本步说明</h3>
+          <div class="desc" data-i18n="descLedger">半自动更新台账，去重 Upsert，降低漏更风险。</div>
         </div>
         <div class="section section-ledger">
           <div class="row">
             <input id="usP4PrefillFile" type="file" accept=".csv,text/csv" />
             <input id="usP4LedgerFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-primary" onclick="runUpdateLedger('US', 'us')">台账自动更新</button>
+            <button class="btn-primary" data-i18n="btnLedger" onclick="runUpdateLedger('US', 'us')">台账自动更新</button>
           </div>
         </div>
       </div>
 
       <div id="usPageSchedule" class="page">
         <div class="section section-schedule">
-          <h3>这是什么</h3>
-          <div class="desc">工作日前自动预检，优先暴露阻断问题。适合月初集中提单高峰期。</div>
+          <h3 data-i18n="whatIsThis">本步说明</h3>
+          <div class="desc" data-i18n="descSchedule">工作日前自动预检，适合月初集中提单高峰期（管理员配置）。</div>
           <div class="row">
             <button class="btn-secondary" onclick="markScheduleConfigured('US', 'us')">已完成定时配置（打勾）</button>
           </div>
-        </div>
-        <div class="section">
-          <ul>
-            <li><a href="./工作日前置预检_定时任务说明.md" target="_blank">工作日前置预检说明</a></li>
-            <li><a href="../一键安装_工作日前置预检任务.command" target="_blank">一键安装定时任务脚本</a></li>
-            <li><a href="../工作日前置预检任务.sh" target="_blank">定时执行脚本</a></li>
-          </ul>
         </div>
       </div>
 
@@ -383,22 +509,22 @@
         </div>
       </div>
 
-          <h3>US Result</h3>
+          <h3 id="usResultTitle" data-i18n="resultUS">US 结果</h3>
           <div id="usSummary" class="result-summary">等待执行</div>
           <details class="raw-box">
-            <summary>查看系统原始结果（JSON）</summary>
+            <summary data-i18n="rawJson">查看系统原始结果（JSON）</summary>
             <pre id="usResult">Waiting...</pre>
           </details>
           <div id="usLinks" class="muted"></div>
           <div id="usDashboard" class="section section-output muted">统计看板将在“统计分析（看板）”执行后显示。</div>
         </div>
 
-        <div id="workspaceSG" class="card workspace">
-          <h2 id="sgWorkspaceTitle">CAN Workspace</h2>
-          <div class="tip">CAN 区与 US 区完全独立，所有输入、模板和结果都隔离。</div>
-          <div class="progress-wrap">
+        <div id="workspaceSG" class="workspace">
+          <h2 id="sgWorkspaceTitle" data-i18n="workspaceCAN">CAN 工作区</h2>
+          <div class="tip" data-i18n="tipWorkflowCAN">CAN 与 US 完全独立；推荐顺序同上，所有输入与结果互不混用。</div>
+          <div class="progress-wrap hidden">
             <div class="progress-line"><div id="sgProgressBar" class="progress-bar"></div></div>
-            <div id="sgProgressText" class="progress-text">进度：0%（0/4）</div>
+            <div id="sgProgressText" class="progress-text hidden">进度：0%（0/4）</div>
           </div>
 
       <div id="sgPageOutput" class="page active">
@@ -497,14 +623,11 @@
 
       <div id="sgPageSchedule" class="page">
         <div class="section section-schedule">
+          <h3 data-i18n="whatIsThis">本步说明</h3>
+          <div class="desc" data-i18n="descSchedule">工作日前自动预检，适合月初集中提单高峰期（管理员配置）。</div>
           <div class="row">
             <button class="btn-secondary" onclick="markScheduleConfigured('CAN', 'sg')">已完成定时配置（打勾）</button>
           </div>
-          <ul>
-            <li><a href="./工作日前置预检_定时任务说明.md" target="_blank">工作日前置预检说明</a></li>
-            <li><a href="../一键安装_工作日前置预检任务.command" target="_blank">一键安装定时任务脚本</a></li>
-            <li><a href="../工作日前置预检任务.sh" target="_blank">定时执行脚本</a></li>
-          </ul>
         </div>
       </div>
 
@@ -558,51 +681,36 @@
         </div>
       </div>
 
-          <h3>CAN Result</h3>
+          <h3 id="sgResultTitle" data-i18n="resultCAN">CAN 结果</h3>
           <div id="sgSummary" class="result-summary">等待执行</div>
           <details class="raw-box">
-            <summary>查看系统原始结果（JSON）</summary>
+            <summary data-i18n="rawJson">查看系统原始结果（JSON）</summary>
             <pre id="sgResult">Waiting...</pre>
           </details>
           <div id="sgLinks" class="muted"></div>
           <div id="sgDashboard" class="section section-output muted">统计看板将在“统计分析（看板）”执行后显示。</div>
         </div>
-
-        <div class="card">
-          <h3 id="docTitle">操作文档</h3>
-          <div class="doc-grid">
-            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0_网页版.html" target="_blank">记录文档1.0（网页版）</a>
-            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0.docx" target="_blank">记录文档1.0（Word）</a>
-            <a class="doc-link" href="../AMER FPP + ai_记录文档1.0.md" target="_blank">记录文档1.0（Markdown）</a>
-            <a class="doc-link" href="./操作者操作手册.html" target="_blank">操作者操作手册（网页版）</a>
-            <a class="doc-link" href="./操作文档_按钮级说明.md" target="_blank">按钮级操作文档</a>
-            <a class="doc-link" href="./概念说明_基础产出_vs_自动化动作.md" target="_blank">概念说明：文档产出 vs 自动化</a>
-            <a class="doc-link" href="./Operator_Guide_EN.md" target="_blank">Operator Guide (EN)</a>
-            <a class="doc-link" href="./Button_Manual_EN.md" target="_blank">Button Manual (EN)</a>
-            <a class="doc-link" href="./操作者操作清单.csv" target="_blank">操作者操作清单（CSV）</a>
-          </div>
-        </div>
       </div>
-    </div>
+    </main>
   </div>
 
   <div id="templateModalMask" class="modal-mask">
     <div class="modal">
-      <h3>模板校验提示</h3>
+      <h3 data-i18n="modalTplTitle">模板校验提示</h3>
       <div id="templateModalText" class="muted"></div>
       <div class="row">
-        <button onclick="closeTemplateModal()">我知道了</button>
+        <button data-i18n="modalOk" onclick="closeTemplateModal()">我知道了</button>
       </div>
     </div>
   </div>
 
   <div id="guideModalMask" class="modal-mask">
     <div class="modal">
-      <h3>首次使用引导</h3>
+      <h3 data-i18n="guideTitle">首次使用引导</h3>
       <div id="guideText" class="muted"></div>
       <div class="row">
-        <button class="btn-secondary" onclick="skipGuide()">跳过</button>
-        <button class="btn-primary" onclick="nextGuideStep()">下一步</button>
+        <button class="btn-secondary" data-i18n="guideSkip" onclick="skipGuide()">跳过</button>
+        <button class="btn-primary" data-i18n="guideNext" onclick="nextGuideStep()">下一步</button>
       </div>
     </div>
   </div>
@@ -670,9 +778,68 @@
       document.getElementById("workspaceSG").classList.toggle("active", region === "CAN");
       document.getElementById("countryTabUS").classList.toggle("active", region === "US");
       document.getElementById("countryTabSG").classList.toggle("active", region === "CAN");
-      document.getElementById("groupUSPages").classList.toggle("hidden", region !== "US");
-      document.getElementById("groupSGPages").classList.toggle("hidden", region !== "CAN");
-      updateBreadcrumb(region, region === "US" ? "output" : "output");
+      document.getElementById("usStepper").classList.toggle("hidden", region !== "US");
+      document.getElementById("sgStepper").classList.toggle("hidden", region !== "CAN");
+      const usExtra = document.querySelector("#usStepper + .side-extra");
+      if (usExtra) usExtra.classList.toggle("hidden", region !== "US");
+      document.getElementById("sgSideExtra").classList.toggle("hidden", region !== "CAN");
+      const titleKey = region === "US" ? "workspaceUS" : "workspaceCAN";
+      document.getElementById("mainPageTitle").textContent = t(titleKey);
+      document.getElementById("regionTag").textContent = region === "US" ? t("regionTagUS") : t("regionTagCAN");
+      const prefix = region === "US" ? "us" : "sg";
+      const activePill = document.querySelector("#pillTabs .pill-tab.active");
+      const page = activePill ? activePill.getAttribute("data-pill") : "output";
+      switchPage(prefix, page || "output");
+      refreshKpiForRegion(region);
+    }
+
+    function activeRegion() {
+      return document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN";
+    }
+
+    function switchPageFromPill(page) {
+      const prefix = activeRegion() === "US" ? "us" : "sg";
+      switchPage(prefix, page);
+    }
+
+    function syncPillTabs(page) {
+      document.querySelectorAll("#pillTabs .pill-tab").forEach((el) => {
+        el.classList.toggle("active", el.getAttribute("data-pill") === page);
+      });
+    }
+
+    function refreshKpiForRegion(region) {
+      if (region !== activeRegion()) return;
+      const progress = loadProgress(region);
+      const steps = ["output", "center", "ledger", "schedule"];
+      const completed = steps.filter((s) => !!progress[s]).length;
+      const pct = Math.round((completed / steps.length) * 100);
+      const kpiPct = document.getElementById("kpiProgress");
+      const kpiSub = document.getElementById("kpiProgressSub");
+      if (kpiPct) kpiPct.textContent = `${pct}%`;
+      if (kpiSub) kpiSub.textContent = `${completed}/${steps.length}`;
+      [
+        { step: "output", val: "kpiOutput", sub: "kpiOutputSub" },
+        { step: "center", val: "kpiCenter", sub: "kpiCenterSub" },
+        { step: "ledger", val: "kpiLedger", sub: "kpiLedgerSub" }
+      ].forEach(({ step, val, sub }) => {
+        const elVal = document.getElementById(val);
+        const elSub = document.getElementById(sub);
+        if (!elVal || !elSub) return;
+        if (progress[step]) {
+          elVal.textContent = "✓";
+          elVal.style.color = "#15803d";
+          elSub.textContent = t("done");
+        } else if (progress.currentStep === step) {
+          elVal.textContent = "…";
+          elVal.style.color = "#0369a1";
+          elSub.textContent = t("inProgress");
+        } else {
+          elVal.textContent = "—";
+          elVal.style.color = "";
+          elSub.textContent = t("notStarted");
+        }
+      });
     }
 
     function progressKey(region) { return `${KEY_PROGRESS_PREFIX}${region}`; }
@@ -693,10 +860,9 @@
     }
 
     function setStepDone(prefix, step, done) {
-      const id = `${prefix}Check${step[0].toUpperCase()}${step.slice(1)}`;
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.toggle("done", !!done);
+      const tabId = `${prefix}Tab${step[0].toUpperCase()}${step.slice(1)}`;
+      const tab = document.getElementById(tabId);
+      if (tab && tab.classList.contains("step-item")) tab.classList.toggle("done", !!done);
     }
 
     function setStepLabel(prefix, step, label, mode) {
@@ -718,11 +884,12 @@
       const txt = document.getElementById(`${prefix}ProgressText`);
       if (bar) bar.style.width = `${pct}%`;
       if (txt) {
-        txt.textContent =
-          currentLang === "en"
-            ? `Progress: ${pct}% (${completed}/${steps.length})`
-            : `进度：${pct}%（${completed}/${steps.length}）`;
+        txt.textContent = t("progressText")
+          .replace("{pct}", String(pct))
+          .replace("{done}", String(completed))
+          .replace("{total}", String(steps.length));
       }
+      refreshKpiForRegion(region);
     }
 
     function markStepDone(region, step) {
@@ -734,8 +901,8 @@
       saveProgress(region, progress);
       setStepDone(prefix, step, true);
       const ts = progress[`${step}At`]
-        ? (currentLang === "en" ? ` Done (${progress[`${step}At`]})` : ` 已完成(${progress[`${step}At`]})`)
-        : (currentLang === "en" ? "Done" : "已完成");
+        ? `${t("done")} (${progress[`${step}At`]})`
+        : t("done");
       setStepLabel(prefix, step, ts, "done");
       updateProgressBar(region, progress);
     }
@@ -761,13 +928,13 @@
         setStepDone(prefix, step, !!progress[step]);
         if (progress[step]) {
           const ts = progress[`${step}At`]
-            ? (currentLang === "en" ? `Done (${progress[`${step}At`]})` : `已完成(${progress[`${step}At`]})`)
-            : (currentLang === "en" ? "Done" : "已完成");
+            ? `${t("done")} (${progress[`${step}At`]})`
+            : t("done");
           setStepLabel(prefix, step, ts, "done");
         } else if (progress.currentStep === step) {
-          setStepLabel(prefix, step, currentLang === "en" ? "In Progress" : "进行中", "in-progress");
+          setStepLabel(prefix, step, t("inProgress"), "in-progress");
         } else {
-          setStepLabel(prefix, step, currentLang === "en" ? "Not Started" : "未开始", "");
+          setStepLabel(prefix, step, t("notStarted"), "");
         }
       });
       updateProgressBar(region, progress);
@@ -787,23 +954,30 @@
       pages.forEach((p) => {
         const pid = `${prefix}Page${p[0].toUpperCase()}${p.slice(1)}`;
         const tid = `${prefix}Tab${p[0].toUpperCase()}${p.slice(1)}`;
-        document.getElementById(pid).classList.toggle("active", p === page);
-        document.getElementById(tid).classList.toggle("active", p === page);
+        const pageEl = document.getElementById(pid);
+        const tabEl = document.getElementById(tid);
+        if (pageEl) pageEl.classList.toggle("active", p === page);
+        if (tabEl) tabEl.classList.toggle("active", p === page);
       });
+      if (["output", "center", "ledger", "history"].includes(page)) {
+        syncPillTabs(page);
+      } else {
+        document.querySelectorAll("#pillTabs .pill-tab").forEach((el) => el.classList.remove("active"));
+      }
       updateBreadcrumb(prefix === "us" ? "US" : "CAN", page);
     }
 
     function stepLabel(step) {
-      const map = currentLang === "en"
-        ? { output: "Output", analytics: "Analytics", center: "Center Check", ledger: "Ledger Update", schedule: "Schedule Check", history: "History", queue: "Queue" }
-        : { output: "文档产出", analytics: "统计分析", center: "成本中心预检", ledger: "台账回填", schedule: "定时预检", history: "执行历史", queue: "任务队列" };
-      return map[step] || step;
+      const key = STEP_I18N[step];
+      return key ? t(key) : step;
     }
 
     function updateBreadcrumb(region, step) {
       const el = document.getElementById("breadcrumb");
       if (!el) return;
-      el.textContent = currentLang === "en" ? `Now: ${region} / ${stepLabel(step)}` : `当前：${region} / ${stepLabel(step)}`;
+      el.textContent = t("breadcrumb")
+        .replace("{region}", region)
+        .replace("{step}", stepLabel(step));
     }
 
     function setDefaults(prefix, region) {
@@ -1619,17 +1793,7 @@
 
     let guideStep = 0;
     function guideTexts() {
-      return currentLang === "en"
-        ? [
-            "Step 1: Run Health Check at top first.",
-            "Step 2: Select region + step, then upload CSV and click main action.",
-            "Step 3: Read summary and download outputs; expand raw JSON only for troubleshooting."
-          ]
-        : [
-            "第1步：先在顶部做健康检查，确认后端可用。",
-            "第2步：左侧选国家和步骤，再上传文件点击主按钮。",
-            "第3步：看结果摘要和下载链接，必要时展开原始JSON排查。"
-          ];
+      return [t("guide1"), t("guide2"), t("guide3")];
     }
     function openGuide() {
       guideStep = 0;
@@ -1767,164 +1931,175 @@
       }
     }
 
-    function switchLang() {
-      const lang = document.getElementById("lang").value;
-      currentLang = lang;
-      localStorage.setItem(KEY_LANG, lang);
-      if (lang === "en") {
-        document.getElementById("title").textContent = "AMER FPP + ai";
-        document.getElementById("subtitle").textContent = "AMER (US/CAN) isolated workspaces with paged efficiency actions.";
-        document.getElementById("connTitle").textContent = "Backend";
-        document.getElementById("saveBtn").textContent = "Save";
-        document.getElementById("healthBtn").textContent = "Health Check";
-        document.getElementById("countryJumpTitle").textContent = "Country Navigation";
-        document.getElementById("navCountriesTitle").textContent = "Countries";
-        document.getElementById("navUsPagesTitle").textContent = "US Pages";
-        document.getElementById("navCanPagesTitle").textContent = "CAN Pages";
-        document.getElementById("countryTabUSText").textContent = "US Workspace";
-        document.getElementById("countryTabSGText").textContent = "CAN Workspace";
-        document.getElementById("usWorkspaceTitle").textContent = "US Workspace";
-        document.getElementById("sgWorkspaceTitle").textContent = "CAN Workspace";
-      } else {
-        document.getElementById("title").textContent = "AMER FPP + ai";
-        document.getElementById("subtitle").textContent = "AMER（US/CAN）完全独立，按效能点分页执行。";
-        document.getElementById("connTitle").textContent = "后端连接";
-        document.getElementById("saveBtn").textContent = "保存";
-        document.getElementById("healthBtn").textContent = "健康检查";
-        document.getElementById("countryJumpTitle").textContent = "国家跳转";
-        document.getElementById("navCountriesTitle").textContent = "国家";
-        document.getElementById("navUsPagesTitle").textContent = "US 页面";
-        document.getElementById("navCanPagesTitle").textContent = "CAN 页面";
-        document.getElementById("countryTabUSText").textContent = "US 工作区";
-        document.getElementById("countryTabSGText").textContent = "CAN 工作区";
-        document.getElementById("usWorkspaceTitle").textContent = "US 工作区";
-        document.getElementById("sgWorkspaceTitle").textContent = "CAN 工作区";
+    const I18N = {
+      zh: {
+        subtitle: "AMER（US/CAN）完全独立，按步骤执行月度流程。",
+        connTitle: "后端连接",
+        saveBtn: "保存",
+        healthBtn: "健康检查",
+        safetyNote: "安全说明：本工具在本地运行，文件在本机处理，不上传外网。",
+        countryUS: "US 工作区",
+        countryCAN: "CAN 工作区",
+        workspaceUS: "US 工作区",
+        workspaceCAN: "CAN 工作区",
+        tipWorkflow: "推荐顺序：① 文档产出 → ② 成本中心预检 → ③ 台账回填（US 与 CAN 各自独立）。",
+        tipWorkflowCAN: "CAN 与 US 完全独立；推荐顺序同上，所有输入与结果互不混用。",
+        stepOutput: "文档产出",
+        stepCenter: "成本中心预检",
+        stepLedger: "台账回填",
+        stepSchedule: "定时预检",
+        stepHistory: "执行历史",
+        stepQueue: "任务队列",
+        notStarted: "未开始",
+        inProgress: "进行中",
+        done: "已完成",
+        progressText: "进度：{pct}%（{done}/{total}）",
+        breadcrumb: "当前：{region} / {step}",
+        waiting: "等待执行",
+        dashboardWait: "统计看板将在「统计分析」执行后显示。",
+        guideTitle: "首次使用引导",
+        guideSkip: "跳过",
+        guideNext: "下一步",
+        modalOk: "我知道了",
+        modalTplTitle: "模板校验提示",
+        resultUS: "US 结果",
+        resultCAN: "CAN 结果",
+        rawJson: "查看系统原始结果（JSON）",
+        btnGenSubmission: "生成提单文本",
+        btnGenHC: "生成HC校验",
+        btnDocHealth: "文档字段健康检查",
+        btnStats: "统计分析（看板）",
+        btnBatchRun: "批量串行执行",
+        btnBuildHC: "自动分摊生成HC",
+        btnAutoRun: "自动填入并执行（推荐）",
+        btnCheckCenter: "检查成本中心（上传状态表）",
+        btnCheckCenterDefault: "检查成本中心（默认状态表）",
+        btnLedger: "台账自动更新",
+        btnRefreshOps: "刷新运营看板",
+        btnQueryHistory: "查询历史",
+        maskUpload: "上传前脱敏（输出自动恢复）",
+        descOutput: "把 CSV 转为可提交文档，不修改台账；结果可下载复核。",
+        descCenter: "分摊人数并检查成本中心有效性，避免提单失败。",
+        descLedger: "半自动更新台账，去重 Upsert，降低漏更风险。",
+        descSchedule: "工作日前自动预检，适合月初高峰期（管理员配置）。",
+        whatIsThis: "本步说明",
+        guide1: "第1步：顶部健康检查，确认 ok: true。",
+        guide2: "第2步：选 US/CAN，按步骤条上传 CSV 并点击主按钮。",
+        guide3: "第3步：查看结果摘要与下载链接。",
+        kpiProgress: "流程进度",
+        kpiStep1: "步骤① 文档产出",
+        kpiStep2: "步骤② 成本中心",
+        kpiStep3: "步骤③ 台账",
+        regionTagUS: "US · FPP 月度",
+        regionTagCAN: "CAN · FPP 月度"
+      },
+      en: {
+        subtitle: "US and CAN run independently. Follow the step bar for monthly workflow.",
+        connTitle: "Backend",
+        saveBtn: "Save",
+        healthBtn: "Health Check",
+        safetyNote: "Security: Files are processed on this server; outputs are auditable.",
+        countryUS: "US Workspace",
+        countryCAN: "CAN Workspace",
+        workspaceUS: "US Workspace",
+        workspaceCAN: "CAN Workspace",
+        tipWorkflow: "Recommended: ① Output → ② Center Check → ③ Ledger (US & CAN separate).",
+        tipWorkflowCAN: "CAN is fully isolated from US; same step order applies.",
+        stepOutput: "Output",
+        stepCenter: "Center Check",
+        stepLedger: "Ledger Update",
+        stepSchedule: "Schedule",
+        stepHistory: "History",
+        stepQueue: "Queue",
+        notStarted: "Not started",
+        inProgress: "In progress",
+        done: "Done",
+        progressText: "Progress: {pct}% ({done}/{total})",
+        breadcrumb: "Now: {region} / {step}",
+        waiting: "Waiting…",
+        dashboardWait: "Dashboard appears after running Analytics.",
+        guideTitle: "Quick start",
+        guideSkip: "Skip",
+        guideNext: "Next",
+        modalOk: "OK",
+        modalTplTitle: "Template check",
+        resultUS: "US Result",
+        resultCAN: "CAN Result",
+        rawJson: "View raw JSON",
+        btnGenSubmission: "Generate submission blocks",
+        btnGenHC: "Generate HC check",
+        btnDocHealth: "Document field health check",
+        btnStats: "Analytics dashboard",
+        btnBatchRun: "Run batch sequentially",
+        btnBuildHC: "Build allocation (HC)",
+        btnAutoRun: "Auto fill & run (recommended)",
+        btnCheckCenter: "Check centers (upload status)",
+        btnCheckCenterDefault: "Check centers (default status)",
+        btnLedger: "Update ledger",
+        btnRefreshOps: "Refresh ops dashboard",
+        btnQueryHistory: "Query history",
+        maskUpload: "Mask upload (auto recover output)",
+        descOutput: "Convert CSV to submission docs without changing ledger.",
+        descCenter: "Allocate headcount and validate cost centers before submit.",
+        descLedger: "Semi-auto ledger upsert to reduce missed updates.",
+        descSchedule: "Workday pre-check before peak submit (admin setup).",
+        whatIsThis: "About this step",
+        guide1: "Step 1: Run Health Check — expect ok: true.",
+        guide2: "Step 2: Pick US/CAN, follow the step bar, upload CSV, run.",
+        guide3: "Step 3: Review summary and download links.",
+        kpiProgress: "Workflow progress",
+        kpiStep1: "Step 1 · Output",
+        kpiStep2: "Step 2 · Center check",
+        kpiStep3: "Step 3 · Ledger",
+        regionTagUS: "US · FPP Monthly",
+        regionTagCAN: "CAN · FPP Monthly"
       }
-      const map = {
-        "文档产出": "Output",
-        "成本中心预检": "Center Check",
-        "台账回填": "Ledger Update",
-        "定时预检": "Schedule Check",
-        "执行历史": "History",
-        "任务队列": "Queue",
-        "每个分页代表一个效能点。先做“文档产出”，再做预检/台账/定时任务。": "Each tab is one efficiency step. Start with Output, then Center/Ledger/Schedule.",
-        "CAN 区与 US 区完全独立，所有输入、模板和结果都隔离。": "CAN and US workspaces are fully isolated for inputs, templates, and outputs.",
-        "安全说明：本工具在本地运行，文件在本机处理，不上传外网。": "Security: This tool runs locally. Files stay on this machine.",
-        "把 CSV 直接转成可提交文档，不修改台账。适合做提交前检查和材料准备。所有结果都可在报告文件与原始结果中复核，不是算法黑盒。": "Convert CSV to submission docs directly, without changing ledger data. All outputs can be audited via reports and raw results, so it is not a black-box algorithm.",
-        "提交前自动识别失效/未维护成本中心，给出阻断清单和修复建议，避免提单失败。": "Detect invalid or unmaintained cost centers before submission.",
-        "半自动更新台账：按关键字段去重并 Upsert，降低漏更、晚更、重复录入风险。": "Semi-automatic ledger update with de-dup and upsert.",
-        "工作日前自动预检，优先暴露阻断问题。适合月初集中提单高峰期。": "Run pre-check before workday to reveal blockers early.",
-        "这是什么": "What is this",
-        "生成提单文本": "Generate Submission Blocks",
-        "生成HC校验": "Generate HC Check",
-        "文档字段健康检查（含特殊case）": "Document Field Health Check",
-        "统计分析（看板）": "Analytics Dashboard",
-        "批量生成提单文本": "Batch: Submission Blocks",
-        "批量生成HC校验": "Batch: HC Check",
-        "批量文档字段健康检查": "Batch: Field Health Check",
-        "批量统计分析": "Batch: Analytics",
-        "批量串行执行": "Run Batch Sequentially",
-        "1页运营看板": "One-page Operations Dashboard",
-        "刷新运营看板": "Refresh Dashboard",
-        "6个核心指标：今日/本周处理单量、成功率、失败率、步骤平均耗时、失败原因Top3。并提供管理视角（US vs CAN、高风险占比、漏更率、阻断处理时长）。": "6 core metrics: today/week volume, success/failure rate, average elapsed by step, and failure top3. Plus management view (US vs CAN, high-risk ratio, ledger miss rate, and block resolution time).",
-        "点击“刷新运营看板”加载数据。": "Click 'Refresh Dashboard' to load metrics.",
-        "月度看板历史": "Monthly Dashboard History",
-        "保存本月看板": "Save Monthly Snapshot",
-        "刷新月度看板": "Refresh Monthly Dashboard",
-        "导出月度CSV": "Export Monthly CSV",
-        "一键导入真实月度JSON": "One-click Import Real Monthly JSON",
-        "一键导入历史月度数据": "One-click Import Monthly History",
-        "暂无月度记录。": "No monthly records yet.",
-        "保存默认模板": "Save Default Template",
-        "读取默认模板": "Load Default Template",
-        "重置默认模板": "Reset Default Template",
-        "导出模板JSON": "Export Template JSON",
-        "导入模板JSON": "Import Template JSON",
-        "自动分摊生成HC": "Build Allocation (HC)",
-        "自动填入并执行（推荐）": "Auto Fill and Run",
-        "检查成本中心（上传状态表）": "Check Centers (Upload Status File)",
-        "检查成本中心（用默认状态表）": "Check Centers (Use Default Status File)",
-        "台账自动更新": "Update Ledger",
-        "已完成定时配置（打勾）": "Mark Schedule Configured",
-        "查询历史": "Query History",
-        "加入队列": "Enqueue",
-        "开始执行": "Start",
-        "暂停": "Pause",
-        "继续": "Resume",
-        "失败重试": "Retry Failed",
-        "导出队列记录": "Export Queue Log",
-        "上传前脱敏（输出自动恢复）": "Mask Upload (Auto Recover Output)",
-        "全部步骤": "All Steps",
-        "操作文档": "Operator Docs",
-        "操作者使用指南": "Operator Guide",
-        "案例文档（操作者）": "Case Practice",
-        "操作流程（操作者）": "Operator Flow",
-        "使用指南（Word）": "Guide (Word)",
-        "案例演练（Word）": "Case Practice (Word)",
-        "操作流程（Word）": "Flow (Word)",
-        "按钮级操作文档": "Button-level Manual",
-        "操作者操作手册（网页版）": "Operator Manual (Web)",
-        "操作者操作清单（Excel可开）": "Operator Checklist (Excel)",
-        "概念说明：文档产出 vs 自动化": "Concept: Output vs Automation",
-        "查看系统原始结果（JSON）": "View System Raw Output (JSON)",
-        "记录文档1.0（网页版）": "Record Doc 1.0 (Web)",
-        "记录文档1.0（Word）": "Record Doc 1.0 (Word)",
-        "记录文档1.0（Markdown）": "Record Doc 1.0 (Markdown)",
-        "模板校验提示": "Template Validation",
-        "US Result": "US Result",
-        "CAN Result": "CAN Result",
-        "首次使用引导": "First-use Guide",
-        "跳过": "Skip",
-        "下一步": "Next",
-        "我知道了": "Got it"
-      };
-      const reverseMap = Object.fromEntries(Object.entries(map).map(([zh, en]) => [en, zh]));
-      document.querySelectorAll("button, h3, summary, .tip, .desc, .safety, label, li a, option").forEach((el) => {
-        const raw = (el.textContent || "").trim();
-        if (!raw) return;
-        if (lang === "en") {
-          if (map[raw]) el.textContent = map[raw];
-        } else {
-          if (reverseMap[raw]) el.textContent = reverseMap[raw];
-        }
+    };
+
+    const STEP_I18N = {
+      output: "stepOutput",
+      center: "stepCenter",
+      ledger: "stepLedger",
+      schedule: "stepSchedule",
+      history: "stepHistory",
+      queue: "stepQueue"
+    };
+
+    function t(key) {
+      const pack = I18N[currentLang] || I18N.zh;
+      return pack[key] || I18N.zh[key] || key;
+    }
+
+    function applyI18n() {
+      document.documentElement.lang = currentLang === "en" ? "en" : "zh-CN";
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (key && el.id !== "usSummary" && el.id !== "sgSummary") el.textContent = t(key);
       });
-      const navLabels = {
-        usTabOutputText: { zh: "文档产出", en: "Output" },
-        usTabCenterText: { zh: "成本中心预检", en: "Center Check" },
-        usTabLedgerText: { zh: "台账回填", en: "Ledger Update" },
-        usTabScheduleText: { zh: "定时预检", en: "Schedule Check" },
-        usTabHistoryText: { zh: "执行历史", en: "History" },
-        usTabQueueText: { zh: "任务队列", en: "Queue" },
-        sgTabOutputText: { zh: "文档产出", en: "Output" },
-        sgTabCenterText: { zh: "成本中心预检", en: "Center Check" },
-        sgTabLedgerText: { zh: "台账回填", en: "Ledger Update" },
-        sgTabScheduleText: { zh: "定时预检", en: "Schedule Check" },
-        sgTabHistoryText: { zh: "执行历史", en: "History" },
-        sgTabQueueText: { zh: "任务队列", en: "Queue" }
-      };
-      Object.entries(navLabels).forEach(([id, txt]) => {
-        const node = document.getElementById(id);
-        if (node) node.textContent = lang === "en" ? txt.en : txt.zh;
-      });
-      const docTitle = document.getElementById("docTitle");
-      if (docTitle) docTitle.textContent = "Operator Docs / 操作文档";
-      const summaryDefault = lang === "en" ? "Waiting..." : "等待执行";
       ["usSummary", "sgSummary"].forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
         const cur = (el.textContent || "").trim();
-        if (["等待执行", "Waiting...", "Waiting"].includes(cur)) el.textContent = summaryDefault;
+        if (["等待执行", "Waiting…", "Waiting...", "Waiting"].includes(cur)) el.textContent = t("waiting");
       });
-      const dashboardDefault = lang === "en"
-        ? "Dashboard appears after running 'Analytics Dashboard'."
-        : "统计看板将在“统计分析（看板）”执行后显示。";
       ["usDashboard", "sgDashboard"].forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
-        if (el.classList.contains("muted")) el.textContent = dashboardDefault;
+        if (el.classList.contains("muted")) el.textContent = t("dashboardWait");
       });
-      updateBreadcrumb(document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN", "output");
+    }
+
+    function switchLang() {
+      currentLang = document.getElementById("lang").value;
+      localStorage.setItem(KEY_LANG, currentLang);
+      applyI18n();
       restoreProgressUI();
+      refreshKpiForRegion(document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN");
+      const region = document.getElementById("workspaceUS").classList.contains("active") ? "US" : "CAN";
+      document.getElementById("mainPageTitle").textContent = t(region === "US" ? "workspaceUS" : "workspaceCAN");
+      document.getElementById("regionTag").textContent = t(region === "US" ? "regionTagUS" : "regionTagCAN");
+      const activePill = document.querySelector("#pillTabs .pill-tab.active");
+      updateBreadcrumb(region, activePill ? activePill.getAttribute("data-pill") : "output");
       if (latestStatsSummary.US) renderStatsDashboard("usResult", { stats_summary: latestStatsSummary.US });
       if (latestStatsSummary.CAN) renderStatsDashboard("sgResult", { stats_summary: latestStatsSummary.CAN });
       if (latestOpsData.US) renderOpsDashboard("us", latestOpsData.US);
@@ -1932,7 +2107,6 @@
     }
 
     async function init() {
-      renderNavIcons();
       document.getElementById("apiBase").value = API;
       document.getElementById("rootPath").value = ROOT;
       document.getElementById("lang").value = localStorage.getItem(KEY_LANG) || "zh";
@@ -1947,15 +2121,12 @@
       loadRegionTemplate("US", "us", true);
       loadRegionTemplate("CAN", "sg", true);
       restoreProgressUI();
-      setStepLabel("us", "history", currentLang === "en" ? "Not Started" : "未开始", "");
-      setStepLabel("us", "queue", currentLang === "en" ? "Not Started" : "未开始", "");
-      setStepLabel("sg", "history", currentLang === "en" ? "Not Started" : "未开始", "");
-      setStepLabel("sg", "queue", currentLang === "en" ? "Not Started" : "未开始", "");
       renderQueueTable("US", "us");
       renderQueueTable("CAN", "sg");
       loadOpsDashboard("US", "us");
       loadOpsDashboard("CAN", "sg");
       updateBreadcrumb("US", "output");
+      switchCountry("US");
       if (!localStorage.getItem(KEY_GUIDE_DONE)) openGuide();
       try {
         const res = await fetch(`${API}/api/meta`);
