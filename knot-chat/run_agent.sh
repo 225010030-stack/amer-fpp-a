@@ -24,11 +24,13 @@ AMER FPP 四痛点指令（复制到 Knot chat 即可）：
   痛点4 / 台账更新        台账自动 upsert
 
 【演示 / 引导】
-  主菜单 / SOP / 菜单    按 SOP 环节展示需要什么文件（HR助手同款）
-  US演示 / 四痛点演示     样例闭环
-  网页入口               复杂上传时用 upload-docs 四按钮
+  主菜单              先选 US 或 CAN（双流程入口）
+  主菜单US / 主菜单CAN  各国 0-7 说明
+  US演示 / CAN演示      各国培训闭环
+  网页入口US / 网页入口CAN  upload-docs 对应区域
 
-  也可直接发数字 0-7（见主菜单）
+  正式操作建议带国家前缀：US 2 … 或 CAN 2 …
+  也可先回复 US/CAN 锁定国家，再发数字 0-7
 
 规则：所有结果以脚本 stdout 中 DONE: 路径为准，禁止口头编造。
 EOF
@@ -62,8 +64,23 @@ case "$CMD" in
   US演示|四痛点演示|demo_us|闭环演示)
     bash "$ROOT/knot-chat/run_demo_us.sh"
     ;;
+  CAN演示|can演示|demo_can)
+    bash "$ROOT/knot-chat/run_demo_can.sh"
+    ;;
+  主菜单US|US主菜单|菜单US|menu_us)
+    bash "$ROOT/knot-chat/run_sop_menu_us.sh"
+    ;;
+  主菜单CAN|CAN主菜单|菜单CAN|menu_can)
+    bash "$ROOT/knot-chat/run_sop_menu_can.sh"
+    ;;
   主菜单|SOP|菜单|menu)
     bash "$ROOT/knot-chat/run_sop_menu.sh"
+    ;;
+  网页入口US|网页US)
+    bash "$ROOT/knot-chat/run_web_guide_us.sh"
+    ;;
+  网页入口CAN|网页CAN)
+    bash "$ROOT/knot-chat/run_web_guide_can.sh"
     ;;
   网页入口|网页|web)
     bash "$ROOT/knot-chat/run_web_guide.sh"

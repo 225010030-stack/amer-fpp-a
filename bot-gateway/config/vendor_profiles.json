@@ -1,0 +1,96 @@
+{
+  "defaults": {
+    "US": "us_anthem_medical",
+    "CAN": "can_sunlife_medical"
+  },
+  "profiles": {
+    "us_anthem_medical": {
+      "country": "US",
+      "vendor": "Anthem",
+      "fee_type": "Medical Insurance",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_Anthem_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_cigna_dental": {
+      "country": "US",
+      "vendor": "Cigna",
+      "fee_type": "Dental",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_Cigna_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_guardian_vision": {
+      "country": "US",
+      "vendor": "Guardian",
+      "fee_type": "Vision STD LTD Life",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_Guardian_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_kaiser_medical": {
+      "country": "US",
+      "vendor": "Kaiser",
+      "fee_type": "Medical Insurance",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_Kaiser_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_optum_fsa": {
+      "country": "US",
+      "vendor": "Optum",
+      "fee_type": "FSA Weekly Claim",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_Optum_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_legalshield": {
+      "country": "US",
+      "vendor": "LegalShield",
+      "fee_type": "ID Legal Insurance",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_LegalShield_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "us_cyc_hrfee": {
+      "country": "US",
+      "vendor": "CYC",
+      "fee_type": "HR Service Fee",
+      "entity": "Tencent America LLC",
+      "currency": "USD",
+      "fpp_scenario": "Pure Service",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_CYC_HRFee_{主体}",
+      "invoice_strategy": "With Invoice"
+    },
+    "can_sunlife_medical": {
+      "country": "CAN",
+      "vendor": "SunLife",
+      "fee_type": "Medical Insurance",
+      "entity": "Tencent Canada",
+      "currency": "CAD",
+      "fpp_scenario": "Salary Benefits Reimbursement",
+      "document_category": "Contract-based Payment",
+      "payment_description_template": "{期间}_SunLife_CA",
+      "invoice_strategy": "With Invoice"
+    }
+  }
+}

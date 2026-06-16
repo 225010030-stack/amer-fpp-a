@@ -55,3 +55,14 @@ require_months_csv() {
     require_yyyymm "$part" "账单月份"
   done
 }
+
+load_vendor_profile() {
+  local country="$1"
+  local vendor="${2:-}"
+  local fee_type="${3:-}"
+  local line
+  while IFS= read -r line; do
+    # shellcheck disable=SC2163
+    eval "$line"
+  done < <(python3 "$ROOT/knot-chat/lookup_vendor.py" --country "$country" --vendor "$vendor" --fee-type "$fee_type")
+}

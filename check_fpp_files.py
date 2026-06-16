@@ -290,6 +290,12 @@ def main() -> int:
         default="",
         help="Write markdown fix report to this file path",
     )
+    parser.add_argument(
+        "--country",
+        default="ALL",
+        choices=["ALL", "US", "CAN"],
+        help="Limit checks to US, CAN, or ALL (default ALL)",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -307,9 +313,12 @@ def main() -> int:
         return 2
 
     issues: list[Issue] = []
-    check_us_benefits(root, months, issues)
-    check_us_hr_service(root, months, issues)
-    check_can_sunlife(root, months, issues)
+    country = (args.country or "ALL").upper()
+    if country in {"ALL", "US"}:
+        check_us_benefits(root, months, issues)
+        check_us_hr_service(root, months, issues)
+    if country in {"ALL", "CAN"}:
+        check_can_sunlife(root, months, issues)
     check_hc_source(root, months, issues)
 
     if args.fix_report.strip():

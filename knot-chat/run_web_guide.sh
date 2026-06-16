@@ -26,5 +26,5 @@ cat <<EOF
 
 5) Root Path 填：/data/workspace/amer-fpp-a（或 /app）
 
-日常简单操作仍推荐 chat 发：主菜单 / 自动分摊 / 检查成本中心
+日常 chat：主菜单 → 选 US主菜单 / CAN主菜单
 EOF

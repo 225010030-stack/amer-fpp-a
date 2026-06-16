@@ -1,0 +1,4 @@
+期间,国家,主体,供应商,费用类型,合同号,FPP场景,Document Category,交易币种,支付币种,账单金额(不含税),税额,含税总额,Payment Description,Requester,Business Reviewer,Department,Center,Invoice策略,主附件1,主附件2,主附件3,Other Attachment,成本中心校验状态,期间一致性状态,金额校验状态,可提交(Y/N),阻断原因,FPP单号,提单日期,提交人,备注
+202606,US,Tencent America LLC,Anthem,Medical Insurance,,Pure Service,Contract-based Payment,USD,USD,,,,202606_Anthem_TA,,,,,,With Invoice,,,,,Pending,Pending,Pending,N,,待填写,,,
+202606,US,Tencent Cloud LLC,Cigna,Dental,,Pure Service,Contract-based Payment,USD,USD,,,,202606_Cigna_TC,,,,,,With Invoice,,,,,Pending,Pending,Pending,N,,待填写,,,
+202606,CA,Sharp Growth (Canada) Limited,SunLife,Medical Insurance,,Salary Benefits Reimbursement,Contract-based Payment,CAD,CAD,,,,202606_SunLife_CA,,,,,,With Invoice,,,,,Pending,Pending,Pending,N,,待填写,,,
