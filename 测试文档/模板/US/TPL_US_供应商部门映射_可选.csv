@@ -1,0 +1,4 @@
+供应商,费用类型,分摊依据ID,部门过滤,成本中心过滤
+Anthem,Medical Insurance,DEFAULT,,
+Cigna,Dental,DEFAULT,,
+SunLife,Medical Insurance,DEFAULT,,

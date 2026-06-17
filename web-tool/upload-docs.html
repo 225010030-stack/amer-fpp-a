@@ -174,6 +174,22 @@
     .btn-ghost { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; padding: 7px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; }
     .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
     .vendor-preset-label { font-size: 12px; color: #64748b; margin: 12px 0 6px; }
+    .allocate-primary {
+      margin-top: 14px; padding: 16px 18px; border-radius: 12px;
+      border: 1px solid #86efac; background: linear-gradient(180deg, #f0fdf4 0%, #fff 100%);
+    }
+    .allocate-secondary { margin-top: 14px; font-size: 13px; color: #64748b; }
+    .allocate-secondary > summary {
+      cursor: pointer; font-size: 13px; font-weight: 600; color: #475569; padding: 10px 0;
+    }
+    .allocate-block-title {
+      margin: 0 0 10px; font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.4;
+    }
+    .allocate-tag {
+      display: inline-block; font-size: 11px; font-weight: 600; color: #166534;
+      background: #dcfce7; border-radius: 999px; padding: 2px 8px; margin-left: 8px; vertical-align: middle;
+    }
+    .file-name-hint { font-size: 11px; color: #64748b; font-family: ui-monospace, monospace; margin-top: 4px; }
     .advanced-prefs { margin-top: 12px; font-size: 12px; color: #64748b; }
     .advanced-prefs summary { cursor: pointer; color: #475569; font-weight: 500; }
     .period-invalid { border-color: #ff7875 !important; background: #fff2f0; }
@@ -564,110 +580,123 @@
       <div id="usPageAllocate" class="page">
         <div class="section section-center">
           <h3 data-i18n="stepAllocate">自动分摊</h3>
-          <div class="desc" data-i18n="descAllocate">金额以台账为准；按 OU 内人数占比分摊，整表一次处理。</div>
-          <div class="desc" data-i18n="descCenterForm">账单月请按 YYYYMM 手输；账单总额来自台账或手动输入。</div>
-          <div class="form-grid-labeled">
-            <div class="form-field">
-              <label for="usPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
-              <input id="usPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
-                data-i18n-placeholder="phPeriodInput" placeholder="在此输入，如 202607" onblur="normalizePeriodInput('us')" />
-            </div>
-            <div class="form-field">
-              <label for="usCountry" data-i18n="labelCountry">国家</label>
-              <select id="usCountry" disabled><option value="US">US</option></select>
-            </div>
-            <div class="form-field">
-              <label for="usEntity" data-i18n="labelEntity">主体 Entity</label>
-              <select id="usEntity" class="select-empty" onchange="syncSelectEmptyState('usEntity')">
-                <option value="" data-i18n="phEntity">— 请选择主体 —</option>
-                <option value="Tencent America LLC">Tencent America LLC</option>
-                <option value="Tencent Cloud LLC">Tencent Cloud LLC</option>
-                <option value="Proxima Beta U.S. LLC">Proxima Beta U.S. LLC</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="usVendor" data-i18n="labelVendor">供应商 Vendor</label>
-              <select id="usVendor" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usVendor')">
-                <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
-                <option value="Anthem">Anthem</option>
-                <option value="Cigna">Cigna</option>
-                <option value="Guardian">Guardian</option>
-                <option value="Kaiser">Kaiser</option>
-                <option value="Optum">Optum</option>
-                <option value="LegalShield">LegalShield</option>
-                <option value="ADP">ADP</option>
-                <option value="CYC">CYC</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="usFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
-              <select id="usFeeType" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usFeeType')">
-                <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
-                <option value="Medical Insurance">Medical Insurance</option>
-                <option value="Dental">Dental</option>
-                <option value="Vision STD LTD Life">Vision STD LTD Life</option>
-                <option value="FSA Weekly Claim">FSA Weekly Claim</option>
-                <option value="ID Legal Insurance">ID Legal Insurance</option>
-                <option value="HR Service Fee">HR Service Fee</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="usInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
-              <input id="usInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
-                data-i18n-placeholder="phInvoiceInput" placeholder="在此输入本月总额，如 145411.03" />
-            </div>
-            <div class="form-field">
-              <label for="usCurrency" data-i18n="labelCurrency">币种 Currency</label>
-              <select id="usCurrency" onchange="syncSelectEmptyState('usCurrency')">
-                <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
-                <option value="USD">USD</option>
-              </select>
-            </div>
-          </div>
-          <div class="chip-row">
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','anthem')">Anthem</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','cigna')">Cigna</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','guardian')">Guardian</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','kaiser')">Kaiser</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','optum')">Optum</button>
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('us','legalshield')">LegalShield</button>
-          </div>
-          <div id="usInvoiceHints" class="chip-row"></div>
-          <div class="pref-toolbar">
-            <button type="button" class="btn-ghost" data-i18n="btnLoadVendorPrefs" onclick="loadRegionTemplate('US', 'us')">载入上次供应商设置</button>
-            <button type="button" class="btn-ghost" data-i18n="btnSaveVendorPrefs" onclick="saveRegionTemplate('US', 'us')">记住当前供应商设置</button>
-          </div>
-          <div class="row" style="align-items:flex-end;">
-            <div class="form-field file-field" style="flex:1;min-width:220px;">
-              <label for="usP1File" data-i18n="labelP1File">人数 CSV</label>
-              <input id="usP1File" type="file" accept=".csv,text/csv" />
-            </div>
-            <button class="btn-primary" data-i18n="btnBuildHC" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
-            <button class="btn-secondary" data-i18n="btnAutoRun" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行</button>
-          </div>
-          <details class="advanced-prefs" style="margin-top:16px;">
-            <summary data-i18n="batchAllocSummary">从台账批量分摊（多供应商 → 共用人数表）</summary>
-            <div class="desc" style="margin:8px 0;" data-i18n="descBatchAlloc">
-              读取台账本账期所有供应商行，按各行含税总额分别分摊。默认<strong>多家供应商共用同一份 P1 人数 CSV</strong>（多对一）。
-              若某供应商只分摊部分部门，上传「供应商映射 CSV」配置部门过滤（见 example 模板）。
-            </div>
-            <div class="form-grid-labeled">
-              <div class="form-field file-field">
-                <label data-i18n="labelBatchLedger">台账 / 预填表 CSV</label>
+          <div class="desc" data-i18n="descAllocateMain">主流程：步骤①台账 + 一份 P1 人数表 → 一次生成全部供应商 HC（金额以台账为准）。</div>
+
+          <div class="allocate-primary">
+            <h4 class="allocate-block-title" data-i18n="batchAllocTitle">批量分摊<span class="allocate-tag" data-i18n="batchAllocTag">推荐</span></h4>
+            <div class="desc" data-i18n="descBatchAllocShort">上传步骤①更新后的台账 + 本月 P1 人数 CSV；系统按台账中各供应商含税总额分别分摊，<strong>多家共用同一份人数表</strong>。</div>
+            <div class="form-grid-labeled" style="margin-top:12px;">
+              <div class="form-field">
+                <label for="usPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
+                <span class="field-hint" data-i18n="hintPeriod">与步骤0批次、步骤①台账账期一致</span>
+                <input id="usPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
+                  data-i18n-placeholder="phPeriodInput" placeholder="202607" onblur="normalizePeriodInput('us')" />
+              </div>
+              <div class="form-field">
+                <label for="usCountry" data-i18n="labelCountry">国家</label>
+                <select id="usCountry" disabled><option value="US">US</option></select>
+              </div>
+              <div class="form-field file-field" style="grid-column:1/-1;">
+                <label for="usBatchLedgerFile" data-i18n="labelBatchLedger">① 台账 CSV</label>
+                <span class="field-hint" data-i18n="hintBatchLedger">步骤① Upsert 后的文件（含全部供应商行）</span>
+                <div class="file-name-hint">例：IN_US_P4_台账_202607.csv</div>
                 <input id="usBatchLedgerFile" type="file" accept=".csv,text/csv" />
               </div>
-              <div class="form-field file-field">
-                <label data-i18n="labelBatchP1">共用人数 CSV（DEFAULT）</label>
+              <div class="form-field file-field" style="grid-column:1/-1;">
+                <label for="usBatchP1File" data-i18n="labelBatchP1">② P1 人数 CSV</label>
+                <span class="field-hint" data-i18n="hintBatchP1">全公司成本中心人数，<strong>所有供应商共用这一份</strong></span>
+                <div class="file-name-hint">例：IN_US_P1_人数_202607.csv</div>
                 <input id="usBatchP1File" type="file" accept=".csv,text/csv" />
               </div>
+            </div>
+            <div class="row" style="margin-top:14px;">
+              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('US','us')">批量分摊全部供应商</button>
+            </div>
+            <details class="advanced-prefs" style="margin-top:12px;">
+              <summary data-i18n="batchAllocAdvanced">高级 · 供应商部门映射（可选，大多数月份不用）</summary>
+              <div class="desc" style="margin:8px 0;" data-i18n="descBatchVendorMap">
+                只有某供应商<strong>只分摊部分部门</strong>时才上传。日常不用准备此文件；模板见仓库
+                <code>bot-gateway/config/allocation_vendor_basis_map.example.csv</code>
+              </div>
               <div class="form-field file-field">
-                <label data-i18n="labelBatchVendorMap">供应商映射（可选）</label>
-                <span class="field-hint" data-i18n="hintBatchVendorMap">列：供应商,费用类型,分摊依据ID,部门过滤,成本中心过滤</span>
+                <label for="usBatchVendorMapFile" data-i18n="labelBatchVendorMap">部门映射 CSV（可选）</label>
                 <input id="usBatchVendorMapFile" type="file" accept=".csv,text/csv" />
               </div>
+            </details>
+          </div>
+
+          <details class="allocate-secondary">
+            <summary data-i18n="singleAllocSummary">单家分摊（补跑一家 / 调试）</summary>
+            <div class="desc" style="margin:10px 0 0;" data-i18n="descSingleAlloc">仅重跑某一个供应商时使用；需手选供应商、手填账单总额。</div>
+            <div class="form-grid-labeled">
+              <div class="form-field">
+                <label for="usEntity" data-i18n="labelEntity">主体 Entity</label>
+                <select id="usEntity" class="select-empty" onchange="syncSelectEmptyState('usEntity')">
+                  <option value="" data-i18n="phEntity">— 请选择主体 —</option>
+                  <option value="Tencent America LLC">Tencent America LLC</option>
+                  <option value="Tencent Cloud LLC">Tencent Cloud LLC</option>
+                  <option value="Proxima Beta U.S. LLC">Proxima Beta U.S. LLC</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="usVendor" data-i18n="labelVendor">供应商 Vendor</label>
+                <select id="usVendor" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usVendor')">
+                  <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
+                  <option value="Anthem">Anthem</option>
+                  <option value="Cigna">Cigna</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Kaiser">Kaiser</option>
+                  <option value="Optum">Optum</option>
+                  <option value="LegalShield">LegalShield</option>
+                  <option value="ADP">ADP</option>
+                  <option value="CYC">CYC</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="usFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
+                <select id="usFeeType" class="select-empty" onchange="refreshInvoiceHints('US','us'); syncSelectEmptyState('usFeeType')">
+                  <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
+                  <option value="Medical Insurance">Medical Insurance</option>
+                  <option value="Dental">Dental</option>
+                  <option value="Vision STD LTD Life">Vision STD LTD Life</option>
+                  <option value="FSA Weekly Claim">FSA Weekly Claim</option>
+                  <option value="ID Legal Insurance">ID Legal Insurance</option>
+                  <option value="HR Service Fee">HR Service Fee</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="usInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
+                <input id="usInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
+                  data-i18n-placeholder="phInvoiceInput" placeholder="145411.03" />
+              </div>
+              <div class="form-field">
+                <label for="usCurrency" data-i18n="labelCurrency">币种 Currency</label>
+                <select id="usCurrency" onchange="syncSelectEmptyState('usCurrency')">
+                  <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
             </div>
-            <div class="row">
-              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('US','us')">批量分摊全部供应商</button>
+            <div class="chip-row">
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','anthem')">Anthem</button>
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','cigna')">Cigna</button>
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','guardian')">Guardian</button>
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','kaiser')">Kaiser</button>
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','optum')">Optum</button>
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('us','legalshield')">LegalShield</button>
+            </div>
+            <div id="usInvoiceHints" class="chip-row"></div>
+            <div class="pref-toolbar">
+              <button type="button" class="btn-ghost" data-i18n="btnLoadVendorPrefs" onclick="loadRegionTemplate('US', 'us')">载入上次供应商设置</button>
+              <button type="button" class="btn-ghost" data-i18n="btnSaveVendorPrefs" onclick="saveRegionTemplate('US', 'us')">记住当前供应商设置</button>
+            </div>
+            <div class="row" style="align-items:flex-end;margin-top:10px;">
+              <div class="form-field file-field" style="flex:1;min-width:220px;">
+                <label for="usP1File" data-i18n="labelP1File">P1 人数 CSV</label>
+                <div class="file-name-hint">IN_US_P1_人数_YYYYMM.csv</div>
+                <input id="usP1File" type="file" accept=".csv,text/csv" />
+              </div>
+              <button class="btn-secondary" data-i18n="btnBuildHC" onclick="runBuildAllocation('US', 'us')">单家分摊生成 HC</button>
             </div>
           </details>
         </div>
@@ -939,108 +968,100 @@
 
       <div id="sgPageAllocate" class="page">
         <div class="section section-center">
-          <div class="desc" data-i18n="descCenterForm">账单月请按 YYYYMM 手输（可填任意月份）；账单总额每月不同，请手动输入，系统不会写死默认值。</div>
-          <div class="form-grid-labeled">
-            <div class="form-field">
-              <label for="sgPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
-              <span class="field-hint" data-i18n="hintPeriod">6 位数字，例 202607 = 2026 年 7 月（可填任意未来/过去月份）</span>
-              <input id="sgPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
-                data-i18n-placeholder="phPeriodInput" placeholder="在此输入，如 202607" onblur="normalizePeriodInput('sg')" />
-            </div>
-            <div class="form-field">
-              <label for="sgCountry" data-i18n="labelCountry">国家</label>
-              <span class="field-hint" data-i18n="hintCountryCAN">本工作区固定 CAN，无需修改</span>
-              <select id="sgCountry" disabled><option value="CAN">CAN</option></select>
-            </div>
-            <div class="form-field">
-              <label for="sgEntity" data-i18n="labelEntity">主体 Entity</label>
-              <span class="field-hint" data-i18n="hintEntity">请下拉选择，或点下方 SunLife 快捷按钮</span>
-              <select id="sgEntity" class="select-empty" onchange="syncSelectEmptyState('sgEntity')">
-                <option value="" data-i18n="phEntity">— 请选择主体 —</option>
-                <option value="Tencent Canada">Tencent Canada</option>
-                <option value="52Y_Sharp Growth (Canada) Limited">52Y_Sharp Growth (Canada) Limited</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="sgVendor" data-i18n="labelVendor">供应商 Vendor</label>
-              <span class="field-hint" data-i18n="hintVendor">请下拉选择，或点下方 SunLife 快捷按钮</span>
-              <select id="sgVendor" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgVendor')">
-                <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
-                <option value="SunLife">SunLife</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="sgFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
-              <span class="field-hint" data-i18n="hintFeeType">与供应商匹配，如 Medical Insurance</span>
-              <select id="sgFeeType" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgFeeType')">
-                <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
-                <option value="Medical Insurance">Medical Insurance</option>
-                <option value="Employee Commercial Insurance">Employee Commercial Insurance</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="sgInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
-              <span class="field-hint" data-i18n="hintInvoice">每月金额不同，必填；执行成功后可点下方历史金额快速填入</span>
-              <input id="sgInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
-                data-i18n-placeholder="phInvoiceInput" placeholder="在此输入本月总额，如 50000.00" />
-            </div>
-            <div class="form-field">
-              <label for="sgCurrency" data-i18n="labelCurrency">币种 Currency</label>
-              <span class="field-hint" data-i18n="hintCurrencyCAN">CAN 通常为 CAD</span>
-              <select id="sgCurrency" onchange="syncSelectEmptyState('sgCurrency')">
-                <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
-                <option value="CAD">CAD</option>
-              </select>
-            </div>
-          </div>
-          <div class="vendor-preset-label" data-i18n="labelVendorPreset">供应商快捷（只改供应商/费用类型/主体，不改金额）：</div>
-          <div class="chip-row">
-            <button type="button" class="chip-btn" onclick="applyBuildPreset('sg','sunlife')">SunLife</button>
-          </div>
-          <div id="sgInvoiceHints" class="chip-row"></div>
-          <div class="pref-toolbar">
-            <button type="button" class="btn-ghost" data-i18n="btnLoadVendorPrefs" onclick="loadRegionTemplate('CAN', 'sg')">载入上次供应商设置</button>
-            <button type="button" class="btn-ghost" data-i18n="btnSaveVendorPrefs" onclick="saveRegionTemplate('CAN', 'sg')">记住当前供应商设置</button>
-            <button type="button" class="btn-ghost" data-i18n="btnClearMonthly" onclick="clearMonthlyFields('sg', 'CAN')">清空本月输入</button>
-          </div>
-          <details class="advanced-prefs">
-            <summary data-i18n="advPrefsSummary">高级：导出 / 导入设置 JSON（换电脑时用）</summary>
-            <div class="row" style="margin-top:8px;">
-              <button type="button" class="btn-ghost" onclick="exportRegionTemplate('CAN', 'sg')">导出 JSON</button>
-              <button type="button" class="btn-ghost" onclick="triggerImportTemplate('CAN')">导入 JSON</button>
-              <input id="importTemplateSG" type="file" accept=".json,application/json" class="hidden" onchange="importRegionTemplate('CAN', 'sg', this)" />
-            </div>
-          </details>
-          <div class="row" style="align-items:flex-end;">
-            <div class="form-field file-field" style="flex:1;min-width:220px;">
-              <label for="sgP1File" data-i18n="labelP1File">人数 CSV（P1 自动分摊）</label>
-              <span class="field-hint" data-i18n="hintP1FileCAN">例 IN_CAN_P1_人数_202607.csv</span>
-              <input id="sgP1File" type="file" accept=".csv,text/csv" />
-            </div>
-            <button class="btn-primary" onclick="runBuildAllocation('CAN', 'sg')">自动分摊生成HC</button>
-            <button class="btn-secondary" onclick="autoFillAndRunBuild('CAN', 'sg')">自动填入并执行（推荐）</button>
-          </div>
-          <details class="advanced-prefs" style="margin-top:16px;">
-            <summary data-i18n="batchAllocSummary">从台账批量分摊（多供应商 → 共用人数表）</summary>
-            <div class="desc" style="margin:8px 0;" data-i18n="descBatchAlloc">
-              读取台账本账期所有供应商行，按各行含税总额分别分摊。默认多家供应商共用同一份 P1 人数 CSV（多对一）。
-            </div>
-            <div class="form-grid-labeled">
-              <div class="form-field file-field">
-                <label data-i18n="labelBatchLedger">台账 / 预填表 CSV</label>
+          <h3 data-i18n="stepAllocate">自动分摊</h3>
+          <div class="desc" data-i18n="descAllocateMain">主流程：步骤①台账 + 一份 P1 人数表 → 一次生成全部供应商 HC。</div>
+
+          <div class="allocate-primary">
+            <h4 class="allocate-block-title" data-i18n="batchAllocTitle">批量分摊<span class="allocate-tag" data-i18n="batchAllocTag">推荐</span></h4>
+            <div class="desc" data-i18n="descBatchAllocShort">上传步骤①台账 + 本月 P1 人数；CAN 通常仅 SunLife，仍走同一套批量逻辑。</div>
+            <div class="form-grid-labeled" style="margin-top:12px;">
+              <div class="form-field">
+                <label for="sgPeriod" data-i18n="labelPeriod">账单月 YYYYMM</label>
+                <span class="field-hint" data-i18n="hintPeriod">6 位数字，例 202607</span>
+                <input id="sgPeriod" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
+                  data-i18n-placeholder="phPeriodInput" placeholder="202607" onblur="normalizePeriodInput('sg')" />
+              </div>
+              <div class="form-field">
+                <label for="sgCountry" data-i18n="labelCountry">国家</label>
+                <span class="field-hint" data-i18n="hintCountryCAN">本工作区固定 CAN</span>
+                <select id="sgCountry" disabled><option value="CAN">CAN</option></select>
+              </div>
+              <div class="form-field file-field" style="grid-column:1/-1;">
+                <label for="sgBatchLedgerFile" data-i18n="labelBatchLedger">① 台账 CSV</label>
+                <span class="field-hint" data-i18n="hintBatchLedger">步骤① Upsert 后的文件</span>
+                <div class="file-name-hint">例：IN_CAN_P4_台账_202607.csv</div>
                 <input id="sgBatchLedgerFile" type="file" accept=".csv,text/csv" />
               </div>
-              <div class="form-field file-field">
-                <label data-i18n="labelBatchP1">共用人数 CSV（DEFAULT）</label>
+              <div class="form-field file-field" style="grid-column:1/-1;">
+                <label for="sgBatchP1File" data-i18n="labelBatchP1">② P1 人数 CSV</label>
+                <span class="field-hint" data-i18n="hintBatchP1">全公司成本中心人数，所有供应商共用</span>
+                <div class="file-name-hint">例：IN_CAN_P1_人数_202607.csv</div>
                 <input id="sgBatchP1File" type="file" accept=".csv,text/csv" />
               </div>
+            </div>
+            <div class="row" style="margin-top:14px;">
+              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('CAN','sg')">批量分摊全部供应商</button>
+            </div>
+            <details class="advanced-prefs" style="margin-top:12px;">
+              <summary data-i18n="batchAllocAdvanced">高级 · 供应商部门映射（可选，大多数月份不用）</summary>
+              <div class="desc" style="margin:8px 0;" data-i18n="descBatchVendorMap">仅当某供应商只分摊部分部门时需要；模板见 allocation_vendor_basis_map.example.csv</div>
               <div class="form-field file-field">
-                <label data-i18n="labelBatchVendorMap">供应商映射（可选）</label>
+                <label for="sgBatchVendorMapFile" data-i18n="labelBatchVendorMap">部门映射 CSV（可选）</label>
                 <input id="sgBatchVendorMapFile" type="file" accept=".csv,text/csv" />
               </div>
+            </details>
+          </div>
+
+          <details class="allocate-secondary">
+            <summary data-i18n="singleAllocSummary">单家分摊（补跑 / 调试）</summary>
+            <div class="form-grid-labeled" style="margin-top:10px;">
+              <div class="form-field">
+                <label for="sgEntity" data-i18n="labelEntity">主体 Entity</label>
+                <select id="sgEntity" class="select-empty" onchange="syncSelectEmptyState('sgEntity')">
+                  <option value="" data-i18n="phEntity">— 请选择主体 —</option>
+                  <option value="Tencent Canada">Tencent Canada</option>
+                  <option value="52Y_Sharp Growth (Canada) Limited">52Y_Sharp Growth (Canada) Limited</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="sgVendor" data-i18n="labelVendor">供应商 Vendor</label>
+                <select id="sgVendor" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgVendor')">
+                  <option value="" data-i18n="phVendor">— 请选择供应商 —</option>
+                  <option value="SunLife">SunLife</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="sgFeeType" data-i18n="labelFeeType">费用类型 Fee Type</label>
+                <select id="sgFeeType" class="select-empty" onchange="refreshInvoiceHints('CAN','sg'); syncSelectEmptyState('sgFeeType')">
+                  <option value="" data-i18n="phFeeType">— 请选择费用类型 —</option>
+                  <option value="Medical Insurance">Medical Insurance</option>
+                  <option value="Employee Commercial Insurance">Employee Commercial Insurance</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="sgInvoiceTotal" data-i18n="labelInvoiceTotal">账单总额 Invoice Total</label>
+                <input id="sgInvoiceTotal" type="text" inputmode="decimal" autocomplete="off"
+                  data-i18n-placeholder="phInvoiceInput" placeholder="50000.00" />
+              </div>
+              <div class="form-field">
+                <label for="sgCurrency" data-i18n="labelCurrency">币种 Currency</label>
+                <select id="sgCurrency" onchange="syncSelectEmptyState('sgCurrency')">
+                  <option value="" data-i18n="phCurrency">— 请选择币种 —</option>
+                  <option value="CAD">CAD</option>
+                </select>
+              </div>
             </div>
-            <div class="row">
-              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('CAN','sg')">批量分摊全部供应商</button>
+            <div class="chip-row">
+              <button type="button" class="chip-btn" onclick="applyBuildPreset('sg','sunlife')">SunLife</button>
+            </div>
+            <div id="sgInvoiceHints" class="chip-row"></div>
+            <div class="row" style="align-items:flex-end;margin-top:10px;">
+              <div class="form-field file-field" style="flex:1;">
+                <label for="sgP1File" data-i18n="labelP1File">P1 人数 CSV</label>
+                <div class="file-name-hint">IN_CAN_P1_人数_YYYYMM.csv</div>
+                <input id="sgP1File" type="file" accept=".csv,text/csv" />
+              </div>
+              <button class="btn-secondary" onclick="runBuildAllocation('CAN', 'sg')">单家分摊生成 HC</button>
             </div>
           </details>
         </div>
@@ -3298,7 +3319,7 @@
     const I18N = {
       zh: {
         subtitleV2: "2.0 · 台账驱动 · US/CAN 独立批次 · 只报告不锁定",
-        tipWorkflowV2: "2.0 顺序：批次 → 台账 → 人力 → CC → 分摊 → 账单(可选) → 提单。异常只出报告，不锁定按钮。",
+        tipWorkflowV2: "2.0 顺序：批次 → 台账 → 人力 → CC → 分摊（批量） → 账单(可选) → 提单。异常只出报告，不锁定。",
         stepBatch: "账期批次",
         stepLedgerV2: "台账+去重",
         stepRoster: "人力OU预检",
@@ -3312,6 +3333,16 @@
         descRoster: "上传海外人力名单，生成 OU Pivot；分摊按 OU 切分。",
         descCC: "对照 Workday 成本中心状态表；失效 CC 出报告，不锁定分摊。",
         descAllocate: "金额以台账为准；按 OU 内人数占比分摊。",
+        descAllocateMain: "主流程：步骤①台账 + 一份 P1 人数表 → 一次生成全部供应商 HC。",
+        batchAllocTitle: "批量分摊",
+        batchAllocTag: "推荐",
+        descBatchAllocShort: "上传步骤①台账 + 本月 P1 人数；按台账各供应商含税总额分别分摊，多家共用同一份人数表。",
+        hintBatchLedger: "步骤① Upsert 后的文件（含全部供应商，可几万行，系统自动汇总）",
+        hintBatchP1: "全公司成本中心人数，所有供应商共用这一份",
+        batchAllocAdvanced: "高级 · 供应商部门映射（可选，大多数月份不用）",
+        descBatchVendorMap: "只有某供应商只分摊部分部门时才需要；模板见 TPL_US_供应商部门映射_可选.csv",
+        singleAllocSummary: "单家分摊（补跑一家 / 调试）",
+        descSingleAlloc: "仅重跑某一个供应商时使用。",
         descInvoice: "提单前交叉校验；优先以台账为准。",
         descInvoice21: "上传 Invoice PDF/图片，按 Profile 抽取字段与置信度；可与台账对照。台账为准，不锁定。",
         labelExtractMode: "识图模式",
@@ -3375,13 +3406,10 @@
         btnDocHealth: "文档字段健康检查",
         btnStats: "统计分析（看板）",
         btnBatchRun: "批量串行执行",
-        btnBuildHC: "自动分摊生成HC",
-        batchAllocSummary: "从台账批量分摊（多供应商 → 共用人数表）",
-        descBatchAlloc: "读取台账本账期所有供应商行，按含税总额分别分摊。默认多家供应商共用同一份 P1 人数 CSV（多对一）；可用映射 CSV 指定部门/成本中心过滤。",
-        labelBatchLedger: "台账 / 预填表 CSV",
-        labelBatchP1: "共用人数 CSV（DEFAULT）",
-        labelBatchVendorMap: "供应商映射（可选）",
-        hintBatchVendorMap: "列：供应商,费用类型,分摊依据ID,部门过滤,成本中心过滤",
+        btnBuildHC: "单家分摊生成 HC",
+        labelBatchLedger: "① 台账 CSV",
+        labelBatchP1: "② P1 人数 CSV",
+        labelBatchVendorMap: "部门映射 CSV（可选）",
         btnBatchAlloc: "批量分摊全部供应商",
         btnAutoRun: "自动填入并执行（推荐）",
         btnCheckCenter: "检查成本中心（上传状态表）",
@@ -3541,13 +3569,20 @@
         btnDocHealth: "Document field health check",
         btnStats: "Analytics dashboard",
         btnBatchRun: "Run batch sequentially",
-        btnBuildHC: "Build allocation (HC)",
-        batchAllocSummary: "Batch allocate from ledger (many vendors → one headcount file)",
-        descBatchAlloc: "Read all ledger rows for this period; each vendor gets its own HC file using the shared P1 CSV (many-to-one). Optional map CSV for dept/CC filters.",
-        labelBatchLedger: "Ledger / prefill CSV",
-        labelBatchP1: "Shared headcount CSV (DEFAULT)",
-        labelBatchVendorMap: "Vendor map (optional)",
-        hintBatchVendorMap: "Cols: vendor, fee_type, basis_id, dept_filter, cc_filter",
+        btnBuildHC: "Single-vendor HC",
+        descAllocateMain: "Main: Step① ledger + one P1 file → HC for all vendors.",
+        batchAllocTitle: "Batch allocation",
+        batchAllocTag: "Recommended",
+        descBatchAllocShort: "Upload step① ledger + P1 headcount; all vendors share one file.",
+        hintBatchLedger: "Ledger after step① (large files OK; auto-aggregated)",
+        hintBatchP1: "Company-wide headcount — shared by all vendors",
+        batchAllocAdvanced: "Advanced · dept map (optional)",
+        descBatchVendorMap: "Only if a vendor uses a subset of departments.",
+        singleAllocSummary: "Single vendor (re-run / debug)",
+        descSingleAlloc: "Re-run one vendor only.",
+        labelBatchLedger: "① Ledger CSV",
+        labelBatchP1: "② P1 headcount CSV",
+        labelBatchVendorMap: "Dept map CSV (optional)",
         btnBatchAlloc: "Batch allocate all vendors",
         btnAutoRun: "Auto fill & run (recommended)",
         btnCheckCenter: "Check centers (upload status)",
