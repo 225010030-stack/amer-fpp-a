@@ -149,8 +149,11 @@ CAN 默认：Entity=Tencent Canada，Vendor=SunLife，Currency=CAD
 
 ## 两国共用
 
-闭环顺序：**4→2→3→5→6**（各国独立跑）  
-上传：`上传输入/IN_US_*` 或 `IN_CAN_*` → chat 给完整路径
+**2.0 网页顺序（台账驱动，chat 仍可用脚本）：**  
+`0 批次 → 1 台账+去重 → 2 人力OU → 3 CC → 5 分摊 → 4 账单(可选) → 6 提单`  
+网页入口发 **网页入口US** / **网页入口CAN** → 返回 Knot 预览链接 + 步骤说明。
+
+上传：`上传输入/IN_US_*` 或 `IN_CAN_*`（P0 人力名单见 `IN_US_P0_人力名单_YYYYMM.csv`）→ chat 给完整路径
 
 ## 回复格式
 
@@ -171,7 +174,7 @@ CAN 默认：Entity=Tencent Canada，Vendor=SunLife，Currency=CAD
 - 培训：`US演示` 或 `CAN演示`（先问要做哪国培训亦可）
 - 正式 US：`US 2 上传输入/IN_US_P1_人数_202607.csv 202607 US 145411.03 Cigna Dental`
 - 正式 CAN：`CAN 2 上传输入/IN_CAN_P1_人数_202607.csv 202607 CAN 50000`
-- 多 CSV：该国 `网页入口US` / `网页入口CAN`
+- 多 CSV / 2.0 全流程：**网页入口US** / **网页入口CAN**（返回 upload-docs 预览链接）
 
 ## 你好
 

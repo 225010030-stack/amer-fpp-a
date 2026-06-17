@@ -749,6 +749,66 @@ async def pain_update_ledger(
     return result
 
 
+@app.post("/api/pain/roster-pivot")
+async def pain_roster_pivot(
+    file: UploadFile = File(...),
+    region: str = Form(default="US"),
+    root: str = Form(default=str(WORKSPACE_ROOT)),
+) -> dict[str, Any]:
+    target_root = to_safe_abs(root)
+    input_path = await save_uploaded_file(file, "pain0_roster")
+    now = datetime.now().strftime("%Y%m%d_%H%M%S")
+    region_tag = (region or "US").strip().upper()
+    output_md = UPLOAD_OUTPUT_DIR / f"Roster_OU_Pivot_{region_tag}_{now}.md"
+    output_csv = UPLOAD_OUTPUT_DIR / f"Roster_OU_Summary_{region_tag}_{now}.csv"
+    cmd = [
+        "python3",
+        str((WORKSPACE_ROOT / "痛点攻坚实施包" / "preview_roster_ou_pivot.py").resolve()),
+        "--input",
+        str(input_path),
+        "--output",
+        str(output_md),
+        "--summary-csv",
+        str(output_csv),
+    ]
+    result = run_cmd(cmd, target_root, "pain0_roster_pivot", meta={"region": region_tag, "step": "roster"})
+    for p in (output_md, output_csv):
+        if p.exists() and str(p) not in result.get("outputs", []):
+            result.setdefault("outputs", []).append(str(p))
+    return result
+
+
+@app.post("/api/pain/check-ledger-dedup")
+async def pain_check_ledger_dedup(
+    ledger_file: UploadFile = File(...),
+    region: str = Form(default="US"),
+    root: str = Form(default=str(WORKSPACE_ROOT)),
+) -> dict[str, Any]:
+    target_root = to_safe_abs(root)
+    ledger_path = await save_uploaded_file(ledger_file, "pain1_ledger_dedup")
+    now = datetime.now().strftime("%Y%m%d_%H%M%S")
+    region_tag = (region or "US").strip().upper()
+    output_path = UPLOAD_OUTPUT_DIR / f"台账去重预警_{region_tag}_{now}.md"
+    cmd = [
+        "python3",
+        str((WORKSPACE_ROOT / "痛点攻坚实施包" / "check_ledger_dedup.py").resolve()),
+        "--ledger",
+        str(ledger_path),
+        "--output",
+        str(output_path),
+    ]
+    result = run_cmd(cmd, target_root, "pain1_ledger_dedup", meta={"region": region_tag, "step": "ledger"})
+    if output_path.exists() and str(output_path) not in result.get("outputs", []):
+        result.setdefault("outputs", []).append(str(output_path))
+    dup_count = 0
+    if output_path.exists():
+        text = output_path.read_text(encoding="utf-8")
+        dup_count = text.count("## 重复组")
+    result["dedup_groups"] = dup_count
+    result["has_duplicates"] = dup_count > 0
+    return result
+
+
 @app.post("/api/webhook/knotbot")
 def webhook_knotbot(
     payload: dict[str, Any],
