@@ -248,6 +248,12 @@
       background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 10px 14px;
       font-size: 12px; color: #92400e; margin-bottom: 12px;
     }
+    .conf-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+    .conf-high { background: #dcfce7; color: #166534; }
+    .conf-mid { background: #fef9c3; color: #854d0e; }
+    .conf-low { background: #fee2e2; color: #991b1b; }
+    .extract-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+    .extract-table th, .extract-table td { border: 1px solid #e5e7eb; padding: 8px; text-align: left; }
     #workspaceDashboard { display: none; }
     #workspaceDashboard.active { display: block; }
     body.app-dashboard #opsChrome,
@@ -644,13 +650,63 @@
 
       <div id="usPageInvoice" class="page">
         <div class="section section-output">
-          <h3 data-i18n="stepInvoice">账单核对 <span class="step-optional" data-i18n="optionalTag">可选</span></h3>
-          <div class="desc" data-i18n="descInvoice">提单前交叉校验：优先以台账为准。上传 prefill/字段表做健康检查（OCR 置信度 2.1 上线）。</div>
-          <div class="row">
-            <input id="usInvoiceCheckFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-secondary" data-i18n="btnDocHealth" onclick="uploadAndGenerate('US', 'doc_health_check_upload', 'usInvoiceCheckFile', 'usResult', 'usLinks')">字段健康检查</button>
+          <h3 data-i18n="stepInvoice">账单核对 <span class="step-optional" data-i18n="optionalTag">可选</span> <span class="step-optional">· 2.1</span></h3>
+          <div class="desc" data-i18n="descInvoice21">上传 Invoice PDF/图片，按供应商配置抽取字段+置信度；可与台账交叉核对。台账为准，低置信度不锁定后续步骤。</div>
+          <div class="form-grid-labeled" style="max-width:720px;">
+            <div class="form-field">
+              <label data-i18n="labelExtractMode">识图模式</label>
+              <select id="usExtractMode" onchange="syncInvoiceModeHint('us')">
+                <option value="local">local · PDF 文本 + 规则（默认）</option>
+                <option value="knot_agent">knot_agent · 转发 Knot 识图智能体</option>
+              </select>
+              <span class="field-hint" id="usExtractModeHint">未配置 Knot webhook 时 knot_agent 会失败，请先在下方配置区保存 URL。</span>
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelExtractProfile">供应商 Profile</label>
+              <select id="usExtractProfile"></select>
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelPeriod">账期 YYYYMM</label>
+              <input id="usExtractPeriod" type="text" maxlength="6" placeholder="202607" />
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelLedgerAmount">台账金额（可选对照）</label>
+              <input id="usLedgerAmount" type="text" placeholder="145411.03" />
+            </div>
           </div>
-          <div class="empty-state"><div class="es-icon">🧾</div><div data-i18n="emptyInvoice">可跳过本步；有 Invoice PDF 批次时 2.1 将支持置信度读取</div></div>
+          <div class="row">
+            <input id="usInvoiceDocFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,image/*,application/pdf" />
+            <button type="button" class="btn-primary" data-i18n="btnInvoiceExtract" onclick="runInvoiceExtract('US','us')">识图抽取</button>
+          </div>
+          <div id="usExtractResult" class="muted" style="margin-top:12px;"></div>
+          <details class="advanced-prefs" style="margin-top:14px;">
+            <summary data-i18n="extractConfigSummary">管理员 · Knot 识图智能体配置（2.1）</summary>
+            <div class="desc" style="margin:8px 0;" data-i18n="extractConfigHint">可在 Knot 另建第二个 Agent（仅识图），Client 工具提供 HTTP 入口；把 URL 填到下方。与 Anna 主 Agent 分离，Chat 可不接。</div>
+            <div class="form-grid-labeled">
+              <div class="form-field">
+                <label><input type="checkbox" id="usKnotVisionEnabled" /> 启用 Knot 识图</label>
+              </div>
+              <div class="form-field" style="grid-column:1/-1;">
+                <label>Webhook URL</label>
+                <input id="usKnotVisionUrl" type="url" placeholder="https://..." style="width:100%;" />
+              </div>
+              <div class="form-field">
+                <label>Token（可选）</label>
+                <input id="usKnotVisionToken" type="password" autocomplete="off" />
+              </div>
+            </div>
+            <div class="row">
+              <button type="button" class="btn-secondary" data-i18n="btnSaveExtractConfig" onclick="saveInvoiceExtractSettings('us')">保存识图配置</button>
+              <button type="button" class="btn-ghost" onclick="loadInvoiceExtractSettings('us','US')">重新加载配置</button>
+            </div>
+          </details>
+          <details style="margin-top:10px;">
+            <summary data-i18n="legacyDocHealth">旧：CSV 字段健康检查</summary>
+            <div class="row" style="margin-top:8px;">
+              <input id="usInvoiceCheckFile" type="file" accept=".csv,text/csv" />
+              <button class="btn-secondary" data-i18n="btnDocHealth" onclick="uploadAndGenerate('US', 'doc_health_check_upload', 'usInvoiceCheckFile', 'usResult', 'usLinks')">字段健康检查</button>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -957,11 +1013,37 @@
 
       <div id="sgPageInvoice" class="page">
         <div class="section section-output">
-          <h3 data-i18n="stepInvoice">账单核对（可选）</h3>
-          <div class="row">
-            <input id="sgInvoiceCheckFile" type="file" accept=".csv,text/csv" />
-            <button class="btn-secondary" onclick="uploadAndGenerate('CAN', 'doc_health_check_upload', 'sgInvoiceCheckFile', 'sgResult', 'sgLinks')">字段健康检查</button>
+          <h3 data-i18n="stepInvoice">账单核对（可选） · 2.1</h3>
+          <div class="desc" data-i18n="descInvoice21">PDF/图片识图 + 置信度；台账为准。</div>
+          <div class="form-grid-labeled" style="max-width:720px;">
+            <div class="form-field">
+              <label data-i18n="labelExtractMode">识图模式</label>
+              <select id="sgExtractMode"><option value="local">local</option><option value="knot_agent">knot_agent</option></select>
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelExtractProfile">供应商 Profile</label>
+              <select id="sgExtractProfile"></select>
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelPeriod">账期</label>
+              <input id="sgExtractPeriod" type="text" maxlength="6" />
+            </div>
+            <div class="form-field">
+              <label data-i18n="labelLedgerAmount">台账金额</label>
+              <input id="sgLedgerAmount" type="text" />
+            </div>
           </div>
+          <div class="row">
+            <input id="sgInvoiceDocFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,image/*,application/pdf" />
+            <button type="button" class="btn-primary" data-i18n="btnInvoiceExtract" onclick="runInvoiceExtract('CAN','sg')">识图抽取</button>
+          </div>
+          <div id="sgExtractResult" class="muted"></div>
+          <details class="advanced-prefs" style="margin-top:14px;">
+            <summary data-i18n="extractConfigSummary">Knot 识图配置</summary>
+            <div class="form-field"><label><input type="checkbox" id="sgKnotVisionEnabled" /> 启用</label></div>
+            <div class="form-field"><input id="sgKnotVisionUrl" type="url" placeholder="Webhook URL" style="width:100%;" /></div>
+            <button type="button" class="btn-secondary" onclick="saveInvoiceExtractSettings('sg')">保存</button>
+          </details>
         </div>
       </div>
 
@@ -2720,6 +2802,137 @@
       }
     }
 
+    function confPillClass(c) {
+      if (c >= 0.75) return "conf-high";
+      if (c >= 0.5) return "conf-mid";
+      return "conf-low";
+    }
+
+    function renderInvoiceExtractBox(prefix, data) {
+      const box = document.getElementById(`${prefix}ExtractResult`);
+      if (!box || !data) return;
+      if (!data.fields) {
+        box.textContent = JSON.stringify(data, null, 2);
+        return;
+      }
+      const rows = Object.entries(data.fields).filter(([k]) => !k.startsWith("_")).map(([k, v]) => {
+        const conf = Number(v.confidence || 0);
+        return `<tr><td>${k}</td><td>${v.value || "—"}</td><td><span class="conf-pill ${confPillClass(conf)}">${Math.round(conf * 100)}%</span></td><td>${v.source || ""}</td></tr>`;
+      }).join("");
+      const checks = (data.checks || []).map((c) => `<li>${c.ok ? "✓" : "⚠"} ${c.message}</li>`).join("");
+      const links = (data.outputs || []).map((p) => `<a href="${API}/api/files?path=${encodeURIComponent(p)}" target="_blank">${p.split("/").pop()}</a>`).join(" · ");
+      box.innerHTML = `
+        <div class="desc">${currentLang === "en" ? "Mode" : "模式"}: <strong>${data.mode}</strong> · ${data.profile_id}</div>
+        <table class="extract-table"><thead><tr><th>${currentLang === "en" ? "Field" : "字段"}</th><th>${currentLang === "en" ? "Value" : "值"}</th><th>${currentLang === "en" ? "Conf." : "置信度"}</th><th>${currentLang === "en" ? "Source" : "来源"}</th></tr></thead><tbody>${rows}</tbody></table>
+        ${checks ? `<ul style="margin:8px 0;font-size:12px;">${checks}</ul>` : ""}
+        <div class="desc">${links}</div>`;
+    }
+
+    async function loadInvoiceExtractProfiles(prefix, region) {
+      const sel = document.getElementById(`${prefix}ExtractProfile`);
+      if (!sel) return;
+      try {
+        const res = await fetch(`${API}/api/invoice-extract/profiles?region=${encodeURIComponent(region)}`);
+        const data = await res.json();
+        const profiles = data.profiles || {};
+        sel.innerHTML = Object.entries(profiles).map(([id, p]) =>
+          `<option value="${id}">${p.vendor || id} (${p.country || region})</option>`
+        ).join("");
+      } catch (_) {
+        sel.innerHTML = `<option value="us_anthem_medical">Anthem</option>`;
+      }
+    }
+
+    async function loadInvoiceExtractSettings(prefix, region) {
+      await loadInvoiceExtractProfiles(prefix, region);
+      try {
+        const res = await fetch(`${API}/api/invoice-extract/settings`);
+        const data = await res.json();
+        const s = data.settings || {};
+        const kv = s.knot_vision || {};
+        const modeEl = document.getElementById(`${prefix}ExtractMode`);
+        if (modeEl && s.default_mode) modeEl.value = s.default_mode;
+        const en = document.getElementById(`${prefix}KnotVisionEnabled`);
+        const url = document.getElementById(`${prefix}KnotVisionUrl`);
+        const tok = document.getElementById(`${prefix}KnotVisionToken`);
+        if (en) en.checked = !!kv.enabled;
+        if (url) url.value = kv.webhook_url || "";
+        if (tok && kv.token) tok.value = kv.token;
+        syncInvoiceModeHint(prefix);
+      } catch (_) {}
+      const batch = loadBatch(region);
+      const pel = document.getElementById(`${prefix}ExtractPeriod`);
+      if (pel && batch?.period) pel.value = batch.period;
+    }
+
+    function syncInvoiceModeHint(prefix) {
+      const hint = document.getElementById(`${prefix}ExtractModeHint`);
+      const mode = document.getElementById(`${prefix}ExtractMode`)?.value;
+      if (!hint) return;
+      hint.textContent = mode === "knot_agent"
+        ? (currentLang === "en" ? "Requires Knot vision agent webhook in config below." : "需在下文配置 Knot 识图 Agent 的 Webhook URL。")
+        : (currentLang === "en" ? "PDF text + regex; use knot_agent for scanned images." : "PDF 文本+规则；扫描件图片请用 knot_agent + 第二个 Agent。");
+    }
+
+    async function saveInvoiceExtractSettings(prefix) {
+      try {
+        const res = await fetch(`${API}/api/invoice-extract/settings`);
+        const data = await res.json();
+        const s = data.settings || {};
+        s.knot_vision = s.knot_vision || {};
+        s.knot_vision.enabled = !!document.getElementById(`${prefix}KnotVisionEnabled`)?.checked;
+        s.knot_vision.webhook_url = document.getElementById(`${prefix}KnotVisionUrl`)?.value?.trim() || "";
+        const tok = document.getElementById(`${prefix}KnotVisionToken`)?.value?.trim();
+        if (tok) s.knot_vision.token = tok;
+        const mode = document.getElementById(`${prefix}ExtractMode`)?.value;
+        if (mode) s.default_mode = mode;
+        await fetch(`${API}/api/invoice-extract/settings`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ settings: s })
+        });
+        alert(currentLang === "en" ? "Invoice extract config saved." : "识图配置已保存。");
+      } catch (e) {
+        alert(String(e));
+      }
+    }
+
+    async function runInvoiceExtract(region, prefix) {
+      const file = document.getElementById(`${prefix}InvoiceDocFile`)?.files[0];
+      if (!file) {
+        alert(currentLang === "en" ? "Select PDF or image." : "请选择 PDF 或图片。");
+        return;
+      }
+      const profileId = document.getElementById(`${prefix}ExtractProfile`)?.value;
+      if (!profileId) {
+        alert(currentLang === "en" ? "Select vendor profile." : "请选择供应商 Profile。");
+        return;
+      }
+      markStepInProgress(region, "invoice");
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("profile_id", profileId);
+      fd.append("region", region);
+      fd.append("period", document.getElementById(`${prefix}ExtractPeriod`)?.value || "");
+      fd.append("mode", document.getElementById(`${prefix}ExtractMode`)?.value || "local");
+      fd.append("ledger_amount", document.getElementById(`${prefix}LedgerAmount`)?.value || "");
+      if (ROOT) fd.append("root", ROOT);
+      const box = document.getElementById(`${prefix}ExtractResult`);
+      if (box) box.textContent = t("dashboardLoading");
+      try {
+        const res = await fetch(`${API}/api/invoice-extract/run`, { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || res.statusText);
+        renderInvoiceExtractBox(prefix, data);
+        renderLinks(`${prefix}Links`, data.outputs || []);
+        document.getElementById(`${prefix}Result`).textContent = JSON.stringify(data, null, 2);
+        markStepDone(region, "invoice");
+      } catch (e) {
+        clearInProgress(region, "invoice");
+        if (box) box.textContent = String(e);
+      }
+    }
+
     async function runBuildAllocation(region, prefix) {
       const file = document.getElementById(`${prefix}P1File`).files[0];
       if (!file) {
@@ -2845,6 +3058,15 @@
         descCC: "对照 Workday 成本中心状态表；失效 CC 出报告，不锁定分摊。",
         descAllocate: "金额以台账为准；按 OU 内人数占比分摊。",
         descInvoice: "提单前交叉校验；优先以台账为准。",
+        descInvoice21: "上传 Invoice PDF/图片，按 Profile 抽取字段与置信度；可与台账对照。台账为准，不锁定。",
+        labelExtractMode: "识图模式",
+        labelExtractProfile: "供应商 Profile",
+        labelLedgerAmount: "台账金额（对照）",
+        btnInvoiceExtract: "识图抽取",
+        extractConfigSummary: "管理员 · Knot 识图智能体配置",
+        extractConfigHint: "可在 Knot 另建第二个 Agent 专做识图；填 Webhook URL。与 Anna 分离，Chat 可不接。",
+        btnSaveExtractConfig: "保存识图配置",
+        legacyDocHealth: "旧：CSV 字段健康检查",
         descOutputV2: "分摊完成后生成提单文本；人工 FPP 提单后回填单号。",
         btnStartBatch: "开始本批次",
         btnRosterPivot: "OU Pivot 预检",
@@ -2993,6 +3215,15 @@
         descCC: "Workday CC status check; report only.",
         descAllocate: "Amounts from ledger; allocate by OU headcount.",
         descInvoice: "Optional pre-submit cross-check.",
+        descInvoice21: "Upload PDF/image; extract fields + confidence. Ledger is master.",
+        labelExtractMode: "Extract mode",
+        labelExtractProfile: "Vendor profile",
+        labelLedgerAmount: "Ledger amount (compare)",
+        btnInvoiceExtract: "Extract",
+        extractConfigSummary: "Admin · Knot vision agent",
+        extractConfigHint: "Optional 2nd Knot agent for vision; paste webhook URL.",
+        btnSaveExtractConfig: "Save config",
+        legacyDocHealth: "Legacy CSV health check",
         descOutputV2: "Generate submission blocks after allocation.",
         btnStartBatch: "Start batch",
         btnRosterPivot: "OU Pivot",
@@ -3228,6 +3459,8 @@
       switchCountry("US");
       refreshBatchBanner("us", "US");
       refreshBatchBanner("sg", "CAN");
+      loadInvoiceExtractSettings("us", "US");
+      loadInvoiceExtractSettings("sg", "CAN");
       switchAppMode(currentAppMode);
       if (!localStorage.getItem(KEY_WIZARD_V2_DONE)) openBatchWizard();
       else if (!localStorage.getItem(KEY_GUIDE_DONE)) openGuide();

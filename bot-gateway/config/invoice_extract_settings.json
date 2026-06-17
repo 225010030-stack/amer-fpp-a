@@ -1,0 +1,17 @@
+{
+  "version": "2.1",
+  "default_mode": "local",
+  "confidence_warn_below": 0.75,
+  "confidence_block_below": 0.5,
+  "ledger_is_master": true,
+  "knot_vision": {
+    "enabled": false,
+    "webhook_url": "",
+    "token_header": "Authorization",
+    "token_prefix": "Bearer ",
+    "token": "",
+    "timeout_seconds": 120,
+    "agent_label": "Invoice-OCR（Knot 识图智能体，可选第二个 Agent）",
+    "notes": "在 Knot 另建一个仅做识图的 Agent，Client 工具 POST 到本 webhook_url；网页上传 PDF/图片后 gateway 转发。留空则只用 local 文本抽取。"
+  }
+}

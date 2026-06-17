@@ -1,0 +1,31 @@
+{
+  "profiles": {
+    "us_anthem_medical": {
+      "vendor": "Anthem",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": ["Total\\s+Amount\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
+      "period_patterns": ["(20\\d{4})", "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+20\\d{2}"],
+      "vendor_keywords": ["Anthem", "Blue Cross"],
+      "knot_prompt": "从这张美国 Anthem 医疗账单/PDF 中抽取：vendor、amount（含税总额数字）、currency、period（YYYYMM）。只返回 JSON：{\"fields\":{\"vendor\":{\"value\":\"\",\"confidence\":0.9},...}}"
+    },
+    "us_cigna_dental": {
+      "vendor": "Cigna",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": ["Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Cigna"],
+      "knot_prompt": "从 Cigna Dental invoice 抽取 vendor、amount、currency、period(YYYYMM)。JSON only."
+    },
+    "can_sunlife_medical": {
+      "vendor": "SunLife",
+      "country": "CAN",
+      "currency": "CAD",
+      "amount_patterns": ["Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Sun Life", "SunLife"],
+      "knot_prompt": "从 SunLife Canada invoice 抽取 vendor、amount、currency(CAD)、period(YYYYMM)。JSON only."
+    }
+  }
+}

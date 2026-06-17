@@ -4,3 +4,5 @@ pydantic
 python-multipart
 requests
 pycryptodome
+pypdf
+pymupdf

@@ -21,6 +21,15 @@ from pydantic import BaseModel
 
 from repo_sync import auto_sync_enabled, git_head, last_sync_status, sync_workspace
 
+from invoice_extract import (
+    append_feedback,
+    get_profiles,
+    get_settings,
+    run_extract,
+    save_profiles,
+    save_settings,
+)
+
 
 WORKSPACE_ROOT = Path(
     os.getenv("WORKSPACE_ROOT", str(Path(__file__).resolve().parents[1]))
@@ -807,6 +816,78 @@ async def pain_check_ledger_dedup(
     result["dedup_groups"] = dup_count
     result["has_duplicates"] = dup_count > 0
     return result
+
+
+@app.get("/api/invoice-extract/settings")
+def invoice_extract_settings_get() -> dict[str, Any]:
+    return {"ok": True, "settings": get_settings()}
+
+
+@app.put("/api/invoice-extract/settings")
+def invoice_extract_settings_put(payload: dict[str, Any]) -> dict[str, Any]:
+    settings = payload.get("settings") if isinstance(payload.get("settings"), dict) else payload
+    if not isinstance(settings, dict):
+        raise HTTPException(status_code=400, detail="Invalid settings body")
+    save_settings(settings)
+    return {"ok": True, "settings": get_settings()}
+
+
+@app.get("/api/invoice-extract/profiles")
+def invoice_extract_profiles_get(region: Optional[str] = Query(default=None)) -> dict[str, Any]:
+    data = get_profiles()
+    profiles = data.get("profiles") or {}
+    if region:
+        r = region.strip().upper()
+        profiles = {k: v for k, v in profiles.items() if str(v.get("country", "")).upper() == r}
+    return {"ok": True, "profiles": profiles}
+
+
+@app.post("/api/invoice-extract/run")
+async def invoice_extract_run(
+    file: UploadFile = File(...),
+    profile_id: str = Form(...),
+    region: str = Form(default="US"),
+    period: str = Form(default=""),
+    mode: str = Form(default=""),
+    ledger_amount: str = Form(default=""),
+    ledger_vendor: str = Form(default=""),
+    root: str = Form(default=str(WORKSPACE_ROOT)),
+) -> dict[str, Any]:
+    target_root = to_safe_abs(root)
+    saved = await save_uploaded_file(file, "invoice21")
+    region_tag = (region or "US").strip().upper()
+    try:
+        result = run_extract(
+            saved,
+            profile_id.strip(),
+            period_hint=period.strip(),
+            mode=mode.strip(),
+            ledger_amount=ledger_amount.strip(),
+            ledger_vendor=ledger_vendor.strip(),
+            output_dir=UPLOAD_OUTPUT_DIR,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+    entry = {
+        "ok": True,
+        "action": "invoice_extract",
+        "region": region_tag,
+        "step": "invoice",
+        "started_at": datetime.now().isoformat(timespec="seconds"),
+        "outputs": result.get("outputs", []),
+        "profile_id": profile_id,
+        "mode": result.get("mode"),
+    }
+    jobs = load_jobs()
+    jobs.append(entry)
+    save_jobs(jobs[-100:])
+    return result
+
+
+@app.post("/api/invoice-extract/feedback")
+def invoice_extract_feedback(payload: dict[str, Any]) -> dict[str, Any]:
+    path = append_feedback(payload, UPLOAD_OUTPUT_DIR)
+    return {"ok": True, "feedback_file": str(path)}
 
 
 @app.post("/api/webhook/knotbot")
