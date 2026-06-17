@@ -688,6 +688,59 @@ async def pain_build_allocation(
     return result
 
 
+@app.post("/api/pain/batch-build-allocation")
+async def pain_batch_build_allocation(
+    ledger_file: UploadFile = File(...),
+    headcount_file: UploadFile = File(...),
+    period: str = Form(...),
+    region: str = Form(default="US"),
+    country: str = Form(default=""),
+    vendor_map_file: Optional[UploadFile] = File(default=None),
+    root: str = Form(default=str(WORKSPACE_ROOT)),
+) -> dict[str, Any]:
+    """Allocate all ledger vendors; many vendors may share one headcount basis (many-to-one)."""
+    target_root = to_safe_abs(root)
+    region_tag = (region or "US").strip().upper()
+    country_val = (country or ("CAN" if region_tag == "CAN" else "US")).strip()
+    ledger_path = await save_uploaded_file(ledger_file, "batch_ledger")
+    headcount_path = await save_uploaded_file(headcount_file, "batch_p1")
+    map_path: Optional[Path] = None
+    if vendor_map_file is not None and (vendor_map_file.filename or "").strip():
+        map_path = await save_uploaded_file(vendor_map_file, "batch_vendor_map")
+
+    now = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_dir = UPLOAD_OUTPUT_DIR / f"batch_alloc_{region_tag}_{now}"
+    cmd = [
+        "python3",
+        str((WORKSPACE_ROOT / "痛点攻坚实施包" / "batch_build_allocation.py").resolve()),
+        "--ledger",
+        str(ledger_path),
+        "--headcount",
+        str(headcount_path),
+        "--period",
+        period.strip(),
+        "--country",
+        country_val,
+        "--output-dir",
+        str(output_dir),
+    ]
+    if map_path:
+        cmd.extend(["--vendor-map", str(map_path)])
+
+    result = run_cmd(cmd, target_root, "pain1_batch_build_allocation", meta={"region": region_tag, "step": "center"})
+    try:
+        summary_files = sorted(output_dir.glob("批量分摊结果_*.json"))
+        if summary_files:
+            summary = json.loads(summary_files[-1].read_text(encoding="utf-8"))
+            result["batch"] = summary
+            for p in summary.get("outputs") or []:
+                if p not in result.get("outputs", []):
+                    result.setdefault("outputs", []).append(p)
+    except Exception:
+        pass
+    return result
+
+
 @app.post("/api/pain/check-centers")
 async def pain_check_centers(
     source_file: UploadFile = File(...),

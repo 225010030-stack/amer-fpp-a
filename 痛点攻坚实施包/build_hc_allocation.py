@@ -6,11 +6,105 @@ from __future__ import annotations
 import argparse
 import csv
 from pathlib import Path
+from typing import Any
+
+
+OUTPUT_FIELDS = [
+    "期间",
+    "国家",
+    "主体",
+    "供应商",
+    "费用类型",
+    "账单总额",
+    "币种",
+    "成本中心",
+    "部门",
+    "人数",
+    "人数占比(PCT)",
+    "分摊金额",
+    "校验_行状态",
+    "备注",
+]
 
 
 def to_float(val: str) -> float:
     txt = (val or "").strip().replace(",", "")
     return float(txt) if txt else 0.0
+
+
+def build_allocation_rows(
+    rows: list[dict[str, str]],
+    *,
+    period: str,
+    country: str,
+    entity: str,
+    vendor: str,
+    fee_type: str,
+    invoice_total: float,
+    currency: str,
+    basis_id: str = "DEFAULT",
+) -> list[dict[str, str]]:
+    if not rows:
+        raise ValueError("headcount rows empty after filter")
+    total_people = sum(to_float(r.get("人数", "")) for r in rows)
+    if total_people <= 0:
+        raise ValueError("Total 人数 must be > 0")
+
+    output_rows: list[dict[str, str]] = []
+    allocated_sum = 0.0
+    for r in rows:
+        people = to_float(r.get("人数", ""))
+        pct = people / total_people
+        amount = round(invoice_total * pct, 2)
+        allocated_sum += amount
+        note = ""
+        if basis_id and basis_id != "DEFAULT":
+            note = f"分摊依据={basis_id}"
+        output_rows.append(
+            {
+                "期间": period,
+                "国家": country,
+                "主体": entity,
+                "供应商": vendor,
+                "费用类型": fee_type,
+                "账单总额": f"{invoice_total:.2f}",
+                "币种": currency,
+                "成本中心": (r.get("成本中心") or "").strip(),
+                "部门": (r.get("部门") or "").strip(),
+                "人数": str(int(people) if people.is_integer() else people),
+                "人数占比(PCT)": f"{pct:.10f}",
+                "分摊金额": f"{amount:.2f}",
+                "校验_行状态": "OK",
+                "备注": note,
+            }
+        )
+
+    diff = round(invoice_total - allocated_sum, 2)
+    if output_rows and abs(diff) > 0:
+        last_amt = to_float(output_rows[-1]["分摊金额"])
+        output_rows[-1]["分摊金额"] = f"{last_amt + diff:.2f}"
+        tail = output_rows[-1]["备注"]
+        output_rows[-1]["备注"] = f"{tail}; 尾差调平 {diff:+.2f}".strip("; ")
+
+    return output_rows
+
+
+def write_allocation_csv(output_rows: list[dict[str, str]], out_path: Path) -> None:
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS)
+        w.writeheader()
+        w.writerows(output_rows)
+
+
+def load_headcount_csv(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        raise ValueError(f"Input CSV has no rows: {path}")
+    if not {"成本中心", "人数"}.issubset(set(rows[0].keys())):
+        raise ValueError(f"Input CSV must include 成本中心, 人数: {path}")
+    return rows
 
 
 def main() -> int:
@@ -32,76 +126,18 @@ def main() -> int:
         print(f"Input not found: {in_path}")
         return 2
 
-    with in_path.open("r", encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
-    if not rows:
-        print("Input CSV has no rows")
-        return 2
-
-    required = {"成本中心", "人数"}
-    if not required.issubset(set(rows[0].keys())):
-        print("Input CSV must include columns: 成本中心, 人数")
-        return 2
-
-    total_people = sum(to_float(r.get("人数", "")) for r in rows)
-    if total_people <= 0:
-        print("Total 人数 must be > 0")
-        return 2
-
-    output_rows = []
-    allocated_sum = 0.0
-    for idx, r in enumerate(rows):
-        people = to_float(r.get("人数", ""))
-        pct = people / total_people
-        amount = round(args.invoice_total * pct, 2)
-        allocated_sum += amount
-        output_rows.append(
-            {
-                "期间": args.period,
-                "国家": args.country,
-                "主体": args.entity,
-                "供应商": args.vendor,
-                "费用类型": args.fee_type,
-                "账单总额": f"{args.invoice_total:.2f}",
-                "币种": args.currency,
-                "成本中心": (r.get("成本中心") or "").strip(),
-                "部门": (r.get("部门") or "").strip(),
-                "人数": str(int(people) if people.is_integer() else people),
-                "人数占比(PCT)": f"{pct:.10f}",
-                "分摊金额": f"{amount:.2f}",
-                "校验_行状态": "OK",
-                "备注": "",
-            }
-        )
-
-    # Tail difference adjustment on last row.
-    diff = round(args.invoice_total - allocated_sum, 2)
-    if output_rows and abs(diff) > 0:
-        last_amt = to_float(output_rows[-1]["分摊金额"])
-        output_rows[-1]["分摊金额"] = f"{last_amt + diff:.2f}"
-        output_rows[-1]["备注"] = f"尾差调平 {diff:+.2f}"
-
-    fields = [
-        "期间",
-        "国家",
-        "主体",
-        "供应商",
-        "费用类型",
-        "账单总额",
-        "币种",
-        "成本中心",
-        "部门",
-        "人数",
-        "人数占比(PCT)",
-        "分摊金额",
-        "校验_行状态",
-        "备注",
-    ]
-    with out_path.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
-        w.writeheader()
-        w.writerows(output_rows)
-
+    rows = load_headcount_csv(in_path)
+    output_rows = build_allocation_rows(
+        rows,
+        period=args.period.strip(),
+        country=args.country.strip(),
+        entity=args.entity.strip(),
+        vendor=args.vendor.strip(),
+        fee_type=args.fee_type.strip(),
+        invoice_total=float(args.invoice_total),
+        currency=args.currency.strip(),
+    )
+    write_allocation_csv(output_rows, out_path)
     print(f"Generated: {out_path}")
     return 0
 

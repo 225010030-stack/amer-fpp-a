@@ -645,6 +645,31 @@
             <button class="btn-primary" data-i18n="btnBuildHC" onclick="runBuildAllocation('US', 'us')">自动分摊生成HC</button>
             <button class="btn-secondary" data-i18n="btnAutoRun" onclick="autoFillAndRunBuild('US', 'us')">自动填入并执行</button>
           </div>
+          <details class="advanced-prefs" style="margin-top:16px;">
+            <summary data-i18n="batchAllocSummary">从台账批量分摊（多供应商 → 共用人数表）</summary>
+            <div class="desc" style="margin:8px 0;" data-i18n="descBatchAlloc">
+              读取台账本账期所有供应商行，按各行含税总额分别分摊。默认<strong>多家供应商共用同一份 P1 人数 CSV</strong>（多对一）。
+              若某供应商只分摊部分部门，上传「供应商映射 CSV」配置部门过滤（见 example 模板）。
+            </div>
+            <div class="form-grid-labeled">
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchLedger">台账 / 预填表 CSV</label>
+                <input id="usBatchLedgerFile" type="file" accept=".csv,text/csv" />
+              </div>
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchP1">共用人数 CSV（DEFAULT）</label>
+                <input id="usBatchP1File" type="file" accept=".csv,text/csv" />
+              </div>
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchVendorMap">供应商映射（可选）</label>
+                <span class="field-hint" data-i18n="hintBatchVendorMap">列：供应商,费用类型,分摊依据ID,部门过滤,成本中心过滤</span>
+                <input id="usBatchVendorMapFile" type="file" accept=".csv,text/csv" />
+              </div>
+            </div>
+            <div class="row">
+              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('US','us')">批量分摊全部供应商</button>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -995,6 +1020,29 @@
             <button class="btn-primary" onclick="runBuildAllocation('CAN', 'sg')">自动分摊生成HC</button>
             <button class="btn-secondary" onclick="autoFillAndRunBuild('CAN', 'sg')">自动填入并执行（推荐）</button>
           </div>
+          <details class="advanced-prefs" style="margin-top:16px;">
+            <summary data-i18n="batchAllocSummary">从台账批量分摊（多供应商 → 共用人数表）</summary>
+            <div class="desc" style="margin:8px 0;" data-i18n="descBatchAlloc">
+              读取台账本账期所有供应商行，按各行含税总额分别分摊。默认多家供应商共用同一份 P1 人数 CSV（多对一）。
+            </div>
+            <div class="form-grid-labeled">
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchLedger">台账 / 预填表 CSV</label>
+                <input id="sgBatchLedgerFile" type="file" accept=".csv,text/csv" />
+              </div>
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchP1">共用人数 CSV（DEFAULT）</label>
+                <input id="sgBatchP1File" type="file" accept=".csv,text/csv" />
+              </div>
+              <div class="form-field file-field">
+                <label data-i18n="labelBatchVendorMap">供应商映射（可选）</label>
+                <input id="sgBatchVendorMapFile" type="file" accept=".csv,text/csv" />
+              </div>
+            </div>
+            <div class="row">
+              <button type="button" class="btn-primary" data-i18n="btnBatchAlloc" onclick="runBatchAllocationFromLedger('CAN','sg')">批量分摊全部供应商</button>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -3101,6 +3149,44 @@
       }
     }
 
+    async function runBatchAllocationFromLedger(region, prefix) {
+      const ledger = document.getElementById(`${prefix}BatchLedgerFile`)?.files[0];
+      const p1 = document.getElementById(`${prefix}BatchP1File`)?.files[0];
+      const vmap = document.getElementById(`${prefix}BatchVendorMapFile`)?.files[0];
+      if (!ledger || !p1) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Select ledger CSV and shared headcount CSV." : "请选择台账 CSV 和共用人数 CSV。";
+        return;
+      }
+      const period = normalizePeriodInput(prefix) || document.getElementById(`${prefix}BatchPeriod`)?.value?.trim();
+      if (!validatePeriodYYYYMM(period)) {
+        document.getElementById(`${prefix}Result`).textContent =
+          currentLang === "en" ? "Enter billing period YYYYMM." : "请先输入账期 YYYYMM。";
+        return;
+      }
+      markStepInProgress(region, "allocate");
+      const fd = new FormData();
+      fd.append("ledger_file", ledger);
+      fd.append("headcount_file", p1);
+      fd.append("period", period);
+      fd.append("region", region);
+      fd.append("country", region === "CAN" ? "CAN" : "US");
+      if (vmap) fd.append("vendor_map_file", vmap);
+      if (ROOT) fd.append("root", ROOT);
+      const data = await postForm(`${API}/api/pain/batch-build-allocation`, fd, `${prefix}Result`, `${prefix}Links`);
+      if (data && data.ok) {
+        const batch = data.batch || {};
+        const n = batch.vendor_count ?? (batch.results || []).length;
+        const sk = batch.skipped_count ?? (batch.skipped || []).length;
+        document.getElementById(`${prefix}Result`).textContent = currentLang === "en"
+          ? `Batch allocation done: ${n} vendor(s), ${sk} skipped. See report in links.`
+          : `批量分摊完成：${n} 家供应商，跳过 ${sk} 行。见下方链接中的批量分摊报告。`;
+        markStepDone(region, "allocate");
+      } else {
+        clearInProgress(region, "allocate");
+      }
+    }
+
     async function runBuildAllocation(region, prefix) {
       const file = document.getElementById(`${prefix}P1File`).files[0];
       if (!file) {
@@ -3289,6 +3375,13 @@
         btnStats: "统计分析（看板）",
         btnBatchRun: "批量串行执行",
         btnBuildHC: "自动分摊生成HC",
+        batchAllocSummary: "从台账批量分摊（多供应商 → 共用人数表）",
+        descBatchAlloc: "读取台账本账期所有供应商行，按含税总额分别分摊。默认多家供应商共用同一份 P1 人数 CSV（多对一）；可用映射 CSV 指定部门/成本中心过滤。",
+        labelBatchLedger: "台账 / 预填表 CSV",
+        labelBatchP1: "共用人数 CSV（DEFAULT）",
+        labelBatchVendorMap: "供应商映射（可选）",
+        hintBatchVendorMap: "列：供应商,费用类型,分摊依据ID,部门过滤,成本中心过滤",
+        btnBatchAlloc: "批量分摊全部供应商",
         btnAutoRun: "自动填入并执行（推荐）",
         btnCheckCenter: "检查成本中心（上传状态表）",
         btnCheckCenterDefault: "检查成本中心（默认状态表）",
@@ -3448,6 +3541,13 @@
         btnStats: "Analytics dashboard",
         btnBatchRun: "Run batch sequentially",
         btnBuildHC: "Build allocation (HC)",
+        batchAllocSummary: "Batch allocate from ledger (many vendors → one headcount file)",
+        descBatchAlloc: "Read all ledger rows for this period; each vendor gets its own HC file using the shared P1 CSV (many-to-one). Optional map CSV for dept/CC filters.",
+        labelBatchLedger: "Ledger / prefill CSV",
+        labelBatchP1: "Shared headcount CSV (DEFAULT)",
+        labelBatchVendorMap: "Vendor map (optional)",
+        hintBatchVendorMap: "Cols: vendor, fee_type, basis_id, dept_filter, cc_filter",
+        btnBatchAlloc: "Batch allocate all vendors",
         btnAutoRun: "Auto fill & run (recommended)",
         btnCheckCenter: "Check centers (upload status)",
         btnCheckCenterDefault: "Check centers (default status)",
