@@ -2,30 +2,173 @@
   "profiles": {
     "us_anthem_medical": {
       "vendor": "Anthem",
+      "fee_type": "Medical Insurance",
       "country": "US",
       "currency": "USD",
-      "amount_patterns": ["Total\\s+Amount\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
-      "period_patterns": ["(20\\d{4})", "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+20\\d{2}"],
-      "vendor_keywords": ["Anthem", "Blue Cross"],
-      "knot_prompt": "从这张美国 Anthem 医疗账单/PDF 中抽取：vendor、amount（含税总额数字）、currency、period（YYYYMM）。只返回 JSON：{\"fields\":{\"vendor\":{\"value\":\"\",\"confidence\":0.9},...}}"
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s+Amount\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Anthem", "Blue Cross", "Elevance"],
+      "knot_prompt": "从 Anthem US Medical invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
     },
     "us_cigna_dental": {
       "vendor": "Cigna",
+      "fee_type": "Dental",
       "country": "US",
       "currency": "USD",
-      "amount_patterns": ["Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
       "period_patterns": ["(20\\d{4})"],
       "vendor_keywords": ["Cigna"],
-      "knot_prompt": "从 Cigna Dental invoice 抽取 vendor、amount、currency、period(YYYYMM)。JSON only."
+      "knot_prompt": "从 Cigna Dental invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_kaiser_medical": {
+      "vendor": "Kaiser",
+      "fee_type": "Medical Insurance",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Kaiser", "Kaiser Permanente"],
+      "knot_prompt": "从 Kaiser Medical invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_guardian_vol_benefits": {
+      "vendor": "Guardian",
+      "fee_type": "Vision STD LTD Life",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s+Premium\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Guardian"],
+      "knot_prompt": "从 Guardian vol benefits invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_optum_fsa": {
+      "vendor": "Optum",
+      "fee_type": "FSA Weekly Claim",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Claim\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Optum", "CYC", "FSA", "Flexible Spending"],
+      "knot_prompt": "从 Optum/FSA invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_legalshield_legal": {
+      "vendor": "LegalShield",
+      "fee_type": "ID Legal Insurance",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["LegalShield", "Legal Shield"],
+      "knot_prompt": "从 LegalShield invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_adp_payroll": {
+      "vendor": "ADP",
+      "fee_type": "HR Service Fee",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["ADP"],
+      "knot_prompt": "从 ADP invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_cyc_hr_fee": {
+      "vendor": "CYC",
+      "fee_type": "HR Service Fee",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Service\\s+Fee\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["CYC", "Service Fee", "HR Service"],
+      "knot_prompt": "从 CYC HR Service Fee invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
+    },
+    "us_generic_invoice": {
+      "vendor": "",
+      "fee_type": "Other",
+      "country": "US",
+      "currency": "USD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s+Amount\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Invoice\\s+Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Current\\s+Charges\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": [],
+      "knot_prompt": "从 US invoice 抽取 vendor、amount、currency(USD)、period(YYYYMM)。JSON only."
     },
     "can_sunlife_medical": {
       "vendor": "SunLife",
+      "fee_type": "Medical Insurance",
       "country": "CAN",
       "currency": "CAD",
-      "amount_patterns": ["Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})", "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"],
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Current\\s+Charges\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
       "period_patterns": ["(20\\d{4})"],
       "vendor_keywords": ["Sun Life", "SunLife"],
-      "knot_prompt": "从 SunLife Canada invoice 抽取 vendor、amount、currency(CAD)、period(YYYYMM)。JSON only."
+      "knot_prompt": "从 SunLife Canada Medical invoice 抽取 vendor、amount、currency(CAD)、period(YYYYMM)。JSON only."
+    },
+    "can_sunlife_commercial": {
+      "vendor": "SunLife",
+      "fee_type": "Employee Commercial Insurance",
+      "country": "CAN",
+      "currency": "CAD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Current\\s+Charges\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": ["Sun Life", "SunLife", "Commercial"],
+      "knot_prompt": "从 SunLife Canada Commercial invoice 抽取 vendor、amount、currency(CAD)、period(YYYYMM)。JSON only."
+    },
+    "can_generic_invoice": {
+      "vendor": "",
+      "fee_type": "Other",
+      "country": "CAN",
+      "currency": "CAD",
+      "amount_patterns": [
+        "Amount\\s+Due\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Total\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})",
+        "Current\\s+Charges\\s*[:\\$]?\\s*([0-9,]+\\.\\d{2})"
+      ],
+      "period_patterns": ["(20\\d{4})"],
+      "vendor_keywords": [],
+      "knot_prompt": "从 Canada invoice 抽取 vendor、amount、currency(CAD)、period(YYYYMM)。JSON only."
     }
   }
 }

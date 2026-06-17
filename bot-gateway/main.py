@@ -839,6 +839,12 @@ def invoice_extract_profiles_get(region: Optional[str] = Query(default=None)) ->
     if region:
         r = region.strip().upper()
         profiles = {k: v for k, v in profiles.items() if str(v.get("country", "")).upper() == r}
+    profiles = dict(
+        sorted(
+            profiles.items(),
+            key=lambda kv: (str(kv[1].get("vendor") or ""), str(kv[1].get("fee_type") or "")),
+        )
+    )
     return {"ok": True, "profiles": profiles}
 
 

@@ -663,7 +663,22 @@
             </div>
             <div class="form-field">
               <label data-i18n="labelExtractProfile">供应商 Profile</label>
-              <select id="usExtractProfile"></select>
+              <select id="usExtractProfile" onchange="syncInvoiceProfileHint('us')"></select>
+              <span class="field-hint" id="usExtractProfileHint" data-i18n="hintExtractProfile">与分摊步骤供应商一致；可点下方快捷按钮或下拉选择。</span>
+            </div>
+            <div class="form-field" style="grid-column:1/-1;">
+              <div class="vendor-preset-label" data-i18n="labelInvoiceVendorPreset">供应商快捷（与步骤5分摊一致）：</div>
+              <div class="chip-row">
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','anthem')">Anthem</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','cigna')">Cigna</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','kaiser')">Kaiser</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','guardian')">Guardian</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','optum')">Optum</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','legalshield')">LegalShield</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','adp')">ADP</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','cyc')">CYC</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('us','US','generic')">其他 US</button>
+              </div>
             </div>
             <div class="form-field">
               <label data-i18n="labelPeriod">账期 YYYYMM</label>
@@ -1022,7 +1037,16 @@
             </div>
             <div class="form-field">
               <label data-i18n="labelExtractProfile">供应商 Profile</label>
-              <select id="sgExtractProfile"></select>
+              <select id="sgExtractProfile" onchange="syncInvoiceProfileHint('sg')"></select>
+              <span class="field-hint" id="sgExtractProfileHint" data-i18n="hintExtractProfile">与分摊步骤供应商一致；CAN 目前以 SunLife 为主。</span>
+            </div>
+            <div class="form-field" style="grid-column:1/-1;">
+              <div class="vendor-preset-label" data-i18n="labelInvoiceVendorPreset">供应商快捷：</div>
+              <div class="chip-row">
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('sg','CAN','sunlife')">SunLife · Medical</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('sg','CAN','sunlife_commercial')">SunLife · Commercial</button>
+                <button type="button" class="chip-btn" onclick="applyInvoiceVendorPreset('sg','CAN','generic')">其他 CAN</button>
+              </div>
             </div>
             <div class="form-field">
               <label data-i18n="labelPeriod">账期</label>
@@ -1621,6 +1645,10 @@
         document.querySelectorAll("#pillTabs .pill-tab").forEach((el) => el.classList.remove("active"));
       }
       updateBreadcrumb(prefix === "us" ? "US" : "CAN", page);
+      if (page === "invoice") {
+        const region = prefix === "us" ? "US" : "CAN";
+        syncInvoiceProfileFromAllocation(prefix, region);
+      }
     }
 
     function stepLabel(step) {
@@ -2828,6 +2856,138 @@
         <div class="desc">${links}</div>`;
     }
 
+    const INVOICE_VENDOR_PROFILES = {
+      US: {
+        anthem: "us_anthem_medical",
+        cigna: "us_cigna_dental",
+        kaiser: "us_kaiser_medical",
+        guardian: "us_guardian_vol_benefits",
+        optum: "us_optum_fsa",
+        legalshield: "us_legalshield_legal",
+        adp: "us_adp_payroll",
+        cyc: "us_cyc_hr_fee",
+        generic: "us_generic_invoice",
+      },
+      CAN: {
+        sunlife: "can_sunlife_medical",
+        sunlife_commercial: "can_sunlife_commercial",
+        generic: "can_generic_invoice",
+      },
+    };
+
+    const INVOICE_VENDOR_BY_NAME = {
+      US: {
+        Anthem: "us_anthem_medical",
+        Cigna: "us_cigna_dental",
+        Kaiser: "us_kaiser_medical",
+        Guardian: "us_guardian_vol_benefits",
+        Optum: "us_optum_fsa",
+        LegalShield: "us_legalshield_legal",
+        ADP: "us_adp_payroll",
+        CYC: "us_cyc_hr_fee",
+      },
+      CAN: {
+        SunLife: "can_sunlife_medical",
+      },
+    };
+
+    const INVOICE_PROFILE_FALLBACK = {
+      US: [
+        ["us_anthem_medical", "Anthem · Medical Insurance (US)"],
+        ["us_cigna_dental", "Cigna · Dental (US)"],
+        ["us_kaiser_medical", "Kaiser · Medical Insurance (US)"],
+        ["us_guardian_vol_benefits", "Guardian · Vision STD LTD Life (US)"],
+        ["us_optum_fsa", "Optum · FSA Weekly Claim (US)"],
+        ["us_legalshield_legal", "LegalShield · ID Legal Insurance (US)"],
+        ["us_adp_payroll", "ADP · HR Service Fee (US)"],
+        ["us_cyc_hr_fee", "CYC · HR Service Fee (US)"],
+        ["us_generic_invoice", "其他 · Other (US)"],
+      ],
+      CAN: [
+        ["can_sunlife_medical", "SunLife · Medical Insurance (CAN)"],
+        ["can_sunlife_commercial", "SunLife · Employee Commercial Insurance (CAN)"],
+        ["can_generic_invoice", "其他 · Other (CAN)"],
+      ],
+    };
+
+    function invoiceProfileLabel(p, id) {
+      if (!p) return id;
+      const vendor = (p.vendor || (id.includes("generic") ? "其他" : id)).trim();
+      const fee = (p.fee_type || "").trim();
+      const country = (p.country || "").trim();
+      return fee ? `${vendor} · ${fee} (${country})` : `${vendor} (${country})`;
+    }
+
+    function pickInvoiceProfile(prefix, profileId) {
+      const sel = document.getElementById(`${prefix}ExtractProfile`);
+      if (!sel || !profileId) return false;
+      const ok = [...sel.options].some((o) => o.value === profileId);
+      if (ok) sel.value = profileId;
+      syncInvoiceProfileHint(prefix);
+      return ok;
+    }
+
+    function syncInvoiceFieldsFromAllocation(prefix) {
+      const periodSrc = document.getElementById(`${prefix}ExtractPeriod`);
+      const batchPeriod = document.getElementById(`${prefix}BatchPeriod`)?.value?.trim();
+      const allocPeriod = document.getElementById(`${prefix}Period`)?.value?.trim();
+      if (periodSrc && !periodSrc.value.trim()) periodSrc.value = batchPeriod || allocPeriod || "";
+      const ledgerSrc = document.getElementById(`${prefix}LedgerAmount`);
+      const invoiceTotal = document.getElementById(`${prefix}InvoiceTotal`)?.value?.trim();
+      if (ledgerSrc && !ledgerSrc.value.trim() && invoiceTotal) ledgerSrc.value = invoiceTotal;
+    }
+
+    function syncInvoiceProfileFromAllocation(prefix, region) {
+      syncInvoiceFieldsFromAllocation(prefix);
+      const vendor = (document.getElementById(`${prefix}Vendor`)?.value || "").trim();
+      const feeType = (document.getElementById(`${prefix}FeeType`)?.value || "").trim();
+      if (!vendor) return;
+      let profileId = (INVOICE_VENDOR_BY_NAME[region] || {})[vendor];
+      if (region === "CAN" && vendor === "SunLife") {
+        profileId = feeType === "Employee Commercial Insurance"
+          ? "can_sunlife_commercial"
+          : "can_sunlife_medical";
+      }
+      if (profileId) pickInvoiceProfile(prefix, profileId);
+    }
+
+    function applyInvoiceVendorPreset(prefix, region, presetKey) {
+      const profileId = (INVOICE_VENDOR_PROFILES[region] || {})[presetKey];
+      if (profileId) pickInvoiceProfile(prefix, profileId);
+      const vendorPreset = {
+        anthem: { vendor: "Anthem", feeType: "Medical Insurance" },
+        cigna: { vendor: "Cigna", feeType: "Dental" },
+        kaiser: { vendor: "Kaiser", feeType: "Medical Insurance" },
+        guardian: { vendor: "Guardian", feeType: "Vision STD LTD Life" },
+        optum: { vendor: "Optum", feeType: "FSA Weekly Claim" },
+        legalshield: { vendor: "LegalShield", feeType: "ID Legal Insurance" },
+        adp: { vendor: "ADP", feeType: "HR Service Fee" },
+        cyc: { vendor: "CYC", feeType: "HR Service Fee" },
+        sunlife: { vendor: "SunLife", feeType: "Medical Insurance" },
+        sunlife_commercial: { vendor: "SunLife", feeType: "Employee Commercial Insurance" },
+      }[presetKey];
+      if (vendorPreset) {
+        const vEl = document.getElementById(`${prefix}Vendor`);
+        const fEl = document.getElementById(`${prefix}FeeType`);
+        if (vEl) vEl.value = vendorPreset.vendor;
+        if (fEl) fEl.value = vendorPreset.feeType;
+        syncSelectEmptyState(`${prefix}Vendor`);
+        syncSelectEmptyState(`${prefix}FeeType`);
+      }
+      syncInvoiceFieldsFromAllocation(prefix);
+      syncInvoiceProfileHint(prefix);
+    }
+
+    function syncInvoiceProfileHint(prefix) {
+      const sel = document.getElementById(`${prefix}ExtractProfile`);
+      const hint = document.getElementById(`${prefix}ExtractProfileHint`);
+      if (!sel || !hint) return;
+      const opt = sel.selectedOptions[0];
+      hint.textContent = opt
+        ? (currentLang === "en" ? `Selected: ${opt.textContent}` : `当前：${opt.textContent}`)
+        : (currentLang === "en" ? "Pick a vendor profile." : "请选择供应商 Profile。");
+    }
+
     async function loadInvoiceExtractProfiles(prefix, region) {
       const sel = document.getElementById(`${prefix}ExtractProfile`);
       if (!sel) return;
@@ -2835,12 +2995,20 @@
         const res = await fetch(`${API}/api/invoice-extract/profiles?region=${encodeURIComponent(region)}`);
         const data = await res.json();
         const profiles = data.profiles || {};
-        sel.innerHTML = Object.entries(profiles).map(([id, p]) =>
-          `<option value="${id}">${p.vendor || id} (${p.country || region})</option>`
+        const entries = Object.entries(profiles).sort((a, b) => {
+          const av = `${a[1].vendor || ""}|${a[1].fee_type || ""}`;
+          const bv = `${b[1].vendor || ""}|${b[1].fee_type || ""}`;
+          return av.localeCompare(bv);
+        });
+        sel.innerHTML = entries.map(([id, p]) =>
+          `<option value="${id}">${invoiceProfileLabel(p, id)}</option>`
         ).join("");
       } catch (_) {
-        sel.innerHTML = `<option value="us_anthem_medical">Anthem</option>`;
+        const fallback = INVOICE_PROFILE_FALLBACK[region] || INVOICE_PROFILE_FALLBACK.US;
+        sel.innerHTML = fallback.map(([id, label]) => `<option value="${id}">${label}</option>`).join("");
       }
+      syncInvoiceProfileFromAllocation(prefix, region);
+      syncInvoiceProfileHint(prefix);
     }
 
     async function loadInvoiceExtractSettings(prefix, region) {
@@ -3061,6 +3229,8 @@
         descInvoice21: "上传 Invoice PDF/图片，按 Profile 抽取字段与置信度；可与台账对照。台账为准，不锁定。",
         labelExtractMode: "识图模式",
         labelExtractProfile: "供应商 Profile",
+        hintExtractProfile: "与分摊步骤供应商一致；可点快捷按钮或下拉选择（US 共 9 项，CAN 共 3 项）。",
+        labelInvoiceVendorPreset: "供应商快捷（与步骤5分摊一致）：",
         labelLedgerAmount: "台账金额（对照）",
         btnInvoiceExtract: "识图抽取",
         extractConfigSummary: "管理员 · Knot 识图智能体配置",
@@ -3218,6 +3388,8 @@
         descInvoice21: "Upload PDF/image; extract fields + confidence. Ledger is master.",
         labelExtractMode: "Extract mode",
         labelExtractProfile: "Vendor profile",
+        hintExtractProfile: "Matches step-5 vendors; use shortcuts or dropdown (9 US / 3 CAN).",
+        labelInvoiceVendorPreset: "Vendor shortcuts (same as step 5):",
         labelLedgerAmount: "Ledger amount (compare)",
         btnInvoiceExtract: "Extract",
         extractConfigSummary: "Admin · Knot vision agent",
