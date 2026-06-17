@@ -3178,9 +3178,10 @@
         const batch = data.batch || {};
         const n = batch.vendor_count ?? (batch.results || []).length;
         const sk = batch.skipped_count ?? (batch.skipped || []).length;
+        const st = batch.stats || {};
         document.getElementById(`${prefix}Result`).textContent = currentLang === "en"
-          ? `Batch allocation done: ${n} vendor(s), ${sk} skipped. See report in links.`
-          : `批量分摊完成：${n} 家供应商，跳过 ${sk} 行。见下方链接中的批量分摊报告。`;
+          ? `Batch done: scanned ${st.lines_scanned ?? "?"}, ${st.vendor_groups ?? n} vendor group(s), ${n} HC file(s), ${sk} skipped. See report.`
+          : `批量完成：扫描 ${st.lines_scanned ?? "?"} 行 → 汇总 ${st.vendor_groups ?? n} 组 → 生成 ${n} 份 HC，跳过 ${sk} 组。见报告链接。`;
         markStepDone(region, "allocate");
       } else {
         clearInProgress(region, "allocate");

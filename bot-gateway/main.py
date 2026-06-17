@@ -366,6 +366,21 @@ def run_action(req: RunRequest) -> dict[str, Any]:
     return entry
 
 
+def _pain_pkg_dir() -> Path:
+    return (WORKSPACE_ROOT / "痛点攻坚实施包").resolve()
+
+
+def _import_batch_allocation():
+    import sys
+
+    pain_dir = str(_pain_pkg_dir())
+    if pain_dir not in sys.path:
+        sys.path.insert(0, pain_dir)
+    from batch_build_allocation import run_batch  # type: ignore
+
+    return run_batch
+
+
 def run_cmd(cmd: list[str], cwd: Path, action: str, meta: Optional[dict[str, Any]] = None) -> dict[str, Any]:
     ensure_dirs()
     sync_info = maybe_sync_repo(cwd)
@@ -710,35 +725,41 @@ async def pain_batch_build_allocation(
 
     now = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = UPLOAD_OUTPUT_DIR / f"batch_alloc_{region_tag}_{now}"
-    cmd = [
-        "python3",
-        str((WORKSPACE_ROOT / "痛点攻坚实施包" / "batch_build_allocation.py").resolve()),
-        "--ledger",
-        str(ledger_path),
-        "--headcount",
-        str(headcount_path),
-        "--period",
-        period.strip(),
-        "--country",
-        country_val,
-        "--output-dir",
-        str(output_dir),
-    ]
-    if map_path:
-        cmd.extend(["--vendor-map", str(map_path)])
-
-    result = run_cmd(cmd, target_root, "pain1_batch_build_allocation", meta={"region": region_tag, "step": "center"})
+    maybe_sync_repo(target_root)
+    run_id = str(uuid.uuid4())
+    started = datetime.now()
     try:
-        summary_files = sorted(output_dir.glob("批量分摊结果_*.json"))
-        if summary_files:
-            summary = json.loads(summary_files[-1].read_text(encoding="utf-8"))
-            result["batch"] = summary
-            for p in summary.get("outputs") or []:
-                if p not in result.get("outputs", []):
-                    result.setdefault("outputs", []).append(p)
-    except Exception:
-        pass
-    return result
+        run_batch = _import_batch_allocation()
+        batch_result = run_batch(
+            ledger_path=ledger_path,
+            headcount_by_basis={"DEFAULT": headcount_path},
+            period=period.strip(),
+            country=country_val,
+            output_dir=output_dir,
+            vendor_map_path=map_path,
+        )
+        elapsed_ms = int((datetime.now() - started).total_seconds() * 1000)
+        result: dict[str, Any] = {
+            "ok": True,
+            "run_id": run_id,
+            "action": "pain1_batch_build_allocation",
+            "elapsed_ms": elapsed_ms,
+            "batch": batch_result,
+            "outputs": batch_result.get("outputs") or [],
+            "stdout_tail": [
+                f"vendors={batch_result.get('vendor_count', 0)} skipped={batch_result.get('skipped_count', 0)}",
+                f"scanned={((batch_result.get('stats') or {}).get('lines_scanned'))}",
+            ],
+        }
+        if meta:
+            result.update(meta)
+        jobs = load_jobs()
+        jobs.append(result)
+        save_jobs(jobs[-100:])
+        return result
+    except Exception as exc:
+        elapsed_ms = int((datetime.now() - started).total_seconds() * 1000)
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/pain/check-centers")
