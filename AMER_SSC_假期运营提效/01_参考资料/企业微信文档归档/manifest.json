@@ -1,0 +1,60 @@
+{
+  "archived_at": "2026-06-18",
+  "repository": "https://github.com/225010030-stack/amer-fpp-a",
+  "note": "主文档源链接与已发现嵌套链接。完整 xlsx/docx 请运行 05_脚本/export_weixin_docs.py（需企业微信已登录）。",
+  "seed_documents": [
+    {
+      "id": "hrssc_operation_issue_proposal",
+      "title": "HRSSC Operation Issue & Proposal",
+      "type": "doc",
+      "url": "https://doc.weixin.qq.com/doc/w3_AdAAHQbZAP8SGIXTMOSIaTouR7cfn?scode=AJEAIQdfAAoCEIm00y",
+      "local_files": ["01_HRSSC_Operation_Issue_and_Proposal/目录与摘要.txt"]
+    },
+    {
+      "id": "prepayroll_quality_log",
+      "title": "Pre-Payroll Quality Improvement Log (PSSC+HRSSC meeting)",
+      "type": "sheet",
+      "url": "https://doc.weixin.qq.com/sheet/e3_AQwAOwZHAP4b6OX8D2bQV0d6N3N06?scode=AJEAIQdfAAode0xkV4",
+      "sheets": ["Schedule", "2026 Logs", "2026 Summary", "2025 Logs", "2025 Summary"],
+      "local_files": ["02_PrePayroll_Quality_Improvement_Log/README.md"]
+    },
+    {
+      "id": "hrssc_benefits_payroll_2026",
+      "title": "海外HRSSC福利&并薪运营梳理-2026",
+      "type": "sheet",
+      "url": "https://doc.weixin.qq.com/sheet/e3_ATgA9gYhADkCNDEQQVQaMQAuGzqbz?scode=AJEAIQdfAAoHZK3Lxd",
+      "sheets": [
+        "HRSSC全球福利运营承接清单",
+        "3-HRSSC运营服务人力汇总",
+        "2026 福利运营",
+        "人力盘点"
+      ],
+      "local_files": [
+        "03_海外HRSSC福利并薪运营梳理_2026/HRSSC_假期与Prepayroll_运营清单摘录.md",
+        "03_海外HRSSC福利并薪运营梳理_2026/HRSSC_福利并薪_AI方案_PDF要点.md"
+      ]
+    }
+  ],
+  "linked_documents": [
+    {
+      "title": "HRSSC C&B Request Tracking Form",
+      "type": "sheet",
+      "url": "https://doc.weixin.qq.com/sheet/e3_ATgA9gYhADkCNUHhFCB4YSV0VdlIp?scode=AJEAIQdfAAo6sRfhUYATgA9gYhADk",
+      "linked_from": "hrssc_benefits_payroll_2026",
+      "local_files": ["04_HRSSC_CB_Request_Tracking_Form/README.md"]
+    }
+  ],
+  "embedded_links_without_url": [
+    {"title": "Dependent Report 优化", "linked_from": "hrssc_operation_issue_proposal"},
+    {"title": "[HRSSC] APAC & EMEA Benefit Matrix", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "US Payroll Preparation SOP - Leave Part", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "4.2.1 Pre-Payroll Checklist (by PSSC)", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "APAC Leave Calculation Rules", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "[HRSSC] Singapore Pre-Payroll Guide", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "Malaysia Prepayroll Instruction", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "[HRSSC] New Zealand Pre-Payroll Guide", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "Japan Operations Manual_Pre-payroll Input&Checklist", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "海外福利管理R&R框架", "linked_from": "hrssc_benefits_payroll_2026"},
+    {"title": "Overseas Employee Benefit Summary海外福利总览", "linked_from": "hrssc_benefits_payroll_2026"}
+  ]
+}

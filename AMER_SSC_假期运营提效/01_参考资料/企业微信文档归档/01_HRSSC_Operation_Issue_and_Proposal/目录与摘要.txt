@@ -1,0 +1,30 @@
+HRSSC Operation Issue & Proposal
+源链接: https://doc.weixin.qq.com/doc/w3_AdAAHQbZAP8SGIXTMOSIaTouR7cfn?scode=AJEAIQdfAAoCEIm00y
+归档时间: 2026-06-18
+字数: 约 8990 字（企业微信文档统计）
+
+=== 目录 ===
+Malaysia Hubs HRSSC Operation Issue & Proposal
+1. Onboarding supporting documents : 入职文件上线的文档优化方案
+2. Offboarding process 离职运营优化方案
+3. 国籍信息和政府证件相关 - Citizenship related with Gov IDs
+4. 婚姻状态 - Marital Status
+5. 家属信息报表 - Dependent Report
+6. 员工住家地址
+7. Pre-payroll 提交社保
+8. 工资发放账户设定 - Payment Elections
+9. 休假记录 - Absence Records / Report
+10. Leave encashment computation
+11. 休假兑现计算 - Leave encashment computation
+11. Proposal: Enhancement for APAC Onboarding Batch 1 ID Verification Process
+12. APAC Onboarding Enhancement: Batch 1 & 2 Mandatory Tasks
+13. Indonesia Employement Contract
+14. Workday VoE Enhancement
+15. Australia – Superannuation Fund Form
+
+=== 已知嵌套链接 ===
+- Dependent Report 优化（文档第 5 节内嵌）
+
+=== 说明 ===
+完整正文需从企业微信导出 Word 或使用 export_weixin_docs.py 脚本。
+本文档为浏览器可读部分的目录与结构摘要。
