@@ -751,6 +751,7 @@
           <details class="advanced-prefs" style="margin-top:14px;">
             <summary data-i18n="extractConfigSummary">管理员 · Knot 识图智能体配置（2.1）</summary>
             <div class="desc" style="margin:8px 0;" data-i18n="extractConfigHint">可在 Knot 另建第二个 Agent（仅识图），Client 工具提供 HTTP 入口；把 URL 填到下方。与 Anna 主 Agent 分离，Chat 可不接。</div>
+            <div class="desc" style="margin:8px 0;padding:8px 10px;background:#f0f7ff;border-radius:6px;font-size:12px;line-height:1.5;" data-i18n="extractConfigRoles">分工：① 工作区终端 = git pull + start_web.sh（Anna 与网页共用，无 Vision 专用终端）② Anna 主 Agent = Chat/脚本 ③ 本处 Webhook = Knot 里「Invoice OCR」的 API URL，不是 Anna。</div>
             <div class="form-grid-labeled">
               <div class="form-field">
                 <label><input type="checkbox" id="usKnotVisionEnabled" /> 启用 Knot 识图</label>
@@ -1133,6 +1134,7 @@
           <div id="sgExtractResult" class="muted"></div>
           <details class="advanced-prefs" style="margin-top:14px;">
             <summary data-i18n="extractConfigSummary">Knot 识图配置</summary>
+            <div class="desc" style="margin:8px 0;padding:8px 10px;background:#f0f7ff;border-radius:6px;font-size:12px;line-height:1.5;" data-i18n="extractConfigRoles">分工：终端只一个（amer-fpp-a）；Anna=Chat；本处 URL=Vision Agent API，不是 Anna。</div>
             <div class="form-field"><label><input type="checkbox" id="sgKnotVisionEnabled" /> 启用</label></div>
             <div class="form-field"><input id="sgKnotVisionUrl" type="url" placeholder="Webhook URL" style="width:100%;" /></div>
             <button type="button" class="btn-secondary" onclick="saveInvoiceExtractSettings('sg')">保存</button>
@@ -3161,7 +3163,7 @@
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || res.statusText);
         renderInvoiceExtractBox(prefix, data);
-        renderLinks(`${prefix}Links`, data.outputs || []);
+        showLinks(data, `${prefix}Links`);
         document.getElementById(`${prefix}Result`).textContent = JSON.stringify(data, null, 2);
         markStepDone(region, "invoice");
       } catch (e) {
@@ -3353,6 +3355,7 @@
         btnInvoiceExtract: "识图抽取",
         extractConfigSummary: "管理员 · Knot 识图智能体配置",
         extractConfigHint: "可在 Knot 另建第二个 Agent 专做识图；填 Webhook URL。与 Anna 分离，Chat 可不接。",
+        extractConfigRoles: "分工：① 工作区终端 = git pull + start_web.sh（Anna 与网页共用，无 Vision 专用终端）② Anna 主 Agent = Chat/脚本 ③ 本处 Webhook = Knot 里「Invoice OCR」的 API URL，不是 Anna。",
         btnSaveExtractConfig: "保存识图配置",
         legacyDocHealth: "旧：CSV 字段健康检查",
         descOutputV2: "分摊完成后生成提单文本；人工 FPP 提单后回填单号。",
@@ -3516,6 +3519,7 @@
         btnInvoiceExtract: "Extract",
         extractConfigSummary: "Admin · Knot vision agent",
         extractConfigHint: "Optional 2nd Knot agent for vision; paste webhook URL.",
+        extractConfigRoles: "Roles: ① Workspace terminal = git pull + start_web.sh (shared; no Vision-only terminal) ② Anna = Chat/scripts ③ Webhook here = Invoice OCR API URL, not Anna.",
         btnSaveExtractConfig: "Save config",
         legacyDocHealth: "Legacy CSV health check",
         descOutputV2: "Generate submission blocks after allocation.",
