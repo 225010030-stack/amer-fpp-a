@@ -1,0 +1,19 @@
+/* extracted from index.html | style #2 | attrs: (none) */
+([\s\S]*?)<\/style>/);
+    var css = cssM ? cssM[1].replace(/position:fixed/g,'position:absolute') : '';
+    // slide active 的内容：到下一个 <div class="slide" 或到 deck 结束
+    var sIdx = fullHtml.indexOf('<div class="slide active');
+    var sStart = fullHtml.indexOf('>', sIdx) + 1;
+    // 从 sStart 开始，找到对应的 </div>
+    var depth = 1, pos = sStart;
+    while(depth > 0 && pos < fullHtml.length){
+      var op = fullHtml.indexOf('<div', pos);
+      var cl = fullHtml.indexOf('</div>', pos);
+      if(cl < 0) break;
+      if(op >= 0 && op < cl){ depth++; pos = op + 4; }
+      else { depth--; pos = cl + 6; }
+    }
+    var slideHTML = fullHtml.substring(sStart, pos - 6);
+    // 构建缩略图 HTML（无脚本、无交互、纯预览）
+    var thumb = '<div style="width:1280px;height:720px;overflow:hidden;pointer-events:none">'
+      + '<style>' + css + '.slide{pointer-events:none !important;}
