@@ -1,0 +1,57 @@
+<html xmlns:w="urn:schemas-microsoft-com:office:word">
+<head><meta charset="utf-8"/><title>AMER FPP · 明日会议参考</title>
+<style>
+body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 11pt; line-height: 1.5; }
+h1 { font-size: 16pt; color: #1e40af; }
+h2 { font-size: 12pt; margin-top: 16px; }
+table { border-collapse: collapse; width: 100%; font-size: 10pt; margin: 8px 0; }
+th, td { border: 1px solid #ccc; padding: 5px 8px; }
+th { background: #f5f5f5; }
+.box { background: #f8fafc; padding: 8px 10px; margin: 8px 0; border-left: 3px solid #2563eb; }
+.line { border-bottom: 1px dotted #999; height: 28px; margin: 6px 0; }
+</style>
+</head>
+<body>
+
+<h1>AMER FPP + ai · 明日会议参考（同事版）</h1>
+<p>约 12 分钟：讲痛点 → 看界面 → Live 演示 US → 收反馈</p>
+
+<h2>链接</h2>
+<div class="box">
+<strong>网页：</strong> https://pb0hulu9-18081h-devc.preview.with.woa.com/upload-docs.html<br/>
+<strong>Chat：</strong> https://knot.woa.com/chat?web_key=05b6ce9207b64b89ad64794a34a36368&amp;close=0<br/>
+打开网页先点 <strong>健康检查</strong>，选 <strong>US</strong> 或 <strong>CAN</strong>（不能混用）。
+</div>
+
+<h2>四个痛点 → 网页哪里点</h2>
+<table>
+<tr><th>痛点</th><th>网页位置</th></tr>
+<tr><td>① 分摊</td><td>成本中心预检 → 自动分摊</td></tr>
+<tr><td>② 提单文本</td><td>文档产出 → 生成提单文本</td></tr>
+<tr><td>③ 成本中心失效</td><td>成本中心预检 → 检查成本中心</td></tr>
+<tr><td>④ 台账</td><td>台账回填 → 台账自动更新</td></tr>
+</table>
+<p>顺序建议：文档产出 → 成本中心预检 → 台账回填</p>
+
+<h2>演示会跑什么（US · 202605）</h2>
+<ol>
+<li>健康检查 → 选 US</li>
+<li>文档产出：上传提单预填表 → 生成提单文本</li>
+<li>成本中心：分摊（Anthem / 145411.03）→ 检查成本中心</li>
+<li>台账：上传预填表 + 台账 → 自动更新</li>
+</ol>
+<p>CAN 流程相同，文件换 CAN 版，不 live 演示。</p>
+
+<h2>网页 vs Chat</h2>
+<p><strong>网页</strong>适合上传多文件、月结日常；<strong>Chat</strong>适合 SOP 引导和单步指令。底层同一套脚本。</p>
+
+<h2>请帮忙反馈（现场或会后）</h2>
+<p><strong>1.</strong> 步骤顺序是否符合你们习惯？</p><div class="line"></div>
+<p><strong>2.</strong> 表单还缺什么字段？</p><div class="line"></div>
+<p><strong>3.</strong> 更想用网页还是 Chat？</p><div class="line"></div>
+<p><strong>4.</strong> 下一阶段「假期 ADP/WD 比对」是否也需要？最痛在哪？</p><div class="line"></div>
+<p><strong>5.</strong> 其他意见：</p><div class="line"></div>
+
+<p style="color:#666;font-size:9pt;margin-top:20px;">2026-06 · 会后发操作手册 PDF</p>
+</body>
+</html>

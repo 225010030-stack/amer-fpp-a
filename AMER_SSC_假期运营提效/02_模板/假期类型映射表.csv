@@ -1,0 +1,7 @@
+country,wd_absence_type,adp_time_off_type,pay_impact,prepayroll_code,ratio_pay,block_if_unapproved,notes
+US,Unpaid Leave,UNPAID,deduct,UNPAID_DAYS,0,YES,WD 审批后进 Prepayroll
+US,STD,FMLA_STD,partial,STD_40PCT,0.4,YES,美国 40% 比例付薪示例
+US,Vacation,PTO,paid,PTO_PAID,1,NO,余额需 ADP/WD 一致
+US,Sick,SICK,paid,SICK_PAID,1,NO,
+CAN,Vacation,VACATION,paid,VAC_PAID,1,NO,
+CAN,Unpaid,UNPAID,deduct,UNPAID_DAYS,0,YES,

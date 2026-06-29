@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>AMER FPP AI工作台与组织建设说明</title>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #111; line-height: 1.65; font-size: 11pt; }
+h1 { font-size: 22pt; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 15pt; color: #1e40af; margin-top: 22px; page-break-after: avoid; }
+h3 { font-size: 12.5pt; margin-top: 16px; page-break-after: avoid; }
+p, li { margin: 6px 0; }
+ul { padding-left: 20px; }
+blockquote { border-left: 4px solid #93c5fd; background: #f8fbff; padding: 8px 12px; color: #334155; margin: 10px 0; }
+pre { background: #f5f5f5; border: 1px solid #e5e5e5; padding: 10px; border-radius: 6px; font-size: 9pt; white-space: pre-wrap; word-break: break-all; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 9.5pt; }
+th, td { border: 1px solid #dbeafe; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #eff6ff; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 20px 0; }
+.meta { color: #64748b; font-size: 10pt; margin-bottom: 16px; }
+.footer-note { margin-top: 24px; font-size: 9pt; color: #94a3b8; text-align: center; }
+</style>
+</head>
+<body>
+<h1>AMER FPP · AI 工作台与组织建设说明</h1>
+<blockquote>适用对象：流程负责人、操作者、Knot 配置人、内网部署维护人</blockquote>
+<blockquote>版本：v1.0 · 2026-06</blockquote>
+<blockquote>关联仓库：<code>amer-fpp-a</code>（工蜂） · 工作区 <code>/data/workspace/amer-fpp-a</code></blockquote>
+<hr/>
+<h2>目录</h2>
+<p>1. <a href="#1-文档目的">文档目的</a></p>
+<p>2. <a href="#2-整体架构三层分工">整体架构：三层分工</a></p>
+<p>3. <a href="#3-ai-native-四阶段演进">AI Native 四阶段演进</a></p>
+<p>4. <a href="#4-核心概念mcpskill插件">核心概念：MCP、Skill、插件</a></p>
+<p>5. <a href="#5-网页工作台-vs-knot-智能体">网页工作台 vs Knot 智能体</a></p>
+<p>6. <a href="#6-按钮接什么不是每个按钮都嵌-agent">按钮接什么：不是每个按钮都嵌 Agent</a></p>
+<p>7. <a href="#7-校招团队逻辑对照学习参考">校招团队逻辑对照（学习参考）</a></p>
+<p>8. <a href="#8-本项目的文件与入口">本项目的文件与入口</a></p>
+<p>9. <a href="#9-开发与迭代方式">开发与迭代方式</a></p>
+<p>10. <a href="#10-部署工蜂服务器knot-各干什么">部署：工蜂、服务器、Knot 各干什么</a></p>
+<p>11. <a href="#11-启动与调用清单">启动与调用清单</a></p>
+<p>12. <a href="#12-安全与合规要点">安全与合规要点</a></p>
+<p>13. <a href="#13-路线图建议">路线图建议</a></p>
+<p>14. <a href="#14-附录常见问题">附录：常见问题</a></p>
+<hr/>
+<h2>1. 文档目的</h2>
+<p>本文档说明 AMER FPP 团队如何理解并建设「AI 工作台 + Knot 智能体 + 脚本后端」体系，并参考校招中心 AI Native 组织建设思路，明确：</p>
+<ul><li><strong>网页操作台</strong>与 <strong>Knot 对话</strong>各自职责；</li></ul>
+<ul><li><strong>工蜂</strong>存代码、<strong>服务器</strong>跑服务、<strong>Knot 平台</strong>跑智能体；</li></ul>
+<ul><li>如何从 <strong>网页 Demo</strong> 起步，逐步叠加 API、数据底座与 Agent 能力。</li></ul>
+<hr/>
+<h2>2. 整体架构：三层分工</h2>
+<pre>┌─────────────────────────────────────────────────────────────┐
+│  展示与入口层（给人用）                                        │
+│  portal / upload-docs / chat-menu  │  Knot 智能体（Anna）      │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ HTTP / 链接
+┌───────────────────────────▼─────────────────────────────────┐
+│  执行与 API 层                                               │
+│  bot-gateway (FastAPI :18082)  →  knot-chat/*.sh  →  Python  │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ 文件落盘
+┌───────────────────────────▼─────────────────────────────────┐
+│  数据与上下文层（当前 + 未来）                                 │
+│  上传输出/*.csv、*.md  │  jobs.json  │  未来：FPP MCP         │
+└─────────────────────────────────────────────────────────────┘</pre>
+<table>
+<tr><th>层级</th><th>组件</th><th>作用</th></tr>
+<tr><td>展示层</td><td>`web-tool/*.html`</td><td>按钮、表单、看板；**不是聊天 AI**</td></tr>
+<tr><td>展示层</td><td>Knot 智能体</td><td>对话引导、复杂问答、Client 执行命令</td></tr>
+<tr><td>执行层</td><td>`bot-gateway`</td><td>白名单 action、跑脚本、记录 jobs</td></tr>
+<tr><td>执行层</td><td>`knot-chat/*.sh`</td><td>确定性计算（分摊、预检、台账等）</td></tr>
+<tr><td>数据层</td><td>输出目录 + jobs</td><td>审计、复盘；未来结构化 MCP</td></tr>
+</table>
+<p><strong>原则</strong>：分摊、校验、台账等 <strong>计算由脚本完成</strong>；模型只做 <strong>路由、说明、综合问答</strong>（且须遵守防幻觉规则）。</p>
+<hr/>
+<h2>3. AI Native 四阶段演进</h2>
+<p>参考校招中心路径，FPP/SSC 可对标如下：</p>
+<table>
+<tr><th>阶段</th><th>名称</th><th>校招做法</th><th>FPP 现状</th><th>下一步</th></tr>
+<tr><td>1</td><td>工具辅助</td><td>WorkBuddy 个人提效</td><td>Knot + Skills + 脚本</td><td>已具备</td></tr>
+<tr><td>2</td><td>信息聚合</td><td>校招 AI 操作台</td><td>`upload-docs.html`、主菜单</td><td>加 portal 门户页</td></tr>
+<tr><td>3</td><td>上下文打通</td><td>三类 MCP</td><td>文件落盘、jobs.json</td><td>建 FPP 过程 MCP</td></tr>
+<tr><td>4</td><td>智能协同</td><td>Multi-Agent</td><td>US/CAN 分流程</td><td>专科 Agent + 关账晨会</td></tr>
+</table>
+<p><strong>AI Native ≠ 用了 AI</strong>：是把工作流、数据、知识沉淀为 <strong>组织级上下文</strong>，让 AI 持续参与预检、提醒与归因，人做最终判断。</p>
+<p><strong>组织自检 8 指标</strong>（节选）：决策是否有证据链、工作流是否 Pipeline 化、上下文是否可串链、AI 建议是否可追踪、数据是否有字段与权限、异常响应是否及时、是否形成固定人机协作、经验是否跨月复用。</p>
+<hr/>
+<h2>4. 核心概念：MCP、Skill、插件</h2>
+<h3>4.1 一句话区分</h3>
+<table>
+<tr><th>概念</th><th>本质</th><th>类比</th></tr>
+<tr><td>**Skill**</td><td>教 AI **何时、怎么做** 的 SOP</td><td>岗位操作手册</td></tr>
+<tr><td>**MCP**</td><td>给 AI **读写业务数据** 的标准接口</td><td>带权限的业务 API</td></tr>
+<tr><td>**插件**</td><td>给某软件 **加能力** 的扩展（因平台而异）</td><td>外挂模块</td></tr>
+</table>
+<pre>Skill   → 进 AI 的「脑子」（Prompt / 指令层）
+MCP     → 进 AI 的「手和数据」（工具 / 资源层）
+插件    → 进「宿主软件」（IDE / Knot / 浏览器等）</pre>
+<h3>4.2 Skill（本项目已用）</h3>
+<ul><li>位置：<code>knot-agent/skill-upload-packs/</code>、<code>Knot_Skill上传包_直接用/</code></li></ul>
+<ul><li>内容：<code>SKILL.md</code> 定义 Purpose、触发词、Execute 命令、Guardrails</li></ul>
+<ul><li><strong>注意</strong>：Skill 只做说明与路由；实际计算必须由 Client「执行命令」跑 <code>knot-chat/*.sh</code></li></ul>
+<h3>4.3 MCP（下一阶段）</h3>
+<ul><li><strong>不是</strong>新报表系统，而是在现有系统/文件之上，沉淀 <strong>可被 AI 读写</strong> 的业务上下文</li></ul>
+<ul><li>FPP 对标三类：</li></ul>
+<ul><li>核心系统 MCP（FPP/Payroll/主数据，若公司已有）</li></ul>
+<ul><li>流程 MCP（提单、审批）</li></ul>
+<ul><li><strong>FPP 过程上下文 MCP</strong>（预检报告、分摊结果、台账变更、SOP 变更）</li></ul>
+<ul><li><strong>长上下文</strong>在此指 <strong>组织记忆完整度</strong>（同一账单月可串全链路证据），不是单纯拉长模型窗口</li></ul>
+<h3>4.4 插件</h3>
+<ul><li>Cursor/VS Code 扩展：给人用的 IDE 能力，多数不接 FPP 业务库</li></ul>
+<ul><li>Knot Client 工具：HTTP 调 <code>bot-gateway</code>，形态类似 MCP Tool</li></ul>
+<ul><li>MCP Server 可以「以插件形式」装进 Cursor，但不是所有插件都是 MCP</li></ul>
+<hr/>
+<h2>5. 网页工作台 vs Knot 智能体</h2>
+<table>
+<tr><th>维度</th><th>网页工作台</th><th>Knot 智能体</th></tr>
+<tr><td>交互</td><td>点按钮、填表单、看板</td><td>打字对话</td></tr>
+<tr><td>是否用 LLM</td><td>否（主流程）</td><td>是（路由+说明）</td></tr>
+<tr><td>典型场景</td><td>上传 CSV、分摊、批量预检</td><td>主菜单、环节引导、演示</td></tr>
+<tr><td>入口文件</td><td>`upload-docs.html`、`chat-menu.html`</td><td>Knot chat 链接</td></tr>
+<tr><td>Token 消耗</td><td>低</td><td>相对较高</td></tr>
+</table>
+<p><strong>结论</strong>：按钮式工作台 <strong>不是</strong> 把 Knot 改成按钮；是 <strong>自建 HTML + bot-gateway</strong>，Knot 作为 <strong>辅助入口</strong>（如 AI 工具 Tab 里的链接）。</p>
+<p>校招对照：</p>
+<ul><li>校招 AI 操作台 ≈ 我们的 <code>upload-docs</code> + 未来 <code>portal.html</code></li></ul>
+<ul><li>WorkBuddy ≈ 我们的 Knot 智能体</li></ul>
+<hr/>
+<h2>6. 按钮接什么：不是每个按钮都嵌 Agent</h2>
+<table>
+<tr><th>按钮类型</th><th>背后接什么</th><th>是否 Agent</th></tr>
+<tr><td>自动分摊 / 目录预检 / 提单文本</td><td>`bot-gateway` → 脚本</td><td>否</td></tr>
+<tr><td>刷新看板 / KPI</td><td>`/api/dashboard/ops`</td><td>否</td></tr>
+<tr><td>模板 / 操作手册</td><td>静态链接</td><td>否</td></tr>
+<tr><td>打开 Anna / Knot</td><td>Knot 对话页</td><td>是</td></tr>
+<tr><td>iframe 嵌入 Knot（可选）</td><td>辅助问答</td><td>是</td></tr>
+</table>
+<p><strong>记忆口诀</strong>：网页按钮主链走 <strong>脚本/API</strong>；Agent 是 <strong>单独入口</strong> 或少数「智能问答」按钮；子智能体是 <strong>后台多角色协同</strong>，不是 UI 上一按钮一 Bot。</p>
+<hr/>
+<h2>7. 校招团队逻辑对照（学习参考）</h2>
+<h3>7.1 三层</h3>
+<p>1. <strong>网页操作台</strong>：聚合重点事项、看板、工具入口（给人看、给人点）</p>
+<p>2. <strong>三类 MCP 并列</strong>：系统事实 / 线索经营 / 过程知识（给 AI 读写）</p>
+<p>3. <strong>Multi-Agent（规划）</strong>：总指挥 + 高校/猎聘/品牌/竞对 + 合成；共用同一 MCP 上下文</p>
+<h3>7.2 接入顺序</h3>
+<p>先跑通样板闭环：<strong>会议纪要 → MCP 入库 → 页面/WorkBuddy 消费 → 展示</strong></p>
+<p>再扩展数据源，最后 Multi-Agent（AI 晨会等）。</p>
+<h3>7.3 与 FPP 映射</h3>
+<table>
+<tr><th>校招</th><th>FPP</th></tr>
+<tr><td>重点项目 / 青云计划</td><td>账单月 + US/CAN + 供应商</td></tr>
+<tr><td>数据看板 KPI</td><td>`/api/dashboard/ops`</td></tr>
+<tr><td>WorkBuddy</td><td>Knot + PROMPT.md</td></tr>
+<tr><td>校招数据 MCP</td><td>未来 FPP 过程 MCP</td></tr>
+<tr><td>专科 Agent</td><td>US/CAN/预检/合规等角色（阶段 4）</td></tr>
+</table>
+<hr/>
+<h2>8. 本项目的文件与入口</h2>
+<h3>8.1 目录结构（工蜂仓库）</h3>
+<pre>amer-fpp-a/
+├── web-tool/              # 网页前端
+│   ├── upload-docs.html   # 完整操作台（US/CAN 分页）
+│   ├── chat-menu.html     # 点击菜单式（调 API，非 LLM）
+│   ├── index.html         # MVP 三按钮
+│   └── README.md
+├── bot-gateway/           # FastAPI 后端
+│   └── main.py
+├── knot-chat/             # 脚本入口
+│   ├── start_web.sh
+│   ├── restart_web.sh
+│   └── run_agent.sh
+├── knot-agent/            # Knot Prompt / Skills / 开场白
+└── docker-compose.yml     # 内网部署</pre>
+<h3>8.2 端口</h3>
+<table>
+<tr><th>服务</th><th>端口</th><th>说明</th></tr>
+<tr><td>静态网页</td><td>18081</td><td>`python -m http.server --directory web-tool`</td></tr>
+<tr><td>API 后端</td><td>18082</td><td>uvicorn `bot-gateway/main.py`</td></tr>
+</table>
+<h3>8.3 主要 API</h3>
+<table>
+<tr><th>接口</th><th>用途</th></tr>
+<tr><td>`GET /api/health`</td><td>健康检查</td></tr>
+<tr><td>`GET /api/menu`</td><td>chat-menu 菜单数据</td></tr>
+<tr><td>`POST /api/run`</td><td>触发白名单 action</td></tr>
+<tr><td>`POST /api/pain/*`</td><td>分摊、预检、台账</td></tr>
+<tr><td>`GET /api/jobs`</td><td>执行历史</td></tr>
+<tr><td>`GET /api/dashboard/ops`</td><td>运营看板指标</td></tr>
+<tr><td>`POST /api/webhook/knotbot`</td><td>Knot Client 工具（可选）</td></tr>
+</table>
+<hr/>
+<h2>9. 开发与迭代方式</h2>
+<h3>9.1 推荐节奏</h3>
+<p><strong>不是</strong>一开始在服务器上写代码，而是：</p>
+<pre>本机 Cursor 开发 → push 工蜂 → 服务器 pull/部署 → 同事访问内网 URL</pre>
+<h3>9.2 Demo 优先、再加功能</h3>
+<table>
+<tr><th>阶段</th><th>内容</th></tr>
+<tr><td>A</td><td>门户 Tab + 布局 Demo（可先静态数据）</td></tr>
+<tr><td>B</td><td>按钮接 `/api/run`、`/api/pain/*`</td></tr>
+<tr><td>C</td><td>看板接 `/api/dashboard/ops`、jobs 历史</td></tr>
+<tr><td>D</td><td>MCP 入库、Knot 深链、Multi-Agent</td></tr>
+</table>
+<p>设计工具建议：<strong>Figma / 即时设计</strong> 画原型 → <strong>Cursor 改 HTML</strong> → 需要图表时加 <strong>ECharts</strong>。MVP 不必上 React 全家桶。</p>
+<hr/>
+<h2>10. 部署：工蜂、服务器、Knot 各干什么</h2>
+<table>
+<tr><th>组件</th><th>位置</th><th>是否自动运行</th></tr>
+<tr><td>源代码</td><td>工蜂 Git</td><td>否，仅存储</td></tr>
+<tr><td>Knot 智能体</td><td>Knot 平台</td><td>是（发指令即执行）</td></tr>
+<tr><td>网页 + bot-gateway</td><td>**内网 Linux / Docker**</td><td>需启动</td></tr>
+</table>
+<h3>10.1 三种使用方式</h3>
+<p><strong>方式 A · 仅 Knot 对话</strong></p>
+<p>无需启动网页；工作区同步代码 + 配置 Prompt + Client「执行命令」。</p>
+<p><strong>方式 B · 本机/工作区试用网页</strong></p>
+<pre>bash knot-chat/start_web.sh
+# 或
+bash knot-chat/restart_web.sh</pre>
+<p>浏览器打开 <code>http://127.0.0.1:18081/upload-docs.html</code>（通常仅本机可访问）。</p>
+<p><strong>方式 C · 团队内网正式环境（推荐）</strong></p>
+<pre>git clone &lt;工蜂仓库&gt;
+cd amer-fpp-a
+docker compose up -d</pre>
+<p>前加 Nginx / 公司网关与 SSO，域名示例：<code>https://fpp-tools.xxx.woa.com</code></p>
+<h3>10.2 服务器规格建议</h3>
+<table>
+<tr><th>场景</th><th>建议</th></tr>
+<tr><td>小团队试点</td><td>内网 Linux 2 核 4G，Docker Compose</td></tr>
+<tr><td>正式使用</td><td>4 核 8G，HTTPS + 日志备份</td></tr>
+<tr><td>不建议</td><td>工蜂 Pages 仅托管 HTML（无法跑 Python 后端）</td></tr>
+</table>
+<hr/>
+<h2>11. 启动与调用清单</h2>
+<h3>11.1 维护人：启动服务</h3>
+<pre>cd /path/to/amer-fpp-a
+bash knot-chat/restart_web.sh
+curl http://127.0.0.1:18082/api/health</pre>
+<h3>11.2 操作者：网页</h3>
+<p>1. 打开内网 URL（或本机 <code>upload-docs.html</code>）</p>
+<p>2. 配置 Backend URL（如 <code>http://127.0.0.1:18082</code>）与 Root Path（如 <code>/data/workspace/amer-fpp-a</code>）</p>
+<p>3. 选 US/CAN → 对应分页 → 上传 CSV / 填参数 → 点执行</p>
+<p>4. 在结果区查看 DONE 路径并下载文件</p>
+<h3>11.3 操作者：Knot</h3>
+<p>1. 打开 Knot chat 链接</p>
+<p>2. 发 <code>主菜单</code> → 选 <code>US</code> 或 <code>CAN</code></p>
+<p>3. 按环节 1–7 或 <code>US演示</code> 操作</p>
+<p>4. 回复须含 <code>DONE:</code> 文件路径（禁止编造）</p>
+<h3>11.4 调用链路</h3>
+<pre>网页按钮 → fetch(:18082/api/...) → bot-gateway → knot-chat/*.sh → 上传输出/
+
+Knot 对话 → Client 执行命令 → bash run_agent.sh ... → 同上</pre>
+<hr/>
+<h2>12. 安全与合规要点</h2>
+<ul><li>只允许 <strong>白名单 action</strong>，禁止任意命令执行</li></ul>
+<ul><li>文件下载限制在工作区根目录内</li></ul>
+<ul><li>敏感列脱敏（见 <code>bot-gateway</code> 中 <code>SENSITIVE_COLUMNS</code>）</li></ul>
+<ul><li>每次执行记录 jobs（操作人、时间、输出）</li></ul>
+<ul><li>生产数据优先用 <strong>只读/脱敏副本</strong> 接 MCP；AI 提交/过账须 <strong>人工确认</strong></li></ul>
+<ul><li>内网部署，不对公网裸奔</li></ul>
+<hr/>
+<h2>13. 路线图建议</h2>
+<table>
+<tr><th>优先级</th><th>事项</th></tr>
+<tr><td>P0</td><td>稳定 Knot + 主菜单 + 四痛点脚本</td></tr>
+<tr><td>P0</td><td>内网 Docker 部署 upload-docs</td></tr>
+<tr><td>P1</td><td>新增 portal.html 门户（对标校招操作台）</td></tr>
+<tr><td>P1</td><td>看板 ECharts + `/api/dashboard/ops`</td></tr>
+<tr><td>P2</td><td>预检/分摊结果结构化入库（FPP MCP v0）</td></tr>
+<tr><td>P3</td><td>专科 Agent 分工 + 关账前汇总</td></tr>
+</table>
+<hr/>
+<h2>14. 附录：常见问题</h2>
+<p><strong>Q：代码 push 到工蜂后，网页为什么打不开？</strong></p>
+<p>A：工蜂不跑服务，需在服务器执行 <code>docker compose up</code> 或 <code>start_web.sh</code>。</p>
+<p><strong>Q：Knot 能跑，网页按钮失败？</strong></p>
+<p>A：检查 18082 是否启动；页面 Backend URL 是否指向正确主机。</p>
+<p><strong>Q：每个按钮都要做一个 Knot Bot 吗？</strong></p>
+<p>A：不需要。按钮走 API；Knot 负责对话与引导。</p>
+<p><strong>Q：MCP 和 Skill 要先做哪个？</strong></p>
+<p>A：先 Skill + 脚本 + 网页闭环；MCP 在需要「跨月检索、证据链问答」时再加。</p>
+<p><strong>Q：校招的子智能体我们现在要做吗？</strong></p>
+<p>A：阶段 4。当前优先 portal + 看板 + jobs/MCP 样板源。</p>
+<hr/>
+<h2>修订记录</h2>
+<table>
+<tr><th>版本</th><th>日期</th><th>说明</th></tr>
+<tr><td>v1.0</td><td>2026-06</td><td>首版：架构、部署、校招对照、FPP 入口</td></tr>
+</table>
+<hr/>
+<p>*AMER FPP + ai · SSC AI 组织建设说明 · 内部使用*</p>
+<p class="footer-note">AMER FPP + ai · 内部说明文档 · 生成自 build_pdf.py</p>
+</body>
+</html>

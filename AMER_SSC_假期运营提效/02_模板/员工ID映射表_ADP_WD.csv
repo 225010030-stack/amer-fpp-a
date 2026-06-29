@@ -1,0 +1,4 @@
+country,wd_employee_id,adp_associate_id,employee_name,status,effective_from,notes
+US,10001234,ADP-987654,Jane Doe,active,2024-01-01,示例行-请替换
+US,10005678,ADP-123456,John Smith,active,2023-06-15,示例行-请替换
+CAN,20001111,ADP-CA-001,Alice Lee,active,2025-01-01,示例行-请替换

@@ -1,0 +1,9 @@
+country,report_or_task,data_source,frequency,owner,automation_level_L0-L4,current_pain,hours_per_cycle,target_level,next_action,priority
+US,ADP vs WD Time Off 比对,ADP export + WD Absence export,bi-weekly,SSC Leave Ops,L1,人工逐行比对,bi-weekly 4-8h,L3,PoC run_leave_reconcile.py,P0
+US,Prepayroll unpaid leave 输入,WD approved + 规则表,monthly,SSC Prepayroll,L2,手工整理 Excel,monthly 2-4h,L3,标准 CSV 模板签字,P0
+US,STD/FMLA 特殊假期核算,材料+ADP+WD,multi,Benefits+SSC,L1,多系统重复录入,case by case,L2,材料抽取 AI 辅助,P1
+CA,ADP vs WD 比对,ADP + WD,bi-weekly,SSC Leave Ops,L1,同 US,bi-weekly 2-4h,L3,复用 US 脚本+CA 映射,P0
+SG,假期余额与入离调转,WD + 手工,rehire/term,L1,余额不同步,high,L3,事件触发重算,P1
+NZ,实习生合同变更假期,WD,on change,L1,合同不一致,medium,L2,规则引擎,P2
+NL,终止假期余额结算,WD export,term,L1,终止后需二次导出,medium,L3,终止 flag 预检,P1
+JP,加班调休计算,手工+部分系统,monthly,L0,仍人工计算,high,L2,单独子流程,P2
