@@ -219,30 +219,15 @@
       padding: 1px 8px;
       font-weight: 700;
     }
-    .sub-rail {
+    .sub-rail.console-tabs {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      padding: 10px 0 8px;
+      margin-top: 0;
       border-top: 1px solid #e2e8f0;
       border-bottom: 1px solid #e2e8f0;
-      padding: 10px 6px 8px;
-      margin-top: 6px;
       background: #fff;
-    }
-    .sub-rail-item {
-      border: 1px solid #dbeafe;
-      background: #f8fbff;
-      color: #1e3a8a;
-      border-radius: 999px;
-      font-size: 12px;
-      padding: 5px 11px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .sub-rail-item.active {
-      background: #2563eb;
-      color: #fff;
-      border-color: #2563eb;
     }
     .console-main-inner {
       max-width: 1400px;
@@ -374,7 +359,7 @@
             <span class="panel-rail-badge">P5</span><span class="panel-rail-label"><span class="panel-rail-cn">系统管理</span><span class="panel-rail-en">Administration</span></span>
           </button>
         </nav>
-        <nav class="sub-rail" id="globalSubRail"></nav>
+        <nav class="sub-rail console-tabs" id="globalSubRail"></nav>
       </div>
     </div>
 
@@ -686,7 +671,7 @@
       const items = defs[panel] || [];
       const activeId = activeMap[panel] || "";
       rail.innerHTML = items
-        .map((item) => `<button class="sub-rail-item ${item.id === activeId ? "active" : ""}" data-subrail-id="${esc(item.id)}">${esc(item.label)}</button>`)
+        .map((item) => `<button class="console-tab ${item.id === activeId ? "active" : ""}" data-subrail-id="${esc(item.id)}">${esc(item.label)}</button>`)
         .join("");
       rail.querySelectorAll("[data-subrail-id]").forEach((btn) => {
         const item = items.find((x) => x.id === btn.dataset.subrailId);
