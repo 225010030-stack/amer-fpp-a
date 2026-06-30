@@ -200,6 +200,41 @@
       word-break: break-all;
       text-decoration: none;
     }
+    .noioa-badge {
+      margin-left: 8px;
+      font-size: 10px;
+      color: #0369a1;
+      background: #e0f2fe;
+      border: 1px solid #7dd3fc;
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-weight: 700;
+    }
+    .sub-rail {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 6px 8px;
+      margin-top: 6px;
+      background: #fff;
+    }
+    .sub-rail-item {
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      color: #1e3a8a;
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 5px 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .sub-rail-item.active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
   </style>
 </head>
 <body class="ssc-console-body">
@@ -212,7 +247,20 @@
       <span class="lite-top-note">公开共享版 · 无 IOA / 无登录</span>
       <div class="console-header-spacer"></div>
       <div class="console-header-meta">
+        <span class="status" id="healthChip">在线 · clone</span>
+        <label class="user-pick-dev">
+          <span>操作人</span>
+          <select id="currentUser" aria-label="选择操作人"></select>
+        </label>
+        <div class="user-badge guest" id="userBadge" hidden>
+          <div class="user-meta">
+            <span class="user-name" id="userDisplayName">—</span>
+            <span class="user-sub" id="userStaffMeta">—</span>
+          </div>
+          <span class="user-role-tag" id="userRoleTag">—</span>
+        </div>
         <span class="topbar-date" id="topbarDate"></span>
+        <button class="btn btn-sm" id="btnRefresh" type="button">刷新</button>
       </div>
     </header>
 
@@ -236,6 +284,7 @@
             <span class="panel-rail-badge">P5</span><span class="panel-rail-label"><span class="panel-rail-cn">系统管理</span><span class="panel-rail-en">Administration</span></span>
           </button>
         </nav>
+        <nav class="sub-rail" id="globalSubRail"></nav>
       </div>
     </div>
 
@@ -247,6 +296,7 @@
               <div class="console-page-head-main">
                 <h2 id="mainTitle">区域工具 · 共享版</h2>
                 <span class="ssc-page-sub">NO AUTH MODE · Pure Frontend</span>
+                <span class="noioa-badge">NO IOA</span>
               </div>
             </div>
 
@@ -370,6 +420,7 @@
 
   <script>
     const STORE_KEY = "ssc_no_ioa_clone_v2";
+    const CURRENT_USER_KEY = "ssc_no_ioa_current_user";
     const KNOT_LINKS = {
       knotMainAgent: "https://knot.woa.com/agent/detail/68b6acdd12f740e981a6a08a728b35d1",
       knotQaAgent: "https://knot.woa.com/agent/detail/60b0769077ac446d95ebddd21ac85cfa",
@@ -422,6 +473,7 @@
     let selectedProjectId = null;
     let editingIssueId = null;
     let meetingParsePreview = null;
+    let currentUserId = localStorage.getItem(CURRENT_USER_KEY) || "";
 
     function nowText() {
       const d = new Date();
@@ -479,6 +531,7 @@
       document.querySelectorAll(".panel-section").forEach((sec) => sec.classList.remove("active"));
       document.getElementById(`panel${panel.charAt(0).toUpperCase()}${panel.slice(1)}`).classList.add("active");
       document.getElementById("mainTitle").textContent = titleMap[panel] || "共享版";
+      renderGlobalSubRail(panel);
     }
 
     function switchSubView(targetId, rootSelector) {
@@ -489,11 +542,109 @@
       root.querySelectorAll(".sub-view").forEach((view) => {
         view.classList.toggle("active", view.id === targetId);
       });
+      const panel = document.querySelector("#mainPanelRail .panel-rail-btn.active")?.dataset.panel;
+      if (panel) renderGlobalSubRail(panel);
     }
 
     function switchToolView(targetId) {
       document.querySelectorAll(".tools-switch-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.target === targetId));
       document.querySelectorAll(".lite-view").forEach((v) => v.classList.toggle("active", v.id === targetId));
+      const panel = document.querySelector("#mainPanelRail .panel-rail-btn.active")?.dataset.panel;
+      if (panel) renderGlobalSubRail(panel);
+    }
+
+    function renderGlobalSubRail(panel) {
+      const rail = document.getElementById("globalSubRail");
+      if (!rail) return;
+      const defs = {
+        tools: [
+          { id: "usView", label: "美国工作区 · 分摊 / 提单", action: () => switchToolView("usView") },
+          { id: "caView", label: "加拿大工作区 · 分摊 / 提单", action: () => switchToolView("caView") },
+          { id: "sgView", label: "新加坡 · EE Listing", action: () => switchToolView("sgView") },
+        ],
+        knowledge: [
+          { id: "kb-shelves", label: "书架", action: () => switchSubView("kb-shelves", "#panelKnowledge") },
+          { id: "kb-ops", label: "运营清单", action: () => switchSubView("kb-ops", "#panelKnowledge") },
+          { id: "kb-qa", label: "知识问答 · Knot", action: () => switchSubView("kb-qa", "#panelKnowledge") },
+        ],
+        home: [
+          { id: "home-overview", label: "指挥总览", action: () => switchSubView("home-overview", "#panelHome") },
+          { id: "home-projects", label: "项目 KPI", action: () => switchSubView("home-projects", "#panelHome") },
+          { id: "home-collab", label: "协同态势", action: () => switchSubView("home-collab", "#panelHome") },
+          { id: "home-monitor", label: "监控信号", action: () => switchSubView("home-monitor", "#panelHome") },
+        ],
+        collab: [
+          { id: "collab-projects", label: "项目看板", action: () => switchSubView("collab-projects", "#panelCollab") },
+          { id: "collab-issues", label: "Issue", action: () => switchSubView("collab-issues", "#panelCollab") },
+          { id: "collab-meetings", label: "会议", action: () => switchSubView("collab-meetings", "#panelCollab") },
+        ],
+        system: [
+          { id: "sys-mgmt", label: "管理看板", action: () => switchSubView("sys-mgmt", "#panelSystem") },
+          { id: "sys-users", label: "用户管理", action: () => switchSubView("sys-users", "#panelSystem") },
+          { id: "sys-perm", label: "权限矩阵", action: () => switchSubView("sys-perm", "#panelSystem") },
+          { id: "sys-audit", label: "操作日志", action: () => switchSubView("sys-audit", "#panelSystem") },
+          { id: "sys-access", label: "权限申请", action: () => switchSubView("sys-access", "#panelSystem") },
+        ],
+      };
+      const activeMap = {
+        tools: document.querySelector(".lite-view.active")?.id || "usView",
+        knowledge: document.querySelector("#panelKnowledge .sub-view.active")?.id || "kb-shelves",
+        home: document.querySelector("#panelHome .sub-view.active")?.id || "home-overview",
+        collab: document.querySelector("#panelCollab .sub-view.active")?.id || "collab-projects",
+        system: document.querySelector("#panelSystem .sub-view.active")?.id || "sys-mgmt",
+      };
+      const items = defs[panel] || [];
+      const activeId = activeMap[panel] || "";
+      rail.innerHTML = items
+        .map((item) => `<button class="sub-rail-item ${item.id === activeId ? "active" : ""}" data-subrail-id="${esc(item.id)}">${esc(item.label)}</button>`)
+        .join("");
+      rail.querySelectorAll("[data-subrail-id]").forEach((btn) => {
+        const item = items.find((x) => x.id === btn.dataset.subrailId);
+        if (!item) return;
+        btn.onclick = () => {
+          item.action();
+          renderGlobalSubRail(panel);
+        };
+      });
+    }
+
+    function initHeaderControls() {
+      const sel = document.getElementById("currentUser");
+      if (!sel) return;
+      sel.innerHTML = `<option value="">请选择</option>` + state.users.map((u) => `<option value="${esc(u.id)}">${esc(u.name)}</option>`).join("");
+      if (currentUserId && state.users.some((u) => u.id === currentUserId)) {
+        sel.value = currentUserId;
+      }
+      const updateBadge = () => {
+        const badge = document.getElementById("userBadge");
+        const nameEl = document.getElementById("userDisplayName");
+        const metaEl = document.getElementById("userStaffMeta");
+        const roleEl = document.getElementById("userRoleTag");
+        const user = state.users.find((u) => u.id === sel.value);
+        if (!user) {
+          badge.hidden = true;
+          return;
+        }
+        badge.hidden = false;
+        nameEl.textContent = user.name;
+        metaEl.textContent = user.staffType;
+        roleEl.textContent = user.role;
+      };
+      sel.onchange = () => {
+        currentUserId = sel.value || "";
+        localStorage.setItem(CURRENT_USER_KEY, currentUserId);
+        updateBadge();
+      };
+      updateBadge();
+
+      const refreshBtn = document.getElementById("btnRefresh");
+      if (refreshBtn) {
+        refreshBtn.onclick = () => {
+          renderAll();
+          const panel = document.querySelector("#mainPanelRail .panel-rail-btn.active")?.dataset.panel || "tools";
+          renderGlobalSubRail(panel);
+        };
+      }
     }
 
     function renderHome() {
@@ -1064,6 +1215,7 @@
       renderKnowledge();
       renderCollab();
       renderSystem();
+      initHeaderControls();
     }
 
     function bindBaseEvents() {
@@ -1116,6 +1268,7 @@
     setInterval(() => { document.getElementById("topbarDate").textContent = nowText(); }, 60000);
     bindBaseEvents();
     renderAll();
+    renderGlobalSubRail("tools");
   </script>
 </body>
 </html>
