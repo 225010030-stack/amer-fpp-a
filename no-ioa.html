@@ -530,45 +530,97 @@
 
     function renderCollab() {
       document.getElementById("collab-projects").innerHTML = `
-        <div class="panel">
-          <div class="panel-head"><h3>项目看板</h3></div>
-          <div class="lite-form-row">
-            <input id="newProjName" placeholder="项目名称" />
-            <input id="newProjOwner" placeholder="负责人" />
-            <select id="newProjStatus"><option>进行中</option><option>待复核</option><option>完成</option></select>
-            <button class="btn btn-sm btn-primary" id="btnAddProject">新增项目</button>
+        <header class="admin-page-hero" style="margin-bottom:12px">
+          <div>
+            <h3 style="margin:0">项目看板</h3>
+            <p class="muted" style="margin:6px 0 0">卡片布局与原版一致，支持本地新增与状态管理</p>
+          </div>
+          <div class="issue-hero-actions">
+            <button class="btn btn-primary btn-sm" id="btnAddProject">新建项目</button>
             <button class="btn btn-sm" id="btnProjAskKnot">在 Knot 问项目进展</button>
           </div>
-          <div class="lite-list">${state.projects.map((p) => `<div class="lite-item"><strong>${esc(p.name)}</strong> · ${esc(p.owner)} · ${esc(p.status)} · ${esc(p.progress)}%</div>`).join("")}</div>
+        </header>
+        <div class="lite-form-row" style="margin-bottom:10px">
+          <input id="newProjName" placeholder="项目名称" />
+          <input id="newProjOwner" placeholder="负责人" />
+          <select id="newProjStatus"><option>进行中</option><option>待复核</option><option>完成</option></select>
+        </div>
+        <div class="project-stack">
+          ${state.projects.map((p) => `
+            <article class="panel">
+              <div class="panel-head">
+                <h3>${esc(p.name)}</h3>
+                <span class="badge">${esc(p.status)}</span>
+              </div>
+              <p class="muted">负责人：${esc(p.owner)} · 进度：${esc(p.progress)}%</p>
+            </article>
+          `).join("")}
         </div>`;
 
       document.getElementById("collab-issues").innerHTML = `
-        <div class="panel">
-          <div class="panel-head"><h3>Issue 跟踪</h3></div>
-          <div class="lite-form-row">
-            <input id="newIssueTitle" placeholder="Issue 标题" />
-            <select id="newIssueCountry"><option>US</option><option>CAN</option><option>SG</option></select>
-            <select id="newIssueSeverity"><option>high</option><option>medium</option><option>low</option></select>
-            <button class="btn btn-sm btn-primary" id="btnAddIssue">新增 Issue</button>
+        <header class="admin-page-hero" style="margin-bottom:12px">
+          <div>
+            <h3 style="margin:0">Issue 跟踪</h3>
+            <p class="muted" style="margin:6px 0 0">支持 open/review/closed 状态流转与本地留痕</p>
+          </div>
+          <div class="issue-hero-actions">
+            <button class="btn btn-primary btn-sm" id="btnAddIssue">新建 Issue</button>
             <button class="btn btn-sm" id="btnIssueAskKnot">在 Knot 问 Issue</button>
           </div>
-          <table class="lite-table" style="margin-top:10px">
-            <thead><tr><th>ID</th><th>标题</th><th>国家</th><th>严重度</th><th>状态</th></tr></thead>
-            <tbody>${state.issues.map((i) => `<tr><td>${esc(i.id)}</td><td>${esc(i.title)}</td><td>${esc(i.country)}</td><td>${esc(i.severity)}</td><td>${esc(i.status)}</td></tr>`).join("")}</tbody>
+        </header>
+        <div class="lite-form-row" style="margin-bottom:10px">
+          <input id="newIssueTitle" placeholder="Issue 标题" />
+          <select id="newIssueCountry"><option>US</option><option>CAN</option><option>SG</option></select>
+          <select id="newIssueSeverity"><option>high</option><option>medium</option><option>low</option></select>
+        </div>
+        <div class="panel" style="padding:0;overflow:hidden">
+          <table class="issue-table">
+            <thead><tr><th>严重度</th><th>国家</th><th>Issue</th><th>状态</th><th>Owner</th><th>动作</th></tr></thead>
+            <tbody>
+              ${state.issues.map((i) => `
+                <tr>
+                  <td><span class="tag">${esc(i.severity)}</span></td>
+                  <td>${esc(i.country)}</td>
+                  <td><strong>${esc(i.title)}</strong><div class="muted" style="font-size:11px">${esc(i.id)}</div></td>
+                  <td>${esc(i.status)}</td>
+                  <td>${esc(i.owner || "未指定")}</td>
+                  <td>
+                    <button class="btn btn-sm" data-issue-next="${esc(i.id)}">下一状态</button>
+                    <button class="btn btn-sm" data-issue-close="${esc(i.id)}">关闭</button>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
           </table>
         </div>`;
 
       document.getElementById("collab-meetings").innerHTML = `
-        <div class="panel">
-          <div class="panel-head"><h3>会议纪要</h3></div>
-          <div class="lite-form-row">
-            <input id="newMeetingTopic" placeholder="会议主题" />
-            <input id="newMeetingOwner" placeholder="主持人" />
-            <input id="newMeetingTodo" placeholder="待办事项" />
-            <button class="btn btn-sm btn-primary" id="btnAddMeeting">新增会议</button>
+        <header class="admin-page-hero meeting-hero" style="margin-bottom:12px">
+          <div>
+            <h3 style="margin:0">会议纪要与待办</h3>
+            <p class="muted" style="margin:6px 0 0">支持新增会议，并将待办一键转为 Issue</p>
+          </div>
+          <div class="issue-hero-actions">
+            <button class="btn btn-primary btn-sm" id="btnAddMeeting">新增会议</button>
             <button class="btn btn-sm" id="btnMeetingAskKnot">在 Knot 问会议待办</button>
           </div>
-          <div class="lite-list">${state.meetings.map((m) => `<div class="lite-item"><strong>${esc(m.topic)}</strong> · ${esc(m.owner)}<br/>待办：${esc(m.todo)} · 状态：${esc(m.status)}</div>`).join("")}</div>
+        </header>
+        <div class="lite-form-row" style="margin-bottom:10px">
+          <input id="newMeetingTopic" placeholder="会议主题" />
+          <input id="newMeetingOwner" placeholder="主持人" />
+          <input id="newMeetingTodo" placeholder="待办事项" />
+        </div>
+        <div class="lite-list">
+          ${state.meetings.map((m) => `
+            <div class="lite-item">
+              <strong>${esc(m.topic)}</strong> · ${esc(m.owner)} · <span class="tag">${esc(m.status)}</span>
+              <div style="margin-top:6px;font-size:12px">待办：${esc(m.todo)}</div>
+              <div class="lite-actions">
+                <button class="btn btn-sm" data-meeting-toggle="${esc(m.id)}">切换状态</button>
+                <button class="btn btn-sm" data-meeting-to-issue="${esc(m.id)}">转 Issue</button>
+              </div>
+            </div>
+          `).join("")}
         </div>`;
 
       document.getElementById("btnAddProject").onclick = () => {
@@ -595,6 +647,56 @@
         saveState();
         renderAll();
       };
+      document.querySelectorAll("[data-issue-next]").forEach((btn) => {
+        btn.onclick = () => {
+          const item = state.issues.find((i) => i.id === btn.dataset.issueNext);
+          if (!item) return;
+          const flow = ["open", "review", "closed"];
+          const idx = flow.indexOf(item.status);
+          item.status = flow[(idx + 1) % flow.length];
+          addAudit("issue.status", `${item.id} -> ${item.status}`);
+          saveState();
+          renderAll();
+        };
+      });
+      document.querySelectorAll("[data-issue-close]").forEach((btn) => {
+        btn.onclick = () => {
+          const item = state.issues.find((i) => i.id === btn.dataset.issueClose);
+          if (!item) return;
+          item.status = "closed";
+          addAudit("issue.close", item.id);
+          saveState();
+          renderAll();
+        };
+      });
+      document.querySelectorAll("[data-meeting-toggle]").forEach((btn) => {
+        btn.onclick = () => {
+          const m = state.meetings.find((x) => x.id === btn.dataset.meetingToggle);
+          if (!m) return;
+          m.status = m.status === "完成" ? "进行中" : "完成";
+          addAudit("meeting.status", `${m.id} -> ${m.status}`);
+          saveState();
+          renderAll();
+        };
+      });
+      document.querySelectorAll("[data-meeting-to-issue]").forEach((btn) => {
+        btn.onclick = () => {
+          const m = state.meetings.find((x) => x.id === btn.dataset.meetingToIssue);
+          if (!m) return;
+          const title = `会议待办:${m.topic}`;
+          state.issues.unshift({
+            id: `I-${String(Date.now()).slice(-4)}`,
+            title,
+            country: "Global",
+            severity: "medium",
+            status: "open",
+            owner: m.owner || "未指定"
+          });
+          addAudit("meeting.todo_to_issue", m.id);
+          saveState();
+          renderAll();
+        };
+      });
       document.getElementById("btnProjAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
       document.getElementById("btnIssueAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
       document.getElementById("btnMeetingAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
