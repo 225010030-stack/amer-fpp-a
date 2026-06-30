@@ -75,8 +75,87 @@
       color: #fff;
       border-color: #2563eb;
     }
+    .panel-section { display: none; }
+    .panel-section.active { display: block; }
     .lite-view { display: none; }
     .lite-view.active { display: block; }
+    .lite-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .lite-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .lite-card h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+    .lite-card p {
+      margin: 0;
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .lite-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin: 0 0 12px;
+    }
+    .lite-kpi {
+      background: #fff;
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .lite-kpi .k {
+      font-size: 11px;
+      color: #64748b;
+    }
+    .lite-kpi .v {
+      margin-top: 4px;
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 18px;
+    }
+    .lite-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .lite-table th, .lite-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      text-align: left;
+    }
+    .lite-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+    }
+    .lite-pill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .lite-pill {
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      background: #fff;
+      color: #334155;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body class="ssc-console-body">
@@ -96,35 +175,35 @@
     <div class="console-rails">
       <div class="panel-rail-wrap">
         <span class="panel-rail-eyebrow">功能板块 · PANELS · 5</span>
-        <nav class="panel-rail" role="tablist" aria-label="功能板块">
-          <button type="button" class="panel-rail-btn active" aria-selected="true">
+        <nav class="panel-rail" role="tablist" aria-label="功能板块" id="mainPanelRail">
+          <button type="button" class="panel-rail-btn active" aria-selected="true" data-panel="tools">
             <span class="panel-rail-badge">P1</span>
             <span class="panel-rail-label">
               <span class="panel-rail-cn">区域工具</span>
               <span class="panel-rail-en">Regional Tools</span>
             </span>
           </button>
-          <button type="button" class="panel-rail-btn" disabled>
+          <button type="button" class="panel-rail-btn" data-panel="knowledge">
             <span class="panel-rail-badge">P2</span>
             <span class="panel-rail-label">
               <span class="panel-rail-cn">知识库</span>
               <span class="panel-rail-en">Knowledge</span>
             </span>
           </button>
-          <button type="button" class="panel-rail-btn" disabled>
+          <button type="button" class="panel-rail-btn" data-panel="home">
             <span class="panel-rail-label">
               <span class="panel-rail-cn">全局总览</span>
               <span class="panel-rail-en">Overview</span>
             </span>
           </button>
-          <button type="button" class="panel-rail-btn" disabled>
+          <button type="button" class="panel-rail-btn" data-panel="collab">
             <span class="panel-rail-badge">P4</span>
             <span class="panel-rail-label">
               <span class="panel-rail-cn">协同</span>
               <span class="panel-rail-en">Collaboration</span>
             </span>
           </button>
-          <button type="button" class="panel-rail-btn" disabled>
+          <button type="button" class="panel-rail-btn" data-panel="system">
             <span class="panel-rail-badge">P5</span>
             <span class="panel-rail-label">
               <span class="panel-rail-cn">系统管理</span>
@@ -141,7 +220,7 @@
           <div class="console-main-inner">
             <div class="console-page-head">
               <div class="console-page-head-main">
-                <h2>区域工具 · 共享版</h2>
+                <h2 id="mainTitle">区域工具 · 共享版</h2>
                 <span class="ssc-page-sub">NO AUTH MODE · Pure Frontend</span>
               </div>
               <span class="lite-only-badge">当前无需 iOA / 无账号限制</span>
@@ -152,13 +231,14 @@
               为避免同事受权限影响，已移除 iOA 登录和内网 API 依赖；自动化动作改为前端示例处理（可上传文件、可导出演示结果）。
             </div>
 
-            <div class="tools-switch-tabs">
-              <button type="button" class="tools-switch-tab active" data-target="usView">美国工作区 · 分摊 / 提单</button>
-              <button type="button" class="tools-switch-tab" data-target="caView">加拿大工作区 · 分摊 / 提单</button>
-              <button type="button" class="tools-switch-tab" data-target="sgView">新加坡 · EE Listing</button>
-            </div>
+            <div id="panelTools" class="panel-section active">
+              <div class="tools-switch-tabs">
+                <button type="button" class="tools-switch-tab active" data-target="usView">美国工作区 · 分摊 / 提单</button>
+                <button type="button" class="tools-switch-tab" data-target="caView">加拿大工作区 · 分摊 / 提单</button>
+                <button type="button" class="tools-switch-tab" data-target="sgView">新加坡 · EE Listing</button>
+              </div>
 
-            <div id="usView" class="lite-view active">
+              <div id="usView" class="lite-view active">
               <div class="tools-region-banner americas">
                 <h3>美国工作区 · 分摊 / 提单</h3>
                 <p>美洲业务下美国工作区，处理分摊与提单流程。</p>
@@ -281,6 +361,120 @@
                 </div>
               </div>
             </div>
+            </div>
+
+            <div id="panelHome" class="panel-section">
+              <div class="lite-kpis">
+                <div class="lite-kpi"><div class="k">在跟项目</div><div class="v">6</div></div>
+                <div class="lite-kpi"><div class="k">平均进度</div><div class="v">68%</div></div>
+                <div class="lite-kpi"><div class="k">开放 Issue</div><div class="v">14</div></div>
+                <div class="lite-kpi"><div class="k">监控告警</div><div class="v">3</div></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head"><h3>AI · 指挥摘要</h3></div>
+                <p class="muted">本周重点：US/CAN 月结分摊进入复核窗口；SG EE Listing 完成预清洗，待确认异常 4 条。</p>
+              </div>
+              <div class="lite-grid">
+                <div class="lite-card">
+                  <h4>团队小黑板</h4>
+                  <p>可发布跨部门消息并跟踪“收到”确认。共享版展示样例消息，不绑定账号权限。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>监控预警</h4>
+                  <p>聚合 Issue 超期、会议待办超期、里程碑超期。共享版展示结构与说明。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>操作热力图</h4>
+                  <p>展示近 14 天上传、脚本、知识同步行为趋势。共享版提供静态示例。</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="panelKnowledge" class="panel-section">
+              <div class="lite-pill-row">
+                <span class="lite-pill">Knowledge Library</span>
+                <span class="lite-pill">Bookshelves</span>
+                <span class="lite-pill">Q&A Ready</span>
+              </div>
+              <div class="lite-grid">
+                <div class="lite-card">
+                  <h4>书架分布</h4>
+                  <p>按 SOP、运营清单、项目文档、会议纪要分层展示；共享版保留布局，不依赖内网索引服务。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>知识问答入口</h4>
+                  <p>可跳转 `qa.html` 进行问答（若后端可用）；在纯静态场景可作为知识导航页使用。</p>
+                </div>
+              </div>
+              <div class="panel" style="margin-top:12px">
+                <div class="panel-head"><h3>运营清单（示例）</h3></div>
+                <table class="lite-table">
+                  <thead><tr><th>编号</th><th>主题</th><th>状态</th><th>更新时间</th></tr></thead>
+                  <tbody>
+                    <tr><td>OPS-01</td><td>US 月结分摊 SOP</td><td>已入库</td><td>2026-06-30</td></tr>
+                    <tr><td>OPS-02</td><td>CAN 提单检查清单</td><td>待复核</td><td>2026-06-28</td></tr>
+                    <tr><td>OPS-03</td><td>SG EE Listing 异常规则</td><td>已更新</td><td>2026-06-29</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="panelCollab" class="panel-section">
+              <div class="lite-grid">
+                <div class="lite-card">
+                  <h4>项目看板</h4>
+                  <p>保留“项目卡片 → 详情页”信息结构；共享版使用静态样例，便于对外演示流程。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>Issue 跟踪</h4>
+                  <p>支持严重度、状态、国家维度查看；共享版展示典型字段和状态流转。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>会议纪要</h4>
+                  <p>覆盖会议列表、待办提取、关联项目动作。共享版可用作培训演示页面。</p>
+                </div>
+              </div>
+              <div class="panel" style="margin-top:12px">
+                <div class="panel-head"><h3>协同任务样例</h3></div>
+                <table class="lite-table">
+                  <thead><tr><th>类型</th><th>标题</th><th>负责人</th><th>状态</th></tr></thead>
+                  <tbody>
+                    <tr><td>项目</td><td>SSC workbench v1 rollout</td><td>Anna</td><td>进行中</td></tr>
+                    <tr><td>Issue</td><td>成本中心失效导致提单失败</td><td>COE Ops</td><td>待复核</td></tr>
+                    <tr><td>会议待办</td><td>更新 CAN 月结检查表</td><td>PMO</td><td>待完成</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="panelSystem" class="panel-section">
+              <div class="lite-grid">
+                <div class="lite-card">
+                  <h4>管理看板</h4>
+                  <p>展示 8 项运营指标、路线图、固定 Pipeline。共享版保留结构与关键说明。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>用户与权限矩阵</h4>
+                  <p>原版支持正式人员/实习生权限分层。共享版只展示矩阵样式和字段，不含真实权限数据。</p>
+                </div>
+                <div class="lite-card">
+                  <h4>操作日志与权限申请</h4>
+                  <p>保留日志台账与申请流程说明，便于演示治理流程。</p>
+                </div>
+              </div>
+              <div class="panel" style="margin-top:12px">
+                <div class="panel-head"><h3>系统管理样例矩阵</h3></div>
+                <table class="lite-table">
+                  <thead><tr><th>模块</th><th>Viewer</th><th>Operator</th><th>Admin</th></tr></thead>
+                  <tbody>
+                    <tr><td>P1 区域工具</td><td>R</td><td>W</td><td>SA</td></tr>
+                    <tr><td>P2 知识库</td><td>R</td><td>W</td><td>SA</td></tr>
+                    <tr><td>P4 协同</td><td>R</td><td>W</td><td>SA</td></tr>
+                    <tr><td>P5 系统管理</td><td>-</td><td>R</td><td>SA</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -322,6 +516,30 @@
     function bindTabEvents() {
       document.querySelectorAll(".tools-switch-tab").forEach((btn) => {
         btn.addEventListener("click", () => switchLiteView(btn.dataset.target));
+      });
+    }
+
+    function bindMainPanels() {
+      const titleMap = {
+        tools: "区域工具 · 共享版",
+        home: "全局总览 · 共享版",
+        knowledge: "知识库 · 共享版",
+        collab: "协同 · 共享版",
+        system: "系统管理 · 共享版",
+      };
+      document.querySelectorAll("#mainPanelRail .panel-rail-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const panel = btn.dataset.panel;
+          document.querySelectorAll("#mainPanelRail .panel-rail-btn").forEach((n) => {
+            n.classList.toggle("active", n === btn);
+          });
+          document.querySelectorAll(".panel-section").forEach((sec) => {
+            sec.classList.remove("active");
+          });
+          const target = document.getElementById(`panel${panel.charAt(0).toUpperCase()}${panel.slice(1)}`);
+          if (target) target.classList.add("active");
+          document.getElementById("mainTitle").textContent = titleMap[panel] || "共享版";
+        });
       });
     }
 
@@ -404,6 +622,7 @@
     }
 
     document.getElementById("topbarDate").textContent = nowText();
+    bindMainPanels();
     bindTabEvents();
     bindUS();
     bindCA();
