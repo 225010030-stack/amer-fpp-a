@@ -509,8 +509,33 @@
     };
     const defaultState = {
       projects: [
-        { id: "P-001", name: "SSC workbench rollout", owner: "Anna", status: "进行中", progress: 72 },
-        { id: "P-002", name: "CAN monthly allocation", owner: "COE Ops", status: "待复核", progress: 58 }
+        {
+          id: "P-001",
+          name: "SSC workbench rollout",
+          owner: "Anna",
+          status: "进行中",
+          progress: 72,
+          summary: "统一工作台入口、协同链路、Knot 集成演示。",
+          due: "2026-07-15",
+          milestones: [
+            { title: "UI 骨架还原", due: "2026-07-02", done: true },
+            { title: "协同模块恢复", due: "2026-07-08", done: false }
+          ],
+          reminders: ["对齐演示脚本", "确认发布链接"]
+        },
+        {
+          id: "P-002",
+          name: "CAN monthly allocation",
+          owner: "COE Ops",
+          status: "待复核",
+          progress: 58,
+          summary: "加拿大月结分摊流程梳理与提单模板映射。",
+          due: "2026-07-11",
+          milestones: [
+            { title: "模板字段确认", due: "2026-07-04", done: false }
+          ],
+          reminders: ["补充供应商映射", "复核成本中心"]
+        }
       ],
       issues: [
         { id: "I-001", title: "成本中心失效", country: "US", severity: "high", status: "open", owner: "Finance Ops" },
@@ -859,7 +884,7 @@
         <header class="admin-page-hero" style="margin-bottom:12px">
           <div>
             <h3 style="margin:0">项目看板</h3>
-            <p class="muted" style="margin:6px 0 0">卡片布局与原版一致，支持详情查看</p>
+            <p class="muted" style="margin:6px 0 0">第一批功能恢复：筛选、详情编辑、里程碑、提醒（本地持久化）</p>
           </div>
           <div class="issue-hero-actions">
             <button class="btn btn-primary btn-sm" id="btnAddProject">新建项目</button>
@@ -867,33 +892,55 @@
           </div>
         </header>
         <div class="lite-form-row" style="margin-bottom:10px">
+          <input id="projectSearch" placeholder="搜索项目名称 / 负责人" />
+          <select id="projectStatusFilter">
+            <option value="">全部状态</option>
+            <option value="进行中">进行中</option>
+            <option value="待复核">待复核</option>
+            <option value="完成">完成</option>
+          </select>
           <input id="newProjName" placeholder="项目名称" />
           <input id="newProjOwner" placeholder="负责人" />
           <select id="newProjStatus"><option>进行中</option><option>待复核</option><option>完成</option></select>
         </div>
-        <div class="project-stack" style="margin-top:10px">
-          ${state.projects.map((p) => `
-            <article class="panel">
-              <div class="panel-head">
-                <h3>${esc(p.name)}</h3>
-                <span class="badge">${esc(p.status)}</span>
-              </div>
-              <p class="muted">负责人：${esc(p.owner)} · 进度：${esc(p.progress)}%</p>
-              <div class="lite-actions">
-                <button class="btn btn-sm" data-proj-open="${esc(p.id)}">查看详情</button>
-              </div>
-            </article>
-          `).join("")}
-        </div>
+        <div class="project-stack" id="projectCardsHost" style="margin-top:10px"></div>
         ${selectedProject ? `
           <div class="panel project-detail-wrap" style="margin-top:12px">
             <div class="panel-head"><h3>项目详情 · ${esc(selectedProject.name)}</h3></div>
-            <p class="muted">项目ID：${esc(selectedProject.id)} · 负责人：${esc(selectedProject.owner)}</p>
             <div class="lite-form-row">
-              <label style="font-size:12px;color:#64748b">进度</label>
-              <input id="projProgressInput" type="number" min="0" max="100" value="${esc(selectedProject.progress)}" style="width:120px" />
-              <button class="btn btn-sm btn-primary" id="btnSaveProjProgress">保存进度</button>
+              <input id="projNameInput" value="${esc(selectedProject.name)}" />
+              <input id="projOwnerInput" value="${esc(selectedProject.owner)}" />
+              <select id="projStatusInput">
+                <option value="进行中" ${selectedProject.status === "进行中" ? "selected" : ""}>进行中</option>
+                <option value="待复核" ${selectedProject.status === "待复核" ? "selected" : ""}>待复核</option>
+                <option value="完成" ${selectedProject.status === "完成" ? "selected" : ""}>完成</option>
+              </select>
+              <input id="projDueInput" type="date" value="${esc(selectedProject.due || "")}" />
+              <input id="projProgressInput" type="number" min="0" max="100" value="${esc(selectedProject.progress)}" style="width:110px" />
+            </div>
+            <div class="lite-form-row">
+              <textarea id="projSummaryInput" rows="2" style="min-width:360px" placeholder="项目摘要">${esc(selectedProject.summary || "")}</textarea>
+            </div>
+            <div class="lite-actions">
+              <button class="btn btn-sm btn-primary" id="btnSaveProjectDetail">保存详情</button>
               <button class="btn btn-sm" id="btnCloseProjDetail">收起</button>
+            </div>
+            <div class="panel" style="margin-top:10px">
+              <div class="panel-head"><h3>里程碑</h3></div>
+              <div class="lite-list" id="projectMilestoneList"></div>
+              <div class="lite-form-row">
+                <input id="newMilestoneTitle" placeholder="里程碑名称" />
+                <input id="newMilestoneDue" type="date" />
+                <button class="btn btn-sm" id="btnAddMilestone">新增里程碑</button>
+              </div>
+            </div>
+            <div class="panel" style="margin-top:10px">
+              <div class="panel-head"><h3>提醒事项</h3></div>
+              <div class="lite-list" id="projectReminderList"></div>
+              <div class="lite-form-row">
+                <input id="newReminderText" placeholder="新增提醒..." style="min-width:260px" />
+                <button class="btn btn-sm" id="btnAddReminder">新增提醒</button>
+              </div>
             </div>
           </div>` : ""}
       `;
@@ -1007,24 +1054,70 @@
       document.getElementById("btnAddProject").onclick = () => {
         const name = document.getElementById("newProjName").value.trim();
         if (!name) return;
-        state.projects.unshift({ id: `P-${String(Date.now()).slice(-4)}`, name, owner: document.getElementById("newProjOwner").value.trim() || "未指定", status: document.getElementById("newProjStatus").value, progress: 0 });
+        state.projects.unshift({
+          id: `P-${String(Date.now()).slice(-4)}`,
+          name,
+          owner: document.getElementById("newProjOwner").value.trim() || "未指定",
+          status: document.getElementById("newProjStatus").value,
+          progress: 0,
+          summary: "",
+          due: "",
+          milestones: [],
+          reminders: []
+        });
         addAudit("project.create", name);
         saveState();
         renderAll();
       };
-      document.querySelectorAll("[data-proj-open]").forEach((btn) => {
-        btn.onclick = () => {
-          selectedProjectId = btn.dataset.projOpen;
-          renderAll();
-        };
-      });
+      const renderProjectCards = () => {
+        const q = (document.getElementById("projectSearch")?.value || "").trim().toLowerCase();
+        const f = document.getElementById("projectStatusFilter")?.value || "";
+        const list = state.projects.filter((p) => {
+          const hit = !q || p.name.toLowerCase().includes(q) || String(p.owner || "").toLowerCase().includes(q);
+          const stat = !f || p.status === f;
+          return hit && stat;
+        });
+        const host = document.getElementById("projectCardsHost");
+        if (!host) return;
+        host.innerHTML = list.map((p) => `
+          <article class="panel">
+            <div class="panel-head">
+              <h3>${esc(p.name)}</h3>
+              <span class="badge">${esc(p.status)}</span>
+            </div>
+            <p class="muted">负责人：${esc(p.owner)} · 进度：${esc(p.progress)}% · 截止：${esc(p.due || "未设定")}</p>
+            <p class="muted">${esc(p.summary || "暂无摘要")}</p>
+            <div class="lite-actions">
+              <button class="btn btn-sm" data-proj-open="${esc(p.id)}">查看详情</button>
+            </div>
+          </article>
+        `).join("");
+        host.querySelectorAll("[data-proj-open]").forEach((btn) => {
+          btn.onclick = () => {
+            selectedProjectId = btn.dataset.projOpen;
+            renderAll();
+          };
+        });
+      };
+      renderProjectCards();
+      const searchInput = document.getElementById("projectSearch");
+      const statusFilter = document.getElementById("projectStatusFilter");
+      if (searchInput) searchInput.oninput = renderProjectCards;
+      if (statusFilter) statusFilter.onchange = renderProjectCards;
+
       if (selectedProject) {
-        const btnSaveProgress = document.getElementById("btnSaveProjProgress");
-        if (btnSaveProgress) {
-          btnSaveProgress.onclick = () => {
-            const v = Number(document.getElementById("projProgressInput").value || 0);
-            selectedProject.progress = Math.max(0, Math.min(100, v));
-            addAudit("project.progress", `${selectedProject.id} -> ${selectedProject.progress}`);
+        if (!Array.isArray(selectedProject.milestones)) selectedProject.milestones = [];
+        if (!Array.isArray(selectedProject.reminders)) selectedProject.reminders = [];
+        const btnSaveDetail = document.getElementById("btnSaveProjectDetail");
+        if (btnSaveDetail) {
+          btnSaveDetail.onclick = () => {
+            selectedProject.name = document.getElementById("projNameInput").value.trim() || selectedProject.name;
+            selectedProject.owner = document.getElementById("projOwnerInput").value.trim() || "未指定";
+            selectedProject.status = document.getElementById("projStatusInput").value;
+            selectedProject.due = document.getElementById("projDueInput").value || "";
+            selectedProject.progress = Math.max(0, Math.min(100, Number(document.getElementById("projProgressInput").value || 0)));
+            selectedProject.summary = document.getElementById("projSummaryInput").value.trim();
+            addAudit("project.detail_update", selectedProject.id);
             saveState();
             renderAll();
           };
@@ -1033,6 +1126,83 @@
         if (btnCloseDetail) {
           btnCloseDetail.onclick = () => {
             selectedProjectId = null;
+            renderAll();
+          };
+        }
+        const milestoneHost = document.getElementById("projectMilestoneList");
+        if (milestoneHost) {
+          milestoneHost.innerHTML = (selectedProject.milestones || []).map((m, idx) => `
+            <div class="lite-item">
+              <strong>${esc(m.title)}</strong> · ${esc(m.due || "未设定")}
+              <span class="tag">${m.done ? "done" : "open"}</span>
+              <div class="lite-actions">
+                <button class="btn btn-sm" data-milestone-toggle="${idx}">切换状态</button>
+                <button class="btn btn-sm" data-milestone-del="${idx}">删除</button>
+              </div>
+            </div>
+          `).join("") || `<div class="muted">暂无里程碑</div>`;
+          milestoneHost.querySelectorAll("[data-milestone-toggle]").forEach((btn) => {
+            btn.onclick = () => {
+              const i = Number(btn.dataset.milestoneToggle);
+              const m = selectedProject.milestones[i];
+              if (!m) return;
+              m.done = !m.done;
+              addAudit("project.milestone_toggle", `${selectedProject.id}#${i}`);
+              saveState();
+              renderAll();
+            };
+          });
+          milestoneHost.querySelectorAll("[data-milestone-del]").forEach((btn) => {
+            btn.onclick = () => {
+              const i = Number(btn.dataset.milestoneDel);
+              selectedProject.milestones.splice(i, 1);
+              addAudit("project.milestone_delete", `${selectedProject.id}#${i}`);
+              saveState();
+              renderAll();
+            };
+          });
+        }
+        const btnAddMilestone = document.getElementById("btnAddMilestone");
+        if (btnAddMilestone) {
+          btnAddMilestone.onclick = () => {
+            const title = document.getElementById("newMilestoneTitle").value.trim();
+            if (!title) return;
+            selectedProject.milestones.push({
+              title,
+              due: document.getElementById("newMilestoneDue").value || "",
+              done: false
+            });
+            addAudit("project.milestone_add", selectedProject.id);
+            saveState();
+            renderAll();
+          };
+        }
+        const reminderHost = document.getElementById("projectReminderList");
+        if (reminderHost) {
+          reminderHost.innerHTML = (selectedProject.reminders || []).map((r, idx) => `
+            <div class="lite-item">
+              ${esc(r)}
+              <div class="lite-actions"><button class="btn btn-sm" data-reminder-del="${idx}">删除</button></div>
+            </div>
+          `).join("") || `<div class="muted">暂无提醒</div>`;
+          reminderHost.querySelectorAll("[data-reminder-del]").forEach((btn) => {
+            btn.onclick = () => {
+              const i = Number(btn.dataset.reminderDel);
+              selectedProject.reminders.splice(i, 1);
+              addAudit("project.reminder_delete", `${selectedProject.id}#${i}`);
+              saveState();
+              renderAll();
+            };
+          });
+        }
+        const btnAddReminder = document.getElementById("btnAddReminder");
+        if (btnAddReminder) {
+          btnAddReminder.onclick = () => {
+            const text = document.getElementById("newReminderText").value.trim();
+            if (!text) return;
+            selectedProject.reminders.push(text);
+            addAudit("project.reminder_add", selectedProject.id);
+            saveState();
             renderAll();
           };
         }
