@@ -8,16 +8,6 @@
   <link rel="stylesheet" href="console-shell.css?v=8a0f394" />
   <link rel="stylesheet" href="app.css?v=8a0f394" />
   <style>
-    .lite-top-note {
-      margin-left: 10px;
-      font-size: 12px;
-      color: #0f766e;
-      background: #ecfeff;
-      border: 1px solid #99f6e4;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-weight: 600;
-    }
     .lite-warning {
       margin: 10px 0 14px;
       padding: 12px 14px;
@@ -287,18 +277,6 @@
     .issue-table tr:hover td {
       background: #fbfdff;
     }
-    .console-header-meta .status {
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      background: #ecfdf5;
-      color: #047857;
-      border: 1px solid #86efac;
-    }
-    .console-header-meta .btn.btn-sm {
-      border-radius: 10px;
-    }
     @media (max-width: 980px) {
       .console-main-inner {
         padding-top: 8px;
@@ -319,24 +297,7 @@
         <span class="console-brand-cn">SSC 薪酬福利工作台</span>
         <span class="console-brand-en">Compensation & Benefits · P1</span>
       </div>
-      <span class="lite-top-note">公开共享版 · 无 IOA / 无登录</span>
       <div class="console-header-spacer"></div>
-      <div class="console-header-meta">
-        <span class="status" id="healthChip">在线 · clone</span>
-        <label class="user-pick-dev">
-          <span>操作人</span>
-          <select id="currentUser" aria-label="选择操作人"></select>
-        </label>
-        <div class="user-badge guest" id="userBadge" hidden>
-          <div class="user-meta">
-            <span class="user-name" id="userDisplayName">—</span>
-            <span class="user-sub" id="userStaffMeta">—</span>
-          </div>
-          <span class="user-role-tag" id="userRoleTag">—</span>
-        </div>
-        <span class="topbar-date" id="topbarDate"></span>
-        <button class="btn btn-sm" id="btnRefresh" type="button">刷新</button>
-      </div>
     </header>
 
     <div class="console-rails">
@@ -495,7 +456,6 @@
 
   <script>
     const STORE_KEY = "ssc_no_ioa_clone_v2";
-    const CURRENT_USER_KEY = "ssc_no_ioa_current_user";
     const KNOT_LINKS = {
       knotMainAgent: "https://knot.woa.com/agent/detail/68b6acdd12f740e981a6a08a728b35d1",
       knotQaAgent: "https://knot.woa.com/agent/detail/60b0769077ac446d95ebddd21ac85cfa",
@@ -573,7 +533,6 @@
     let selectedProjectId = null;
     let editingIssueId = null;
     let meetingParsePreview = null;
-    let currentUserId = localStorage.getItem(CURRENT_USER_KEY) || "";
 
     function nowText() {
       const d = new Date();
@@ -708,44 +667,7 @@
       });
     }
 
-    function initHeaderControls() {
-      const sel = document.getElementById("currentUser");
-      if (!sel) return;
-      sel.innerHTML = `<option value="">请选择</option>` + state.users.map((u) => `<option value="${esc(u.id)}">${esc(u.name)}</option>`).join("");
-      if (currentUserId && state.users.some((u) => u.id === currentUserId)) {
-        sel.value = currentUserId;
-      }
-      const updateBadge = () => {
-        const badge = document.getElementById("userBadge");
-        const nameEl = document.getElementById("userDisplayName");
-        const metaEl = document.getElementById("userStaffMeta");
-        const roleEl = document.getElementById("userRoleTag");
-        const user = state.users.find((u) => u.id === sel.value);
-        if (!user) {
-          badge.hidden = true;
-          return;
-        }
-        badge.hidden = false;
-        nameEl.textContent = user.name;
-        metaEl.textContent = user.staffType;
-        roleEl.textContent = user.role;
-      };
-      sel.onchange = () => {
-        currentUserId = sel.value || "";
-        localStorage.setItem(CURRENT_USER_KEY, currentUserId);
-        updateBadge();
-      };
-      updateBadge();
-
-      const refreshBtn = document.getElementById("btnRefresh");
-      if (refreshBtn) {
-        refreshBtn.onclick = () => {
-          renderAll();
-          const panel = document.querySelector("#mainPanelRail .panel-rail-btn.active")?.dataset.panel || "tools";
-          renderGlobalSubRail(panel);
-        };
-      }
-    }
+    function initHeaderControls() {}
 
     function renderHome() {
       const doneProjects = state.projects.filter((p) => p.status === "完成").length;
@@ -1536,8 +1458,11 @@
       });
     }
 
-    document.getElementById("topbarDate").textContent = nowText();
-    setInterval(() => { document.getElementById("topbarDate").textContent = nowText(); }, 60000);
+    const topbarDate = document.getElementById("topbarDate");
+    if (topbarDate) {
+      topbarDate.textContent = nowText();
+      setInterval(() => { topbarDate.textContent = nowText(); }, 60000);
+    }
     bindBaseEvents();
     renderAll();
     renderGlobalSubRail("tools");
