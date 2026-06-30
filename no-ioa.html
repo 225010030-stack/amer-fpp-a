@@ -177,6 +177,29 @@
       color: #1e40af;
       margin-right: 6px;
     }
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .link-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .link-item .k {
+      font-size: 11px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .link-item a {
+      font-size: 12px;
+      color: #1d4ed8;
+      word-break: break-all;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body class="ssc-console-body">
@@ -347,6 +370,17 @@
 
   <script>
     const STORE_KEY = "ssc_no_ioa_clone_v2";
+    const KNOT_LINKS = {
+      knotMainAgent: "https://knot.woa.com/agent/detail/68b6acdd12f740e981a6a08a728b35d1",
+      knotQaAgent: "https://knot.woa.com/agent/detail/60b0769077ac446d95ebddd21ac85cfa",
+      knotQaChat: "https://knot.woa.com/chat?web_key=60b0769077ac446d95ebddd21ac85cfa&close=0",
+      fppPortal: "https://pb0hulu9-18081h-devc.preview.with.woa.com/upload-docs.html",
+      portalPage: "portal.html",
+      workbenchPage: "index.html",
+      qaPage: "qa.html",
+      orchestrateApi: "/api/orchestrate",
+      agentRegistryApi: "/api/agent-registry"
+    };
     const defaultState = {
       projects: [
         { id: "P-001", name: "SSC workbench rollout", owner: "Anna", status: "进行中", progress: 72 },
@@ -407,6 +441,9 @@
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
+    }
+    function openLink(url) {
+      window.open(url, "_blank", "noopener");
     }
 
     function switchMainPanel(panel) {
@@ -477,7 +514,18 @@
             </tbody>
           </table>
         </div>`;
-      document.getElementById("kb-qa").innerHTML = `<div class="panel"><div class="panel-head"><h3>问答入口</h3></div><p class="muted">该无 IOA 版本不调用内网问答 API，可将这里作为知识目录导航。</p><div class="lite-actions"><a class="btn btn-sm" href="qa.html">打开原 qa.html（若后端可用）</a></div></div>`;
+      document.getElementById("kb-qa").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>问答入口 · Knot / Agent 链接已迁移</h3></div>
+          <p class="muted">无 IOA 版本不做鉴权，但保留原页面的 Knot/Agent 入口，方便你和同事直接跳转。</p>
+          <div class="lite-actions">
+            <a class="btn btn-sm" href="${KNOT_LINKS.qaPage}" target="_blank" rel="noopener">打开 qa.html</a>
+            <button class="btn btn-sm" id="btnOpenKnotQaChat">打开 Knot 问答 Chat</button>
+            <button class="btn btn-sm" id="btnOpenKnotQaAgent">打开 Knot 问答 Agent</button>
+          </div>
+        </div>`;
+      document.getElementById("btnOpenKnotQaChat").onclick = () => openLink(KNOT_LINKS.knotQaChat);
+      document.getElementById("btnOpenKnotQaAgent").onclick = () => openLink(KNOT_LINKS.knotQaAgent);
     }
 
     function renderCollab() {
@@ -489,6 +537,7 @@
             <input id="newProjOwner" placeholder="负责人" />
             <select id="newProjStatus"><option>进行中</option><option>待复核</option><option>完成</option></select>
             <button class="btn btn-sm btn-primary" id="btnAddProject">新增项目</button>
+            <button class="btn btn-sm" id="btnProjAskKnot">在 Knot 问项目进展</button>
           </div>
           <div class="lite-list">${state.projects.map((p) => `<div class="lite-item"><strong>${esc(p.name)}</strong> · ${esc(p.owner)} · ${esc(p.status)} · ${esc(p.progress)}%</div>`).join("")}</div>
         </div>`;
@@ -501,6 +550,7 @@
             <select id="newIssueCountry"><option>US</option><option>CAN</option><option>SG</option></select>
             <select id="newIssueSeverity"><option>high</option><option>medium</option><option>low</option></select>
             <button class="btn btn-sm btn-primary" id="btnAddIssue">新增 Issue</button>
+            <button class="btn btn-sm" id="btnIssueAskKnot">在 Knot 问 Issue</button>
           </div>
           <table class="lite-table" style="margin-top:10px">
             <thead><tr><th>ID</th><th>标题</th><th>国家</th><th>严重度</th><th>状态</th></tr></thead>
@@ -516,6 +566,7 @@
             <input id="newMeetingOwner" placeholder="主持人" />
             <input id="newMeetingTodo" placeholder="待办事项" />
             <button class="btn btn-sm btn-primary" id="btnAddMeeting">新增会议</button>
+            <button class="btn btn-sm" id="btnMeetingAskKnot">在 Knot 问会议待办</button>
           </div>
           <div class="lite-list">${state.meetings.map((m) => `<div class="lite-item"><strong>${esc(m.topic)}</strong> · ${esc(m.owner)}<br/>待办：${esc(m.todo)} · 状态：${esc(m.status)}</div>`).join("")}</div>
         </div>`;
@@ -544,6 +595,9 @@
         saveState();
         renderAll();
       };
+      document.getElementById("btnProjAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
+      document.getElementById("btnIssueAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
+      document.getElementById("btnMeetingAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
     }
 
     function renderSystem() {
@@ -554,7 +608,24 @@
           <div class="lite-kpi"><div class="k">会议数</div><div class="v">${state.meetings.length}</div></div>
           <div class="lite-kpi"><div class="k">日志条数</div><div class="v">${state.audit.length}</div></div>
         </div>
-        <div class="panel"><div class="panel-head"><h3>管理看板说明</h3></div><p class="muted">无 IOA 版本仅用于演示流程与交互，管理数据均为本地可编辑数据。</p></div>`;
+        <div class="panel">
+          <div class="panel-head"><h3>管理看板说明</h3></div>
+          <p class="muted">无 IOA 版本仅用于演示流程与交互，管理数据均为本地可编辑数据。</p>
+          <div class="link-grid">
+            <div class="link-item"><div class="k">Knot 总助手 Agent</div><a href="${KNOT_LINKS.knotMainAgent}" target="_blank" rel="noopener">${KNOT_LINKS.knotMainAgent}</a></div>
+            <div class="link-item"><div class="k">Knot 问答 Agent</div><a href="${KNOT_LINKS.knotQaAgent}" target="_blank" rel="noopener">${KNOT_LINKS.knotQaAgent}</a></div>
+            <div class="link-item"><div class="k">Knot 问答 Chat</div><a href="${KNOT_LINKS.knotQaChat}" target="_blank" rel="noopener">${KNOT_LINKS.knotQaChat}</a></div>
+            <div class="link-item"><div class="k">FPP 门户（原业务）</div><a href="${KNOT_LINKS.fppPortal}" target="_blank" rel="noopener">${KNOT_LINKS.fppPortal}</a></div>
+            <div class="link-item"><div class="k">工作台门户页</div><a href="${KNOT_LINKS.portalPage}" target="_blank" rel="noopener">${KNOT_LINKS.portalPage}</a></div>
+            <div class="link-item"><div class="k">工作台总览页</div><a href="${KNOT_LINKS.workbenchPage}" target="_blank" rel="noopener">${KNOT_LINKS.workbenchPage}</a></div>
+            <div class="link-item"><div class="k">API · Orchestrate</div><a href="${KNOT_LINKS.orchestrateApi}" target="_blank" rel="noopener">${KNOT_LINKS.orchestrateApi}</a></div>
+            <div class="link-item"><div class="k">API · Agent Registry</div><a href="${KNOT_LINKS.agentRegistryApi}" target="_blank" rel="noopener">${KNOT_LINKS.agentRegistryApi}</a></div>
+          </div>
+          <div class="lite-actions">
+            <button class="btn btn-sm" id="btnOpenKnotMain">打开 Knot 总助手</button>
+            <button class="btn btn-sm" id="btnOpenFppPortal">打开 FPP 门户</button>
+          </div>
+        </div>`;
 
       document.getElementById("sys-users").innerHTML = `
         <div class="panel">
@@ -609,6 +680,8 @@
         saveState();
         renderAll();
       };
+      document.getElementById("btnOpenKnotMain").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
+      document.getElementById("btnOpenFppPortal").onclick = () => openLink(KNOT_LINKS.fppPortal);
     }
 
     function renderAll() {
