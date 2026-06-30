@@ -397,7 +397,13 @@
         { id: "U-001", name: "Anna", role: "admin", staffType: "formal" },
         { id: "U-002", name: "Liu Wei", role: "operator", staffType: "formal" }
       ],
-      accessRequests: [],
+      accessRequests: [
+        { id: "AR-001", ts: "2026-06-30 20:00", name: "Summer Intern", role: "viewer", reason: "需要查看项目进展", status: "pending" }
+      ],
+      alerts: [
+        { id: "ALT-001", severity: "high", title: "成本中心失效风险", source: "Issue", status: "open" },
+        { id: "ALT-002", severity: "medium", title: "会议待办临近超期", source: "Meeting", status: "open" }
+      ],
       audit: []
     };
 
@@ -481,19 +487,73 @@
       const doneProjects = state.projects.filter((p) => p.status === "完成").length;
       const openIssues = state.issues.filter((i) => i.status !== "closed").length;
       const openMeetings = state.meetings.filter((m) => m.status !== "完成").length;
+      const pendingAccess = state.accessRequests.filter((r) => r.status === "pending").length;
+      const openAlerts = state.alerts.filter((a) => a.status === "open").length;
 
       document.getElementById("home-overview").innerHTML = `
         <div class="lite-kpis">
           <div class="lite-kpi"><div class="k">在跟项目</div><div class="v">${state.projects.length}</div></div>
           <div class="lite-kpi"><div class="k">开放 Issue</div><div class="v">${openIssues}</div></div>
           <div class="lite-kpi"><div class="k">会议待办</div><div class="v">${openMeetings}</div></div>
+          <div class="lite-kpi"><div class="k">待审权限申请</div><div class="v">${pendingAccess}</div></div>
+          <div class="lite-kpi"><div class="k">监控告警</div><div class="v">${openAlerts}</div></div>
           <div class="lite-kpi"><div class="k">已完成项目</div><div class="v">${doneProjects}</div></div>
         </div>
-        <div class="panel"><div class="panel-head"><h3>AI 指挥摘要（示例）</h3></div><p class="muted">当前月结处于分摊复核窗口，建议优先处理高优先级 Issue 并同步会议待办。</p></div>
+        <div class="panel">
+          <div class="panel-head"><h3>AI 指挥摘要（示例）</h3></div>
+          <p class="muted">当前月结处于分摊复核窗口，建议优先处理高优先级 Issue、处理监控告警并完成权限审批。</p>
+          <div class="lite-actions">
+            <button class="btn btn-sm" id="btnHomeQuickCloseOneAlert">快速处理 1 条告警</button>
+            <button class="btn btn-sm" id="btnHomeJumpAccess">跳转系统管理-权限申请</button>
+          </div>
+        </div>
       `;
       document.getElementById("home-projects").innerHTML = `<div class="panel"><table class="lite-table"><thead><tr><th>ID</th><th>项目</th><th>负责人</th><th>状态</th><th>进度</th></tr></thead><tbody>${state.projects.map((p) => `<tr><td>${esc(p.id)}</td><td>${esc(p.name)}</td><td>${esc(p.owner)}</td><td>${esc(p.status)}</td><td>${esc(p.progress)}%</td></tr>`).join("")}</tbody></table></div>`;
       document.getElementById("home-collab").innerHTML = `<div class="lite-grid"><div class="lite-card"><h4>团队协同态势</h4><p>Issue 未关闭 ${openIssues} 条；会议待办未完成 ${openMeetings} 条。</p></div><div class="lite-card"><h4>建议动作</h4><p>优先清理 high issue，并将会议待办转项目行动项。</p></div></div>`;
-      document.getElementById("home-monitor").innerHTML = `<div class="panel"><div class="panel-head"><h3>监控信号（示例）</h3></div><div class="lite-list"><div class="lite-item"><span class="tag">high</span> 成本中心失效风险持续 2 天</div><div class="lite-item"><span class="tag">medium</span> CAN 模板字段变更待确认</div></div></div>`;
+      document.getElementById("home-monitor").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>监控信号</h3></div>
+          <div class="lite-list">
+            ${state.alerts.map((a) => `
+              <div class="lite-item">
+                <span class="tag">${esc(a.severity)}</span>
+                <strong>${esc(a.title)}</strong> · ${esc(a.source)} · 状态：${esc(a.status)}
+                <div class="lite-actions">
+                  <button class="btn btn-sm" data-alert-resolve="${esc(a.id)}">标记已处理</button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>`;
+
+      const btnQuick = document.getElementById("btnHomeQuickCloseOneAlert");
+      if (btnQuick) {
+        btnQuick.onclick = () => {
+          const first = state.alerts.find((a) => a.status === "open");
+          if (!first) return;
+          first.status = "resolved";
+          addAudit("alert.resolve", first.id);
+          saveState();
+          renderAll();
+        };
+      }
+      const btnJump = document.getElementById("btnHomeJumpAccess");
+      if (btnJump) {
+        btnJump.onclick = () => {
+          switchMainPanel("system");
+          switchSubView("sys-access", "#panelSystem");
+        };
+      }
+      document.querySelectorAll("[data-alert-resolve]").forEach((btn) => {
+        btn.onclick = () => {
+          const item = state.alerts.find((a) => a.id === btn.dataset.alertResolve);
+          if (!item) return;
+          item.status = "resolved";
+          addAudit("alert.resolve", item.id);
+          saveState();
+          renderAll();
+        };
+      });
     }
 
     function renderKnowledge() {
@@ -738,7 +798,21 @@
             <select id="newUserType"><option>formal</option><option>intern</option></select>
             <button class="btn btn-sm btn-primary" id="btnAddUser">新增用户</button>
           </div>
-          <table class="lite-table" style="margin-top:10px"><thead><tr><th>ID</th><th>姓名</th><th>角色</th><th>人员类型</th></tr></thead><tbody>${state.users.map((u) => `<tr><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${esc(u.role)}</td><td>${esc(u.staffType)}</td></tr>`).join("")}</tbody></table>
+          <table class="lite-table" style="margin-top:10px"><thead><tr><th>ID</th><th>姓名</th><th>角色</th><th>人员类型</th><th>动作</th></tr></thead><tbody>${state.users.map((u) => `
+            <tr>
+              <td>${esc(u.id)}</td>
+              <td>${esc(u.name)}</td>
+              <td>
+                <select data-user-role="${esc(u.id)}">
+                  <option value="viewer" ${u.role === "viewer" ? "selected" : ""}>viewer</option>
+                  <option value="operator" ${u.role === "operator" ? "selected" : ""}>operator</option>
+                  <option value="admin" ${u.role === "admin" ? "selected" : ""}>admin</option>
+                </select>
+              </td>
+              <td>${esc(u.staffType)}</td>
+              <td><button class="btn btn-sm" data-user-save="${esc(u.id)}">保存</button></td>
+            </tr>
+          `).join("")}</tbody></table>
         </div>`;
 
       document.getElementById("sys-perm").innerHTML = `
@@ -762,7 +836,19 @@
             <input id="reqReason" placeholder="申请理由" style="min-width:260px" />
             <button class="btn btn-sm btn-primary" id="btnAddRequest">提交申请</button>
           </div>
-          <table class="lite-table" style="margin-top:10px"><thead><tr><th>时间</th><th>申请人</th><th>目标角色</th><th>理由</th><th>状态</th></tr></thead><tbody>${state.accessRequests.map((r) => `<tr><td>${esc(r.ts)}</td><td>${esc(r.name)}</td><td>${esc(r.role)}</td><td>${esc(r.reason)}</td><td>${esc(r.status)}</td></tr>`).join("") || '<tr><td colspan="5">暂无申请</td></tr>'}</tbody></table>
+          <table class="lite-table" style="margin-top:10px"><thead><tr><th>时间</th><th>申请人</th><th>目标角色</th><th>理由</th><th>状态</th><th>审批动作</th></tr></thead><tbody>${state.accessRequests.map((r) => `
+            <tr>
+              <td>${esc(r.ts)}</td>
+              <td>${esc(r.name)}</td>
+              <td>${esc(r.role)}</td>
+              <td>${esc(r.reason)}</td>
+              <td>${esc(r.status)}</td>
+              <td>
+                <button class="btn btn-sm" data-req-approve="${esc(r.id || "")}" ${r.status !== "pending" ? "disabled" : ""}>通过</button>
+                <button class="btn btn-sm" data-req-reject="${esc(r.id || "")}" ${r.status !== "pending" ? "disabled" : ""}>驳回</button>
+              </td>
+            </tr>
+          `).join("") || '<tr><td colspan="6">暂无申请</td></tr>'}</tbody></table>
         </div>`;
 
       document.getElementById("btnAddUser").onclick = () => {
@@ -773,15 +859,54 @@
         saveState();
         renderAll();
       };
+      document.querySelectorAll("[data-user-save]").forEach((btn) => {
+        btn.onclick = () => {
+          const id = btn.dataset.userSave;
+          const user = state.users.find((u) => u.id === id);
+          if (!user) return;
+          const sel = document.querySelector(`[data-user-role="${id}"]`);
+          if (!sel) return;
+          user.role = sel.value;
+          addAudit("user.role_update", `${id} -> ${user.role}`);
+          saveState();
+          renderAll();
+        };
+      });
       document.getElementById("btnAddRequest").onclick = () => {
         const name = document.getElementById("reqName").value.trim();
         if (!name) return;
-        const req = { ts: nowText(), name, role: document.getElementById("reqRole").value, reason: document.getElementById("reqReason").value.trim() || "未填写", status: "pending" };
+        const req = { id: `AR-${String(Date.now()).slice(-4)}`, ts: nowText(), name, role: document.getElementById("reqRole").value, reason: document.getElementById("reqReason").value.trim() || "未填写", status: "pending" };
         state.accessRequests.unshift(req);
         addAudit("access.request", `${req.name} -> ${req.role}`);
         saveState();
         renderAll();
       };
+      document.querySelectorAll("[data-req-approve]").forEach((btn) => {
+        btn.onclick = () => {
+          const req = state.accessRequests.find((r) => r.id === btn.dataset.reqApprove);
+          if (!req || req.status !== "pending") return;
+          req.status = "approved";
+          state.users.unshift({
+            id: `U-${String(Date.now()).slice(-4)}`,
+            name: req.name,
+            role: req.role,
+            staffType: "formal"
+          });
+          addAudit("access.approve", `${req.name} -> ${req.role}`);
+          saveState();
+          renderAll();
+        };
+      });
+      document.querySelectorAll("[data-req-reject]").forEach((btn) => {
+        btn.onclick = () => {
+          const req = state.accessRequests.find((r) => r.id === btn.dataset.reqReject);
+          if (!req || req.status !== "pending") return;
+          req.status = "rejected";
+          addAudit("access.reject", `${req.name} -> ${req.role}`);
+          saveState();
+          renderAll();
+        };
+      });
       document.getElementById("btnOpenKnotMain").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
       document.getElementById("btnOpenFppPortal").onclick = () => openLink(KNOT_LINKS.fppPortal);
     }
