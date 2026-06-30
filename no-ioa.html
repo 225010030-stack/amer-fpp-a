@@ -419,6 +419,9 @@
       localStorage.setItem(STORE_KEY, JSON.stringify(state));
     }
     let state = loadState();
+    let selectedProjectId = null;
+    let editingIssueId = null;
+    let meetingParsePreview = null;
 
     function nowText() {
       const d = new Date();
@@ -450,6 +453,16 @@
     }
     function openLink(url) {
       window.open(url, "_blank", "noopener");
+    }
+    function parseMeetingDraft(text) {
+      const lines = String(text || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      if (!lines.length) return null;
+      const topic = lines[0].replace(/^#+\s*/, "").replace(/^主题[:：]\s*/, "") || "未命名会议";
+      const todos = lines
+        .slice(1)
+        .filter((l) => /待办|todo|action|^\-|\*/i.test(l))
+        .map((l) => l.replace(/^[-*]\s*/, ""));
+      return { topic, todos: todos.length ? todos : ["待补充行动项"] };
     }
 
     function switchMainPanel(panel) {
@@ -589,11 +602,14 @@
     }
 
     function renderCollab() {
+      const selectedProject = state.projects.find((p) => p.id === selectedProjectId);
+      const editingIssue = state.issues.find((i) => i.id === editingIssueId);
+
       document.getElementById("collab-projects").innerHTML = `
         <header class="admin-page-hero" style="margin-bottom:12px">
           <div>
             <h3 style="margin:0">项目看板</h3>
-            <p class="muted" style="margin:6px 0 0">卡片布局与原版一致，支持本地新增与状态管理</p>
+            <p class="muted" style="margin:6px 0 0">卡片布局与原版一致，支持详情查看</p>
           </div>
           <div class="issue-hero-actions">
             <button class="btn btn-primary btn-sm" id="btnAddProject">新建项目</button>
@@ -613,15 +629,30 @@
                 <span class="badge">${esc(p.status)}</span>
               </div>
               <p class="muted">负责人：${esc(p.owner)} · 进度：${esc(p.progress)}%</p>
+              <div class="lite-actions">
+                <button class="btn btn-sm" data-proj-open="${esc(p.id)}">查看详情</button>
+              </div>
             </article>
           `).join("")}
-        </div>`;
+        </div>
+        ${selectedProject ? `
+          <div class="panel" style="margin-top:12px">
+            <div class="panel-head"><h3>项目详情 · ${esc(selectedProject.name)}</h3></div>
+            <p class="muted">项目ID：${esc(selectedProject.id)} · 负责人：${esc(selectedProject.owner)}</p>
+            <div class="lite-form-row">
+              <label style="font-size:12px;color:#64748b">进度</label>
+              <input id="projProgressInput" type="number" min="0" max="100" value="${esc(selectedProject.progress)}" style="width:120px" />
+              <button class="btn btn-sm btn-primary" id="btnSaveProjProgress">保存进度</button>
+              <button class="btn btn-sm" id="btnCloseProjDetail">收起</button>
+            </div>
+          </div>` : ""}
+      `;
 
       document.getElementById("collab-issues").innerHTML = `
         <header class="admin-page-hero" style="margin-bottom:12px">
           <div>
             <h3 style="margin:0">Issue 跟踪</h3>
-            <p class="muted" style="margin:6px 0 0">支持 open/review/closed 状态流转与本地留痕</p>
+            <p class="muted" style="margin:6px 0 0">支持状态流转与编辑抽屉（本地版）</p>
           </div>
           <div class="issue-hero-actions">
             <button class="btn btn-primary btn-sm" id="btnAddIssue">新建 Issue</button>
@@ -647,18 +678,41 @@
                   <td>
                     <button class="btn btn-sm" data-issue-next="${esc(i.id)}">下一状态</button>
                     <button class="btn btn-sm" data-issue-close="${esc(i.id)}">关闭</button>
+                    <button class="btn btn-sm" data-issue-edit="${esc(i.id)}">编辑</button>
                   </td>
                 </tr>
               `).join("")}
             </tbody>
           </table>
-        </div>`;
+        </div>
+        ${editingIssue ? `
+          <div class="panel" style="margin-top:12px">
+            <div class="panel-head"><h3>Issue 编辑抽屉（简化）</h3></div>
+            <div class="lite-form-row">
+              <input id="editIssueTitle" value="${esc(editingIssue.title)}" />
+              <select id="editIssueCountry">
+                <option value="US" ${editingIssue.country === "US" ? "selected" : ""}>US</option>
+                <option value="CAN" ${editingIssue.country === "CAN" ? "selected" : ""}>CAN</option>
+                <option value="SG" ${editingIssue.country === "SG" ? "selected" : ""}>SG</option>
+                <option value="Global" ${editingIssue.country === "Global" ? "selected" : ""}>Global</option>
+              </select>
+              <select id="editIssueSeverity">
+                <option value="high" ${editingIssue.severity === "high" ? "selected" : ""}>high</option>
+                <option value="medium" ${editingIssue.severity === "medium" ? "selected" : ""}>medium</option>
+                <option value="low" ${editingIssue.severity === "low" ? "selected" : ""}>low</option>
+              </select>
+              <input id="editIssueOwner" value="${esc(editingIssue.owner || "")}" placeholder="负责人" />
+              <button class="btn btn-sm btn-primary" id="btnSaveIssueEdit">保存</button>
+              <button class="btn btn-sm" id="btnCancelIssueEdit">取消</button>
+            </div>
+          </div>` : ""}
+      `;
 
       document.getElementById("collab-meetings").innerHTML = `
         <header class="admin-page-hero meeting-hero" style="margin-bottom:12px">
           <div>
             <h3 style="margin:0">会议纪要与待办</h3>
-            <p class="muted" style="margin:6px 0 0">支持新增会议，并将待办一键转为 Issue</p>
+            <p class="muted" style="margin:6px 0 0">支持文本解析导入，并将待办一键转 Issue</p>
           </div>
           <div class="issue-hero-actions">
             <button class="btn btn-primary btn-sm" id="btnAddMeeting">新增会议</button>
@@ -669,6 +723,19 @@
           <input id="newMeetingTopic" placeholder="会议主题" />
           <input id="newMeetingOwner" placeholder="主持人" />
           <input id="newMeetingTodo" placeholder="待办事项" />
+        </div>
+        <div class="panel" style="margin-bottom:12px">
+          <div class="panel-head"><h3>纪要文本解析（无后端）</h3></div>
+          <textarea id="meetingRawInput" rows="4" style="width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:8px" placeholder="粘贴纪要，例如：&#10;6/30 月结对齐会&#10;- 待办：更新分摊模板&#10;- TODO: 回填台账"></textarea>
+          <div class="lite-actions">
+            <button class="btn btn-sm" id="btnParseMeetingText">解析纪要</button>
+            ${meetingParsePreview ? '<button class="btn btn-sm btn-primary" id="btnImportParsedMeeting">导入为会议</button>' : ""}
+          </div>
+          ${meetingParsePreview ? `
+            <div class="lite-log">
+              主题：${esc(meetingParsePreview.topic)}
+              \n待办：${meetingParsePreview.todos.map((t, idx) => `\n${idx + 1}. ${esc(t)}`).join("")}
+            </div>` : ""}
         </div>
         <div class="lite-list">
           ${state.meetings.map((m) => `
@@ -681,7 +748,8 @@
               </div>
             </div>
           `).join("")}
-        </div>`;
+        </div>
+      `;
 
       document.getElementById("btnAddProject").onclick = () => {
         const name = document.getElementById("newProjName").value.trim();
@@ -691,6 +759,31 @@
         saveState();
         renderAll();
       };
+      document.querySelectorAll("[data-proj-open]").forEach((btn) => {
+        btn.onclick = () => {
+          selectedProjectId = btn.dataset.projOpen;
+          renderAll();
+        };
+      });
+      if (selectedProject) {
+        const btnSaveProgress = document.getElementById("btnSaveProjProgress");
+        if (btnSaveProgress) {
+          btnSaveProgress.onclick = () => {
+            const v = Number(document.getElementById("projProgressInput").value || 0);
+            selectedProject.progress = Math.max(0, Math.min(100, v));
+            addAudit("project.progress", `${selectedProject.id} -> ${selectedProject.progress}`);
+            saveState();
+            renderAll();
+          };
+        }
+        const btnCloseDetail = document.getElementById("btnCloseProjDetail");
+        if (btnCloseDetail) {
+          btnCloseDetail.onclick = () => {
+            selectedProjectId = null;
+            renderAll();
+          };
+        }
+      }
       document.getElementById("btnAddIssue").onclick = () => {
         const title = document.getElementById("newIssueTitle").value.trim();
         if (!title) return;
@@ -729,6 +822,34 @@
           renderAll();
         };
       });
+      document.querySelectorAll("[data-issue-edit]").forEach((btn) => {
+        btn.onclick = () => {
+          editingIssueId = btn.dataset.issueEdit;
+          renderAll();
+        };
+      });
+      if (editingIssue) {
+        const btnSaveIssue = document.getElementById("btnSaveIssueEdit");
+        if (btnSaveIssue) {
+          btnSaveIssue.onclick = () => {
+            editingIssue.title = document.getElementById("editIssueTitle").value.trim() || editingIssue.title;
+            editingIssue.country = document.getElementById("editIssueCountry").value;
+            editingIssue.severity = document.getElementById("editIssueSeverity").value;
+            editingIssue.owner = document.getElementById("editIssueOwner").value.trim() || "未指定";
+            addAudit("issue.edit", editingIssue.id);
+            saveState();
+            editingIssueId = null;
+            renderAll();
+          };
+        }
+        const btnCancelIssue = document.getElementById("btnCancelIssueEdit");
+        if (btnCancelIssue) {
+          btnCancelIssue.onclick = () => {
+            editingIssueId = null;
+            renderAll();
+          };
+        }
+      }
       document.querySelectorAll("[data-meeting-toggle]").forEach((btn) => {
         btn.onclick = () => {
           const m = state.meetings.find((x) => x.id === btn.dataset.meetingToggle);
@@ -757,6 +878,33 @@
           renderAll();
         };
       });
+      const btnParseMeetingText = document.getElementById("btnParseMeetingText");
+      if (btnParseMeetingText) {
+        btnParseMeetingText.onclick = () => {
+          const text = document.getElementById("meetingRawInput").value;
+          meetingParsePreview = parseMeetingDraft(text);
+          if (!meetingParsePreview) return;
+          addAudit("meeting.parse", meetingParsePreview.topic);
+          renderAll();
+        };
+      }
+      const btnImportParsedMeeting = document.getElementById("btnImportParsedMeeting");
+      if (btnImportParsedMeeting) {
+        btnImportParsedMeeting.onclick = () => {
+          if (!meetingParsePreview) return;
+          state.meetings.unshift({
+            id: `M-${String(Date.now()).slice(-4)}`,
+            topic: meetingParsePreview.topic,
+            owner: "解析导入",
+            todo: meetingParsePreview.todos.join("；"),
+            status: "进行中"
+          });
+          addAudit("meeting.import", meetingParsePreview.topic);
+          meetingParsePreview = null;
+          saveState();
+          renderAll();
+        };
+      }
       document.getElementById("btnProjAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
       document.getElementById("btnIssueAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
       document.getElementById("btnMeetingAskKnot").onclick = () => openLink(KNOT_LINKS.knotMainAgent);
