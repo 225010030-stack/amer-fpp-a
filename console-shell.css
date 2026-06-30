@@ -1,0 +1,534 @@
+/**
+ * SSC 总作战工作室 · 布局壳层
+ * 配合 tokens.css · 见 .cursor/skills/ssc-console-ui/
+ */
+@import url("tokens.css");
+
+/* ── Page ── */
+.ssc-console-body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--ssc-font);
+  font-size: var(--ssc-font-size-base);
+  color: var(--ssc-text);
+  background: var(--ssc-bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+.root-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Top header (总台蓝条) ── */
+.console-top-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: var(--ssc-header-h);
+  padding: 0 20px;
+  background: var(--ssc-header-bg);
+  color: #fff;
+  box-shadow: var(--ssc-header-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.console-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.console-brand-cn {
+  font-size: 15px;
+  font-weight: var(--ssc-font-weight-bold);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.console-brand-en {
+  font-size: 10px;
+  opacity: 0.75;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.console-header-spacer { flex: 1; min-width: 8px; }
+
+.console-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.console-top-header .status {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.console-top-header .status.ok {
+  background: rgba(18, 183, 106, 0.25);
+  border-color: rgba(18, 183, 106, 0.5);
+  color: #ecfdf3;
+}
+
+.console-top-header .status.err {
+  background: rgba(240, 68, 56, 0.25);
+  border-color: rgba(240, 68, 56, 0.45);
+  color: #fff2f0;
+}
+
+.console-top-header .user-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  max-width: 260px;
+}
+
+.console-top-header .user-name { color: #fff; }
+.console-top-header .user-sub { color: rgba(255, 255, 255, 0.72); }
+.console-top-header .user-role-tag {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.console-top-header .btn {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.console-top-header .btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+.console-top-header .btn-primary {
+  background: #fff;
+  color: var(--ssc-brand);
+  border-color: #fff;
+}
+
+.console-top-header .user-pick-dev {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+}
+
+.console-top-header .user-pick-dev select {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ssc-text);
+  border: none;
+  border-radius: var(--ssc-radius);
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* ── Body: full-width main (no sidebar) ── */
+.console-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.console-body-full {
+  flex-direction: column;
+}
+
+.console-full-main {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+/* ── Top panel rail (指挥台横栏) ── */
+.console-rails {
+  flex-shrink: 0;
+  background: var(--ssc-bg-card);
+  border-bottom: 1px solid var(--ssc-border);
+  position: sticky;
+  top: var(--ssc-header-h);
+  z-index: 90;
+}
+
+.panel-rail-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px 0;
+  overflow-x: auto;
+}
+
+.panel-rail-eyebrow {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: var(--ssc-font-weight-semibold);
+  color: var(--ssc-text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.panel-rail {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.panel-rail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 8px 14px 10px;
+  border-radius: var(--ssc-radius) var(--ssc-radius) 0 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ssc-text-2);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.panel-rail-btn:hover {
+  background: var(--ssc-bg-page);
+  color: var(--ssc-brand);
+}
+
+.panel-rail-btn.active {
+  background: var(--ssc-brand-light);
+  color: var(--ssc-brand);
+  border-bottom-color: var(--ssc-brand);
+  font-weight: var(--ssc-font-weight-semibold);
+}
+
+.panel-rail-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: var(--ssc-font-weight-bold);
+  background: var(--ssc-bg-page);
+  color: var(--ssc-text-3);
+  border: 1px solid var(--ssc-border);
+}
+
+.panel-rail-btn.active .panel-rail-badge {
+  background: var(--ssc-brand);
+  color: #fff;
+  border-color: var(--ssc-brand);
+}
+
+.panel-rail-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  line-height: 1.2;
+}
+
+.panel-rail-cn {
+  font-size: 13px;
+  font-weight: inherit;
+}
+
+.panel-rail-en {
+  font-size: 9px;
+  opacity: 0.65;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sub-rail {
+  margin: 0 20px;
+  padding-left: 0;
+  border-bottom: 1px solid var(--ssc-border);
+  background: var(--ssc-bg-card);
+}
+
+.sub-rail .console-tab-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.console-body-full .console-main {
+  height: auto;
+  min-height: calc(100vh - var(--ssc-header-h) - 88px);
+}
+
+.console-sidebar {
+  width: var(--ssc-sidebar-w);
+  flex-shrink: 0;
+  background: var(--ssc-bg-card);
+  border-right: 1px solid var(--ssc-border);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--ssc-header-h));
+  position: sticky;
+  top: var(--ssc-header-h);
+  overflow-y: auto;
+}
+
+.console-sidebar .brand-box {
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid var(--ssc-border-light);
+}
+
+.console-sidebar .brand-title {
+  font-size: 14px;
+  color: var(--ssc-text);
+}
+
+.console-sidebar .brand-sub {
+  font-size: 11px;
+  color: var(--ssc-text-3);
+}
+
+.console-sidebar .nav-section-label {
+  padding: 14px 14px 6px;
+  font-size: 11px;
+  font-weight: var(--ssc-font-weight-semibold);
+  color: var(--ssc-text-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.console-sidebar .nav-btn,
+.console-sidebar .nav-sub-item {
+  color: var(--ssc-text-2);
+}
+
+.console-sidebar .nav-btn.active,
+.console-sidebar .nav-sub-item.active {
+  background: var(--ssc-brand-light);
+  color: var(--ssc-brand);
+  box-shadow: inset 3px 0 0 var(--ssc-brand);
+}
+
+.console-sidebar .nav-group-toggle {
+  color: var(--ssc-text-3);
+}
+
+.console-sidebar .sidebar-foot {
+  border-top: 1px solid var(--ssc-border-light);
+  background: var(--ssc-bg-card-muted);
+}
+
+.console-main {
+  flex: 1;
+  min-width: 0;
+  background: var(--ssc-bg-page);
+  overflow-y: auto;
+  height: calc(100vh - var(--ssc-header-h));
+}
+
+.console-main-inner {
+  padding: 16px 20px 32px;
+  max-width: var(--ssc-content-max);
+}
+
+/* 原 topbar 降级为页内标题条 */
+.console-page-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ssc-border);
+}
+
+.console-page-head-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.console-page-head h2 {
+  margin: 0;
+  font-size: var(--ssc-font-size-lg);
+  font-weight: var(--ssc-font-weight-semibold);
+  color: var(--ssc-text);
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.console-page-head .ssc-page-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--ssc-font-size-xs);
+  font-weight: var(--ssc-font-weight-normal);
+  color: var(--ssc-text-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.console-page-head .topbar-date {
+  font-size: var(--ssc-font-size-sm);
+  color: var(--ssc-text-3);
+}
+
+/* ── Horizontal tabs (质量板块) ── */
+.console-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--ssc-border);
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.console-tab {
+  border: none;
+  background: transparent;
+  padding: 10px 16px;
+  font-size: var(--ssc-font-size-base);
+  font-family: inherit;
+  color: var(--ssc-text-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  margin-bottom: -1px;
+}
+
+.console-tab:hover { color: var(--ssc-brand); }
+.console-tab.active {
+  color: var(--ssc-brand);
+  border-bottom-color: var(--ssc-brand);
+  font-weight: var(--ssc-font-weight-semibold);
+}
+
+/* ── Cards on gray page ── */
+.console-main .panel {
+  background: var(--ssc-bg-card);
+  border: 1px solid var(--ssc-border);
+  border-radius: var(--ssc-radius-md);
+  box-shadow: var(--ssc-shadow-sm);
+}
+
+.console-main .stat {
+  background: var(--ssc-bg-card);
+  border: 1px solid var(--ssc-border);
+  border-radius: var(--ssc-radius-md);
+}
+
+.console-main .stat .val {
+  color: var(--ssc-brand);
+  font-size: var(--ssc-font-size-kpi);
+  font-weight: var(--ssc-font-weight-kpi);
+}
+
+/* 1.0 团队小黑板 · 保留紫渐变，不被白卡片规则覆盖 */
+.console-main .panel.team-blackboard-panel {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border: 1px solid #4338ca;
+  box-shadow: 0 8px 24px rgba(30, 27, 75, 0.22);
+  color: #e0e7ff;
+}
+
+.console-main .panel.team-blackboard-panel .panel-head {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+.console-main .panel.team-blackboard-panel h3,
+.console-main .panel.team-blackboard-panel .ssc-block-head-cn {
+  color: #fff;
+}
+
+.console-main .panel.team-blackboard-panel .ssc-block-head-en,
+.console-main .panel.team-blackboard-panel .muted {
+  color: #a5b4fc !important;
+}
+
+/* 块标题 · 总台中英副标题 */
+.ssc-block-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ssc-block-head-main { min-width: 0; }
+
+.ssc-block-head-cn {
+  margin: 0;
+  font-size: var(--ssc-font-size-md);
+  font-weight: var(--ssc-font-weight-semibold);
+  color: var(--ssc-text);
+  line-height: 1.35;
+}
+
+.ssc-block-head-en {
+  margin: 4px 0 0;
+  font-size: var(--ssc-font-size-xs);
+  font-weight: var(--ssc-font-weight-normal);
+  color: var(--ssc-text-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.ssc-section-title {
+  margin: 0 0 12px;
+  font-size: var(--ssc-font-size-base);
+  font-weight: var(--ssc-font-weight-semibold);
+  color: var(--ssc-text);
+  letter-spacing: 0;
+}
+
+.ssc-section-sub {
+  margin: -8px 0 12px;
+  font-size: var(--ssc-font-size-xs);
+  font-weight: var(--ssc-font-weight-normal);
+  color: var(--ssc-text-3);
+  letter-spacing: 0.02em;
+}
+
+/* shell 兼容：旧结构套新壳 — 用 flex 包住侧栏+主区，避免 display:contents 在部分浏览器乱版 */
+.shell.console-legacy-shell,
+.layout.console-legacy-shell {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  align-items: stretch;
+}
+
+.shell.console-legacy-shell > aside.console-sidebar,
+.layout.console-legacy-shell > aside.console-sidebar {
+  flex-shrink: 0;
+}
+
+@media (max-width: 960px) {
+  .console-body { flex-direction: column; }
+  .console-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    max-height: 40vh;
+  }
+  .console-main { height: auto; }
+}

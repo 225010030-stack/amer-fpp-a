@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>操作台 | SSC 海外薪酬福利 AI 工作台</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="console-shell.css" />
+  <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="workbench.css" />
+  <style>
+    /* 布局网格 · 逐步迁入 workbench.css */
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { padding: 8px 18px; border-radius: 999px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; }
+    .pill.active { background: var(--ssc-brand); color: #fff; border-color: var(--ssc-brand); font-weight: 600; }
+    .kpi-row { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .kpi { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(15,23,42,0.04); }
+    .kpi .l { font-size: 12px; color: var(--muted); }
+    .kpi .v { font-size: 26px; font-weight: 800; margin-top: 4px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+    input, select, button { padding: 9px 12px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px; }
+    button { cursor: pointer; background: #fff; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+    .step { border: 1px dashed var(--border); padding: 10px; font-size: 12px; text-align: center; color: var(--muted); }
+    .step.done { border-style: solid; border-color: var(--success); background: var(--success-bg); color: var(--success); }
+    pre { white-space: pre-wrap; background: var(--bg-hover); border: 1px solid var(--border); padding: 12px; font-size: 12px; max-height: 240px; overflow: auto; }
+    .panel h3 { margin: 0 0 8px; font-size: 15px; }
+    .desc { color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .aside-foot { padding: 12px; border-top: 1px solid var(--border); margin-top: auto; }
+    .aside-foot input { width: 100%; padding: 8px; border: 1px solid var(--border); font-size: 12px; }
+    nav { padding: 12px 8px; flex: 1; }
+    .nav-group { margin-bottom: 16px; }
+    @media (max-width: 900px) { .kpi-row, .steps { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body class="ssc-console-body workbench-page">
+  <div class="root-layout">
+    <header class="console-top-header">
+      <div class="console-brand">
+        <span class="console-brand-cn">SSC 薪酬福利工作台</span>
+        <span class="console-brand-en">Leave Ops · Regional Tools</span>
+      </div>
+      <div class="console-header-spacer"></div>
+      <div class="console-header-meta">
+        <a href="index.html" class="btn btn-sm">← 全局总览</a>
+      </div>
+    </header>
+    <div class="console-body">
+  <div class="layout console-legacy-shell">
+    <aside class="console-sidebar">
+      <div class="console-sidebar-head">
+        <span class="console-panel-badge">P1</span>
+        <div class="console-sidebar-head-text">
+          <span class="console-sidebar-title">假期工作台</span>
+          <span class="console-sidebar-sub">Leave Ops · ADP ↔ WD</span>
+        </div>
+      </div>
+      <div class="nav-section-label">业务域 · DOMAINS</div>
+      <nav class="console-nav">
+        <button class="nav-btn console-nav-item active" data-view="leave" onclick="switchView('leave')">
+          <span class="console-nav-lines"><span class="console-nav-cn">假期运营</span><span class="console-nav-en">Leave</span></span>
+        </button>
+        <button class="nav-btn console-nav-item" data-view="prepayroll" onclick="switchView('prepayroll')">
+          <span class="console-nav-lines"><span class="console-nav-cn">Prepayroll</span><span class="console-nav-en">Phase 2</span></span>
+        </button>
+        <button class="nav-btn console-nav-item" data-view="dashboard" onclick="switchView('dashboard')">
+          <span class="console-nav-lines"><span class="console-nav-cn">运营看板</span><span class="console-nav-en">Dashboard</span></span>
+        </button>
+        <div class="nav-section-label" style="padding-top:14px">链接 · LINKS</div>
+        <button class="nav-btn console-nav-item" onclick="location.href='index.html'">
+          <span class="console-nav-lines"><span class="console-nav-cn">全局总览</span><span class="console-nav-en">Overview</span></span>
+        </button>
+        <button class="nav-btn console-nav-item" onclick="location.href='qa.html'">
+          <span class="console-nav-lines"><span class="console-nav-cn">知识问答</span><span class="console-nav-en">Q&A</span></span>
+        </button>
+      </nav>
+      <div class="aside-foot">
+        <label class="desc">API 地址</label>
+        <input id="apiBase" placeholder="http://127.0.0.1:18180" onchange="saveApi()" />
+      </div>
+    </aside>
+
+    <div class="console-main">
+    <div class="console-main-inner">
+      <div class="console-page-head">
+        <h2 id="viewTitle">假期运营</h2>
+        <div class="pill-row" id="regionPills">
+          <button class="pill active" data-region="US" onclick="setRegion('US')">🇺🇸 US</button>
+          <button class="pill" data-region="CAN" onclick="setRegion('CAN')">🇨🇦 CAN</button>
+        </div>
+      </div>
+
+      <!-- LEAVE -->
+      <div id="viewLeave" class="view active">
+        <div class="tip">上传 ADP TimeOff 与 Workday Absence 导出 CSV，脚本确定性比对，输出差异明细与 Prepayroll 候选包。Bot 可发「US假期演示」跑样本。</div>
+        <div class="steps">
+          <div class="step active" id="step1">① 文件预检</div>
+          <div class="step" id="step2">② 上传 ADP</div>
+          <div class="step" id="step3">③ 上传 WD</div>
+          <div class="step" id="step4">④ 比对输出</div>
+        </div>
+
+        <div class="panel">
+          <h3>① 目录与命名预检</h3>
+          <p class="desc">检查 <code>上传输入/</code> 是否有所需 L1 文件，命名是否符合 IN_{国家}_L1_*_{期间}.csv</p>
+          <div class="row">
+            <input id="leavePeriod" placeholder="期间 YYYYMM" value="202606" style="width:140px;" />
+            <button class="btn-p" onclick="runPrecheck()">运行预检</button>
+          </div>
+          <pre id="precheckResult">等待运行…</pre>
+        </div>
+
+        <div class="panel">
+          <h3>② ADP ↔ WD 假期比对</h3>
+          <p class="desc">阻断项需人工处理后再交 Prepayroll；匹配行自动生成 Prepayroll_LeaveInput CSV。</p>
+          <div class="row">
+            <input id="reconcilePeriod" placeholder="期间 YYYYMM" value="202606" style="width:140px;" />
+            <input type="file" id="adpFile" accept=".csv" />
+            <input type="file" id="wdFile" accept=".csv" />
+            <input type="file" id="idMapFile" accept=".csv" title="可选 ID 映射表" />
+          </div>
+          <div class="row">
+            <button class="btn-p" onclick="runReconcile()">开始比对</button>
+            <button onclick="loadDemoFiles()">载入样本 CSV</button>
+          </div>
+          <div class="heatmap" id="diffHeatmap" style="margin-top:14px;display:none;">
+            <div class="heat blocker"><span>阻断</span><b id="heatBlockers">0</b></div>
+            <div class="heat hint"><span>提示</span><b id="heatHints">0</b></div>
+            <div class="heat ok"><span>Prepayroll 行</span><b id="heatPrepay">0</b></div>
+          </div>
+          <pre id="reconcileResult">等待上传…</pre>
+          <div class="links" id="reconcileLinks"></div>
+        </div>
+      </div>
+
+      <!-- PREPAYROLL placeholder -->
+      <div id="viewPrepayroll" class="view">
+        <div class="tip">Phase 2：接入 Benefit Matrix、各国 Prepayroll Checklist。当前可先使用假期比对输出的 Prepayroll_LeaveInput CSV。</div>
+        <div class="panel">
+          <h3>Prepayroll 输入包（假期域）</h3>
+          <p class="desc">比对通过后，在「上传输出/」目录查找 Prepayroll_LeaveInput_{国家}_{期间}.csv</p>
+          <div class="row">
+            <button class="btn-p" onclick="switchView('leave')">去假期比对</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>规划中的能力</h3>
+          <ul class="desc">
+            <li>APAC & EMEA Benefit Matrix 只读浏览</li>
+            <li>各国 Prepayroll cutoff 日历</li>
+            <li>并薪一次性/周期性数据汇总模板</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div id="viewDashboard" class="view">
+        <div class="row" style="margin-top:0;">
+          <button class="btn-p" onclick="loadDashboard()">刷新看板</button>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="l">累计任务</div><div class="v" id="dTotal">—</div></div>
+          <div class="kpi"><div class="l">US 本周成功率</div><div class="v" id="dUsRate">—</div></div>
+          <div class="kpi"><div class="l">假期阻断(周)</div><div class="v" id="dBlockers">—</div></div>
+          <div class="kpi"><div class="l">平均耗时</div><div class="v" id="dAvgMs" style="font-size:18px;">—</div></div>
+        </div>
+        <div class="panel">
+          <h3>各域处理量</h3>
+          <div class="chart-bar" id="domainChart"></div>
+        </div>
+        <div class="panel">
+          <h3>最近执行时间线</h3>
+          <div id="timeline"></div>
+        </div>
+      </div>
+    </div><!-- console-main-inner -->
+    </div><!-- console-main -->
+  </div><!-- layout -->
+    </div><!-- console-body -->
+  </div><!-- root-layout -->
+
+  <script>
+    const KEY_API = "ssc_api_base";
+    let API = localStorage.getItem(KEY_API) || (location.origin.includes("18180") ? location.origin : "http://127.0.0.1:18180");
+    let region = "US";
+
+    document.getElementById("apiBase").value = API;
+    function saveApi() {
+      API = document.getElementById("apiBase").value.trim().replace(/\/$/, "");
+      localStorage.setItem(KEY_API, API);
+    }
+
+    function switchView(name) {
+      document.querySelectorAll(".nav-btn[data-view]").forEach(b => b.classList.toggle("active", b.dataset.view === name));
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      const map = { leave: "viewLeave", prepayroll: "viewPrepayroll", dashboard: "viewDashboard" };
+      document.getElementById(map[name]).classList.add("active");
+      const titles = { leave: "假期运营", prepayroll: "Prepayroll", dashboard: "运营看板" };
+      document.getElementById("viewTitle").textContent = titles[name];
+      document.getElementById("regionPills").style.display = name === "leave" ? "flex" : "none";
+      if (name === "dashboard") loadDashboard();
+    }
+
+    function setRegion(r) {
+      region = r;
+      document.querySelectorAll(".pill[data-region]").forEach(p => p.classList.toggle("active", p.dataset.region === r));
+    }
+
+    async function runPrecheck() {
+      const period = document.getElementById("leavePeriod").value.trim();
+      const fd = new FormData();
+      fd.append("country", region);
+      fd.append("period", period);
+      document.getElementById("precheckResult").textContent = "运行中…";
+      try {
+        const res = await fetch(`${API}/api/leave/precheck`, { method: "POST", body: fd });
+        const data = await res.json();
+        document.getElementById("precheckResult").textContent = (data.issues || []).join("\n") || "全部通过";
+        document.getElementById("step1").classList.add("done");
+      } catch (e) {
+        document.getElementById("precheckResult").textContent = "请求失败：" + e.message;
+      }
+    }
+
+    async function runReconcile() {
+      const adp = document.getElementById("adpFile").files[0];
+      const wd = document.getElementById("wdFile").files[0];
+      if (!adp || !wd) { alert("请选择 ADP 和 WD 两个 CSV"); return; }
+      const fd = new FormData();
+      fd.append("country", region);
+      fd.append("period", document.getElementById("reconcilePeriod").value.trim());
+      fd.append("adp_file", adp);
+      fd.append("wd_file", wd);
+      const idm = document.getElementById("idMapFile").files[0];
+      if (idm) fd.append("id_map_file", idm);
+      document.getElementById("reconcileResult").textContent = "比对中…";
+      try {
+        const res = await fetch(`${API}/api/leave/reconcile`, { method: "POST", body: fd });
+        const data = await res.json();
+        const preview = (data.diffs_preview || []).map(d => `[${d.severity}] ${d.employee_key} · ${d.message}`).join("\n");
+        document.getElementById("reconcileResult").textContent = preview || "无比对差异";
+        document.getElementById("heatBlockers").textContent = data.blockers ?? 0;
+        document.getElementById("heatHints").textContent = data.hints ?? 0;
+        document.getElementById("heatPrepay").textContent = data.prepayroll_rows ?? 0;
+        document.getElementById("diffHeatmap").style.display = "grid";
+        document.getElementById("reconcileLinks").innerHTML = (data.outputs || []).map(p =>
+          `<div><a href="${API}/api/files?path=${encodeURIComponent(p)}" target="_blank">${p.split("/").pop()}</a></div>`
+        ).join("");
+        ["step2","step3","step4"].forEach(id => document.getElementById(id).classList.add("done"));
+      } catch (e) {
+        document.getElementById("reconcileResult").textContent = "请求失败：" + e.message;
+      }
+    }
+
+    async function loadDemoFiles() {
+      const base = API.replace(/:\d+$/, ":18180");
+      async function fetchSample(name) {
+        const res = await fetch(`${base}/api/files?path=${encodeURIComponent(location.origin.includes('18180') ? '' : '')}`);
+        // fallback: use relative paths via gateway samples mount - use file input trick with blob
+      }
+      const samples = {
+        adp: `employee_id,associate_id,balance,leave_date\nE001,E001,40.0,2026-06-10\nE002,E002,24.5,2026-06-12\nE003,E003,8.0,2026-06-15\n`,
+        wd: `employee_id,Worker ID,balance,absence_date\nE001,E001,40.0,2026-06-10\nE002,E002,20.0,2026-06-12\nE004,E004,16.0,2026-06-18\n`,
+      };
+      function setFile(inputId, name, content) {
+        const blob = new Blob([content], { type: "text/csv" });
+        const file = new File([blob], name, { type: "text/csv" });
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        document.getElementById(inputId).files = dt.files;
+      }
+      setFile("adpFile", "demo_adp.csv", samples.adp);
+      setFile("wdFile", "demo_wd.csv", samples.wd);
+      document.getElementById("reconcileResult").textContent = "已载入内置样本（3 ADP / 3 WD，含 2 阻断 + 1 提示）。点击「开始比对」。";
+    }
+
+    async function loadDashboard() {
+      try {
+        const [dash, jobs] = await Promise.all([
+          fetch(`${API}/api/dashboard/ops`).then(r => r.json()),
+          fetch(`${API}/api/jobs?limit=15`).then(r => r.json()),
+        ]);
+        document.getElementById("dTotal").textContent = dash.summary?.total_jobs ?? 0;
+        const usRate = dash.all?.US?.success_rate ?? 0;
+        document.getElementById("dUsRate").textContent = usRate ? Math.round(usRate * 100) + "%" : "—";
+        const bl = (dash.leave?.US?.leave_blockers_week || 0) + (dash.leave?.CAN?.leave_blockers_week || 0);
+        document.getElementById("dBlockers").textContent = bl;
+        document.getElementById("dAvgMs").textContent = (dash.all?.US?.avg_elapsed_ms || 0) + "ms";
+        const vol = dash.volume_by_domain || {};
+        const max = Math.max(1, ...Object.values(vol));
+        document.getElementById("domainChart").innerHTML = Object.entries(vol).map(([k, v]) =>
+          `<div class="bar-col"><div class="bar" style="height:${Math.round(v / max * 100)}px"></div><div class="bar-label">${k}<br>${v}</div></div>`
+        ).join("") || "<span class='desc'>暂无数据</span>";
+        document.getElementById("timeline").innerHTML = (jobs.jobs || []).map(j =>
+          `<div class="timeline-item"><span class="badge ${j.ok?'ok':'fail'}">${j.ok?'成功':'失败'}</span> <strong>${j.action}</strong> · ${j.domain}/${j.region} · ${j.started_at} · ${j.elapsed_ms}ms</div>`
+        ).join("") || "<span class='desc'>暂无记录</span>";
+      } catch (e) {
+        document.getElementById("timeline").innerHTML = "<span style='color:#ef4444'>看板加载失败，请确认 Gateway 已启动</span>";
+      }
+    }
+
+    const hash = location.hash.replace("#", "");
+    if (hash === "prepayroll") switchView("prepayroll");
+    else if (hash === "dashboard") switchView("dashboard");
+  </script>
+</body>
+</html>

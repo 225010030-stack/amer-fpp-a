@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    (function () {
+      if (/[?&]v=/.test(location.search)) return;
+      const u = new URL(location.href);
+      u.searchParams.set("v", "d8a00de2");
+      location.replace(u.toString());
+    })();
+  </script>
+  <title>知识问答 · SSC 薪酬福利工作台</title>
+  <link rel="stylesheet" href="tokens.css?v=d8a00de2" />
+  <link rel="stylesheet" href="console-shell.css?v=d8a00de2" />
+  <link rel="stylesheet" href="app.css?v=d8a00de2" />
+  <link rel="stylesheet" href="qa.css?v=d8a00de2" />
+</head>
+<body class="ssc-console-body qa-body">
+  <div class="root-layout">
+    <header class="console-top-header">
+      <div class="console-brand">
+        <span class="console-brand-cn">SSC 薪酬福利工作台</span>
+        <span class="console-brand-en">Knowledge Q&A · P1</span>
+      </div>
+      <div class="console-header-spacer"></div>
+      <div class="console-header-meta">
+        <span class="status" id="qaHealthChip">连接中</span>
+        <label class="user-pick-dev" id="operatorPickWrap">
+          <span>操作人</span>
+          <select id="qaCurrentUser" aria-label="选择操作人"><option value="">请选择</option></select>
+        </label>
+        <div class="user-badge guest" id="qaUserBadge" hidden>
+          <img class="user-avatar" id="qaUserAvatar" alt="" width="30" height="30" />
+          <div class="user-meta">
+            <span class="user-name" id="qaUserDisplayName">识别中…</span>
+            <span class="user-sub" id="qaUserStaffMeta">—</span>
+          </div>
+          <span class="user-role-tag" id="qaUserRoleTag">—</span>
+        </div>
+        <span class="status qa-access-badge" id="qaAccessBadge">访问校验中</span>
+        <button type="button" class="btn btn-sm" id="btnQaRefresh">刷新</button>
+      </div>
+    </header>
+    <div class="console-body">
+  <div class="shell console-legacy-shell qa-shell">
+    <aside class="console-sidebar">
+      <div class="console-sidebar-head">
+        <span class="console-panel-badge">P1</span>
+        <div class="console-sidebar-head-text">
+          <span class="console-sidebar-title">Function PM 作战室</span>
+          <span class="console-sidebar-sub">Knowledge Q&A</span>
+        </div>
+      </div>
+      <div class="nav-section-label">功能板块 · MODULES</div>
+      <nav class="console-nav nav nav-accordion">
+        <a class="nav-btn nav-top nav-link console-nav-item" href="index.html">
+          <span class="console-nav-lines"><span class="console-nav-cn">全局总览</span><span class="console-nav-en">Overview</span></span>
+        </a>
+        <div class="nav-group open">
+          <span class="nav-group-toggle" style="cursor:default">
+            <span class="console-nav-group-label"><span class="console-nav-group-cn">知识</span><span class="console-nav-group-en">Knowledge</span></span>
+          </span>
+          <div class="nav-sub" style="max-height:320px">
+            <a class="nav-sub-item nav-link console-nav-item active" href="qa.html">
+              <span class="console-nav-lines"><span class="console-nav-cn">知识问答</span><span class="console-nav-en">Q&A · Knot</span></span>
+            </a>
+            <a class="nav-sub-item nav-link console-nav-item" href="index.html#knowledge">
+              <span class="console-nav-lines"><span class="console-nav-cn">知识图书馆</span><span class="console-nav-en">Library</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <span class="nav-group-toggle" style="cursor:default">
+            <span class="console-nav-group-label"><span class="console-nav-group-cn">协同</span><span class="console-nav-group-en">Collaboration</span></span>
+          </span>
+          <div class="nav-sub">
+            <a class="nav-sub-item nav-link console-nav-item" href="index.html#projects">
+              <span class="console-nav-lines"><span class="console-nav-cn">项目看板</span><span class="console-nav-en">Projects</span></span>
+            </a>
+            <a class="nav-sub-item nav-link console-nav-item" href="index.html#issues">
+              <span class="console-nav-lines"><span class="console-nav-cn">Issue</span><span class="console-nav-en">Tracking</span></span>
+            </a>
+            <a class="nav-sub-item nav-link console-nav-item" href="index.html#meetings">
+              <span class="console-nav-lines"><span class="console-nav-cn">会议</span><span class="console-nav-en">Meetings</span></span>
+            </a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <span class="nav-group-toggle" style="cursor:default">
+            <span class="console-nav-group-label"><span class="console-nav-group-cn">区域工具</span><span class="console-nav-group-en">Regional Tools</span></span>
+          </span>
+          <div class="nav-sub">
+            <a class="nav-sub-item nav-link console-nav-item" href="index.html#tools-americas">
+              <span class="console-nav-lines"><span class="console-nav-cn">美洲 · US 假期</span><span class="console-nav-en">US Leave</span></span>
+            </a>
+            <a class="nav-sub-item nav-link console-nav-item" href="workbench.html">
+              <span class="console-nav-lines"><span class="console-nav-cn">假期工作台</span><span class="console-nav-en">Leave Ops</span></span>
+            </a>
+            <a class="nav-sub-item nav-link nav-external console-nav-item" id="fppSidebarLink" href="#" target="_blank" rel="noopener">
+              <span class="console-nav-lines"><span class="console-nav-cn">FPP 分摊 3.0</span><span class="console-nav-en">External ↗</span></span>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="sidebar-foot-label">Gateway</span>
+        <span class="sidebar-foot-val">:18180 · <a href="portal.html" class="sidebar-portal-link">Portal</a></span>
+      </div>
+    </aside>
+
+    <div class="console-main qa-main">
+    <div class="console-main-inner">
+      <div class="console-page-head">
+        <h2>知识问答</h2>
+      </div>
+
+      <section class="qa-entry-guide panel">
+        <p class="section-title">两种问答入口（不要混用）</p>
+        <table class="qa-entry-table">
+          <thead><tr><th>入口</th><th>背后是什么</th><th>适合什么时候用</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>问一句</strong></td>
+              <td>本页 <code>POST /api/qa/chat</code> · Gateway 按操作人过滤书架 · 可选 LLM 归纳</td>
+              <td>快查 SOP、项目、Issue、2026 工作流 · <strong>以本页结果为准</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Knot 深聊 ↗</strong></td>
+              <td>打开 knot.woa.com · 知识问答 Bot #2 · <code>run_qa.sh</code> 拉检索上下文</td>
+              <td>多轮追问 · <strong>仅此一个 Knot 入口</strong>（与「问一句」不同接口）</td>
+            </tr>
+            <tr>
+              <td><strong>各 Tab「AI 解答」</strong></td>
+              <td>同「问一句」+ 当前 Tab 页面上下文</td>
+              <td>在项目/Issue/权限页结合本页数据提问</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted qa-entry-foot">FPP 分摊在「FPP 分摊操作台 3.0」；假期脚本在 workbench — 不在本页问答范围内。</p>
+      </section>
+
+      <section class="qa-hero-landing">
+        <div class="qa-hero-blob" aria-hidden="true"></div>
+        <p class="qa-hero-eyebrow">Knowledge Q&A</p>
+        <h1 class="qa-hero-title">想问什么？</h1>
+        <p class="qa-hero-sub">先选操作人 · 「问一句」= Gateway 即时检索 · 「Knot 深聊」= 另开 knot.woa.com（多轮，非同一接口）</p>
+        <div class="qa-hero-widget">
+          <div class="qa-hero-search-row">
+            <input type="text" id="qaHeroInput" class="qa-hero-input" placeholder="例如：Benefits Module 进展？开放 Issue 有哪些？" autocomplete="off" />
+            <button type="button" class="btn btn-primary qa-hero-btn" id="qaHeroAsk">问一句</button>
+            <button type="button" class="btn btn-ghost qa-hero-btn qa-hero-knot" id="qaHeroKnot" title="打开 knot.woa.com 新标签页">Knot 深聊 ↗</button>
+          </div>
+        </div>
+        <div id="qaHeroResult" class="qa-hero-result" hidden></div>
+        <div class="qa-hero-chips" id="qaHeroChips">
+          <button type="button" class="qa-hero-chip" data-q="各在跟项目进展与 Owner">项目进展</button>
+          <button type="button" class="qa-hero-chip" data-q="开放 Issue 有哪些？">开放 Issue</button>
+          <button type="button" class="qa-hero-chip" data-q="团队小黑板谁还没点收到？">小黑板</button>
+          <button type="button" class="qa-hero-chip" data-q="会议开放待办有哪些？">会议待办</button>
+        </div>
+        <p class="qa-hero-foot muted" id="qaStatus">选择操作人后提问 · 检索来自 Gateway 统一库</p>
+        <p class="qa-hero-library-link"><a href="index.html#knowledge">浏览完整知识图书馆 →</a></p>
+      </section>
+
+      <details class="qa-more-panel panel">
+        <summary>知识源 · 历史</summary>
+        <div class="qa-layout qa-layout-compact">
+          <aside class="qa-context">
+            <p class="section-title">已接入知识源</p>
+            <div id="qaSources" class="qa-source-list">加载中…</div>
+            <p class="muted qa-index-meta" id="qaIndexMeta">索引：—</p>
+            <p class="section-title" style="margin-top:16px">本页记录</p>
+            <div id="qaLocalHistory" class="qa-local-history"></div>
+            <button type="button" class="btn btn-sm" id="btnClearHistory">清空记录</button>
+          </aside>
+          <section class="panel qa-knot-note">
+            <p class="section-title">Knot 说明</p>
+            <p class="muted" style="font-size:13px;line-height:1.6;margin:0">
+              多轮对话请用页顶 <strong>「Knot 深聊 ↗」</strong> — 同一 Bot（知识问答 Agent），非页内第二个入口。
+              快查 SOP 请用「问一句」（Gateway <code>/api/qa/chat</code>）。
+            </p>
+          </section>
+        </div>
+      </details>
+    </div><!-- console-main-inner -->
+    </div><!-- console-main -->
+  </div><!-- shell -->
+    </div><!-- console-body -->
+  </div><!-- root-layout -->
+
+  <script src="qa.js?v=d8a00de2"></script>
+</body>
+</html>

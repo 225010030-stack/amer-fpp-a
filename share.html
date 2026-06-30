@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SSC 海外薪酬福利 AI 工作台 · 成果说明</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="console-shell.css" />
+  <link rel="stylesheet" href="share.css" />
+</head>
+<body class="ssc-console-body share-body">
+  <div class="root-layout">
+    <header class="console-top-header">
+      <div class="console-brand">
+        <span class="console-brand-cn">SSC 薪酬福利工作台</span>
+        <span class="console-brand-en">Deliverables · P1</span>
+      </div>
+      <div class="console-header-spacer"></div>
+      <div class="console-header-meta">
+        <a class="btn btn-sm" href="portal.html">统一门户</a>
+        <a class="btn btn-sm btn-primary" href="index.html">进入工作台</a>
+      </div>
+    </header>
+    <main class="console-main share-main">
+  <div class="share-shell">
+    <header class="share-hero">
+      <div class="share-logo">SSC</div>
+      <span class="share-badge">AI 工作台 1.0 · 阶段 2→2.5</span>
+      <h1>SSC 海外薪酬福利 AI 工作台</h1>
+      <p class="lead">
+        一个入口聚合<strong>指挥总览</strong>、<strong>知识库问答</strong>、<strong>项目 / Issue / 会议协同</strong>与<strong>区域工具</strong>。
+        脚本与 API 负责算数，Agent 负责编排与检索，过程知识自动沉淀。
+      </p>
+      <div class="share-status" id="shareStatus">
+        <span class="dot"></span>
+        <span id="shareStatusText">检测服务状态…</span>
+      </div>
+      <div class="share-actions">
+        <a class="share-btn share-btn-primary" id="btnOpenPortal" href="portal.html">进入统一门户</a>
+        <a class="share-btn" id="btnOpenWorkbench" href="index.html">打开指挥总览</a>
+        <a class="share-btn" id="btnOpenQa" href="qa.html">知识问答</a>
+      </div>
+    </header>
+
+    <div class="share-pills">
+      <span class="share-pill">脚本确定性算数</span>
+      <span class="share-pill">Knot Agent 编排</span>
+      <span class="share-pill">MCP 过程沉淀</span>
+      <span class="share-pill">权限认人非 IP</span>
+      <span class="share-pill">团队小黑板确认</span>
+    </div>
+
+    <section class="share-section">
+      <h2>功能模块</h2>
+      <div class="share-grid">
+        <div class="share-card">
+          <h3>◈ 全局指挥总览</h3>
+          <p>AI 摘要、板块 KPI、团队小黑板（全员独立「收到」确认）、内部监控预警、操作热力图。</p>
+          <span class="tag">index.html</span>
+        </div>
+        <div class="share-card">
+          <h3>📚 知识图书馆 & 问答</h3>
+          <p>书架权限过滤 · 「问一句」Gateway 即时检索 · 「Knot 深聊」多轮对话 · 项目 / Issue 自动入库。</p>
+          <span class="tag">qa.html · #knowledge</span>
+        </div>
+        <div class="share-card">
+          <h3>📋 项目 · Issue · 会议</h3>
+          <p>看板与 Kanban · COE 月报 CSV 导入（可选推小黑板）· 纪要解析 · 待办升级 Issue · 知识同步。</p>
+          <span class="tag">#projects · #issues · #meetings</span>
+        </div>
+        <div class="share-card">
+          <h3>🌎 区域工具</h3>
+          <p>US 假期 ADP↔WD 比对 · FPP 分摊操作台 3.0 外链 · 假期工作台脚本直跑 · 其他区域筹备中。</p>
+          <span class="tag">#tools-americas · workbench.html</span>
+        </div>
+        <div class="share-card">
+          <h3>📊 管理看板 · SSC 运营</h3>
+          <p>8 项业务自检（Pipeline · 分摊留痕 · Issue · 知识书架 · 监控响应等），按海外 HRSSC 口径定义。</p>
+          <span class="tag">#admin-mgmt</span>
+        </div>
+        <div class="share-card">
+          <h3>🤖 Knot 总助手 + 专科 Agent</h3>
+          <p>Bot 执行命令拉 Gateway 数据 · 不算金额 · FPP 分摊引导至独立操作台（:18082）。</p>
+          <span class="tag">Knot · :18180</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="share-section">
+      <h2>在线访问入口</h2>
+      <div class="share-links">
+        <table>
+          <thead>
+            <tr><th>用途</th><th>链接</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>成果说明（本页）</strong></td>
+              <td><a id="linkShare" href="share.html">—</a> <button type="button" class="share-copy" data-copy="linkShare">复制</button></td>
+            </tr>
+            <tr>
+              <td><strong>统一门户</strong></td>
+              <td><a id="linkPortal" href="portal.html">—</a> <button type="button" class="share-copy" data-copy="linkPortal">复制</button></td>
+            </tr>
+            <tr>
+              <td><strong>指挥总览</strong></td>
+              <td><a id="linkIndex" href="index.html">—</a> <button type="button" class="share-copy" data-copy="linkIndex">复制</button></td>
+            </tr>
+            <tr>
+              <td><strong>知识问答</strong></td>
+              <td><a id="linkQa" href="qa.html">—</a> <button type="button" class="share-copy" data-copy="linkQa">复制</button></td>
+            </tr>
+            <tr>
+              <td><strong>FPP 分摊操作台 3.0</strong></td>
+              <td><a id="linkFpp" href="#" target="_blank" rel="noopener">—</a> <button type="button" class="share-copy" data-copy="linkFpp">复制</button></td>
+            </tr>
+            <tr>
+              <td><strong>API 健康检查</strong></td>
+              <td><a id="linkHealth" href="/api/health">—</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin:10px 0 0;font-size:12px;color:#94a3b8">浏览器 Chrome / Edge · 打开后右上角选择操作人（权限按 permissions.json）</p>
+    </section>
+
+    <section class="share-section">
+      <h2>工蜂仓库</h2>
+      <div class="share-links">
+        <table>
+          <thead><tr><th>项</th><th>地址</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>SSC 工作台</strong></td>
+              <td>
+                <a id="linkGitSsh" href="https://git.woa.com/annawzhang/ssc-overseas-cb" target="_blank" rel="noopener">git.woa.com/annawzhang/ssc-overseas-cb</a>
+                <button type="button" class="share-copy" data-copy-text="git@git.woa.com:annawzhang/ssc-overseas-cb.git">复制 SSH</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Knot 工作区路径</strong></td>
+              <td><code>/data/workspace/ssc-overseas-cb</code></td>
+            </tr>
+            <tr>
+              <td><strong>Gateway 端口</strong></td>
+              <td><code>18180</code>（静态页 + API 同端口）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="share-section">
+      <h2>HR Claw 能否部署本工具？</h2>
+      <div class="share-note">
+        <p style="margin:0 0 10px"><strong>可以配置入口，不能替代后端。</strong></p>
+        <p style="margin:0 0 10px">
+          HR Claw 适合作为<strong>应用快捷入口</strong>：在 HR Claw 应用配置里填写 Preview 地址（推荐本页或 portal），用户点击后在浏览器打开完整工作台。
+        </p>
+        <p style="margin:0 0 10px">
+          实际服务运行在 <strong>Knot 工作区 Preview :18180</strong>（FastAPI + 静态页），与 FPP 分摊操作台（:18082）分开。
+          HR Claw 不托管 Python 进程，也不替代 <code>start_web.sh</code>。
+        </p>
+        <p style="margin:0"><strong>建议填写的 HR Claw 应用地址：</strong><br />
+          <a id="linkHrclawSuggest" href="#">—</a>
+          <button type="button" class="share-copy" id="btnCopyHrclaw">复制</button>
+        </p>
+      </div>
+    </section>
+
+    <section class="share-section">
+      <h2>快速上手（3 步）</h2>
+      <ol class="share-steps">
+        <li>打开<strong>统一门户</strong>或<strong>指挥总览</strong> → 右上角选择操作人（团队登记名单）。</li>
+        <li>首页<strong>团队小黑板</strong>查看预警 / 发布消息 → 相关人各自点「收到」。</li>
+        <li>有问题走 <strong>qa.html</strong>「问一句」；多轮追问点「Knot 深聊 ↗」。</li>
+      </ol>
+    </section>
+
+    <footer class="share-foot">
+      SSC 海外薪酬福利 AI 工作台 · Gateway <span id="footApi">—</span> ·
+      <a href="portal.html">门户</a> ·
+      <a href="index.html">工作台</a>
+    </footer>
+  </div><!-- share-shell -->
+    </main>
+  </div><!-- root-layout -->
+  <script>
+    (function () {
+      const FALLBACK_PUBLIC = "https://ckx2p2kk-18180h-devc.preview.with.woa.com";
+      const FALLBACK_FPP = "https://pb0hulu9-18081h-devc.preview.with.woa.com/upload-docs.html";
+      const API = location.protocol.startsWith("http") ? location.origin : "http://127.0.0.1:18180";
+
+      function baseUrl(meta) {
+        const pub = (meta?.workbench_public_url || "").replace(/\/$/, "");
+        if (pub && !pub.includes("127.0.0.1")) return pub;
+        if (location.protocol.startsWith("http") && !location.origin.includes("127.0.0.1")) {
+          return location.origin.replace(/\/$/, "");
+        }
+        return FALLBACK_PUBLIC;
+      }
+
+      function setLink(id, url) {
+        const el = document.getElementById(id);
+        if (!el || !url) return;
+        el.href = url;
+        el.textContent = url;
+      }
+
+      function bindCopyButtons(root, publicBase) {
+        root.querySelectorAll(".share-copy").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            let text = btn.dataset.copyText || "";
+            if (!text && btn.dataset.copy) {
+              const el = document.getElementById(btn.dataset.copy);
+              text = el?.href || el?.textContent || "";
+            }
+            if (!text && btn.id === "btnCopyHrclaw") {
+              text = document.getElementById("linkHrclawSuggest")?.href || publicBase + "/share.html";
+            }
+            try {
+              await navigator.clipboard.writeText(text);
+              const orig = btn.textContent;
+              btn.textContent = "已复制";
+              setTimeout(() => { btn.textContent = orig; }, 1500);
+            } catch {
+              alert("复制失败，请手动选中链接");
+            }
+          });
+        });
+      }
+
+      Promise.all([
+        fetch(API + "/api/health").then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(API + "/api/meta").then(r => r.ok ? r.json() : null).catch(() => null),
+      ]).then(([health, meta]) => {
+        const pub = baseUrl(meta);
+        const fpp = meta?.fpp_portal_url || FALLBACK_FPP;
+        const statusEl = document.getElementById("shareStatus");
+        const statusText = document.getElementById("shareStatusText");
+
+        setLink("linkShare", pub + "/share.html");
+        setLink("linkPortal", pub + "/portal.html");
+        setLink("linkIndex", pub + "/index.html");
+        setLink("linkQa", pub + "/qa.html");
+        setLink("linkFpp", fpp);
+        setLink("linkHealth", pub + "/api/health");
+        setLink("linkHrclawSuggest", pub + "/share.html");
+
+        document.getElementById("btnOpenPortal").href = pub + "/portal.html";
+        document.getElementById("btnOpenWorkbench").href = pub + "/index.html";
+        document.getElementById("btnOpenQa").href = pub + "/qa.html";
+        document.getElementById("footApi").textContent = pub;
+
+        if (health && statusEl) {
+          statusEl.classList.add("ok");
+          statusText.textContent = "服务在线 · v" + (health.api_version || "?") + " · git " + (health.git_commit || "").slice(0, 8);
+        } else if (statusEl) {
+          statusEl.classList.add("err");
+          statusText.textContent = "当前 Gateway 离线 · 请使用 Preview 链接或联系管理员";
+        }
+
+        bindCopyButtons(document, pub);
+      });
+    })();
+  </script>
+</body>
+</html>

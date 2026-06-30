@@ -1,0 +1,89 @@
+/**
+ * SSC 总作战工作室 · 设计 Token
+ * 对齐 TDesign 外壳 (#0052d9) + P1 质量板块 (#2E5BFF / #F5F7FA)
+ * 来源：ssc-console live 提取 · 2026-06-29
+ */
+:root {
+  /* —— Brand —— */
+  --ssc-brand: #0052d9;
+  --ssc-brand-hover: #003cab;
+  --ssc-brand-light: #f2f3ff;
+  --ssc-brand-accent: #2e5bff;
+  --ssc-header-bg: #0963d7;
+  --ssc-header-shadow: 0 8px 18px rgba(5, 74, 165, 0.18);
+
+  /* —— Surface —— */
+  --ssc-bg-page: #eeeeee;
+  --ssc-bg-shell: #f5f7fa;
+  --ssc-bg-card: #ffffff;
+  --ssc-bg-card-muted: #f8f9fa;
+  --ssc-bg-hover: #f7f9fc;
+
+  /* —— Text —— */
+  --ssc-text: #1d2939;
+  --ssc-text-2: #475467;
+  --ssc-text-3: #667085;
+  --ssc-text-muted: rgba(0, 0, 0, 0.6);
+  --ssc-text-primary: rgba(0, 0, 0, 0.9);
+
+  /* —— Border —— */
+  --ssc-border: #e5e9f0;
+  --ssc-border-light: #edf1f6;
+  --ssc-divider: #e7e7e7;
+
+  /* —— Semantic —— */
+  --ssc-success: #12b76a;
+  --ssc-success-alt: #2ba471;
+  --ssc-success-bg: rgba(18, 183, 106, 0.1);
+  --ssc-warn: #f79009;
+  --ssc-warn-bg: rgba(247, 144, 9, 0.1);
+  --ssc-danger: #f04438;
+  --ssc-danger-alt: #e34d59;
+  --ssc-danger-bg: rgba(240, 68, 56, 0.1);
+  --ssc-info: #0052d9;
+  --ssc-purple: #7a5af8;
+
+  /* —— Typography —— */
+  --ssc-font: "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ssc-font-size-xs: 11px;
+  --ssc-font-size-sm: 12px;
+  --ssc-font-size-base: 14px;
+  --ssc-font-size-md: 16px;
+  --ssc-font-size-lg: 20px;
+  --ssc-font-size-kpi: 28px;
+  --ssc-font-weight-normal: 400;
+  --ssc-font-weight-medium: 500;
+  --ssc-font-weight-semibold: 600;
+  --ssc-font-weight-bold: 700;
+  --ssc-font-weight-kpi: 800;
+
+  /* —— Radius —— */
+  --ssc-radius-sm: 3px;
+  --ssc-radius: 6px;
+  --ssc-radius-md: 8px;
+  --ssc-radius-lg: 12px;
+  --ssc-radius-xl: 14px;
+  --ssc-radius-pill: 999px;
+
+  /* —— Shadow —— */
+  --ssc-shadow-sm: 0 1px 4px rgba(15, 23, 42, 0.04);
+  --ssc-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --ssc-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  /* —— Layout —— */
+  --ssc-sidebar-w: 240px;
+  --ssc-header-h: 56px;
+  --ssc-content-max: 1280px;
+
+  /* —— TDesign compat aliases —— */
+  --td-brand-color: var(--ssc-brand);
+  --td-bg-color-page: var(--ssc-bg-page);
+  --td-bg-color-container: var(--ssc-bg-card);
+  --td-text-color-primary: var(--ssc-text-primary);
+  --td-text-color-secondary: var(--ssc-text-muted);
+  --td-font-family: var(--ssc-font);
+  --td-font-size-body-medium: var(--ssc-font-size-base);
+  --td-radius-default: var(--ssc-radius-sm);
+  --td-radius-medium: var(--ssc-radius);
+  --td-radius-large: var(--ssc-radius-md);
+}

@@ -2,11 +2,1042 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0;url=upload-docs.html" />
-  <title>跳转中…</title>
-  <script>location.replace("upload-docs.html");</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    (function () {
+      if (/[?&]v=/.test(location.search)) return;
+      const u = new URL(location.href);
+      u.searchParams.set("v", "8a0f394");
+      location.replace(u.toString());
+    })();
+  </script>
+  <title>SSC 薪酬福利 · 全局总览</title>
+  <link rel="stylesheet" href="tokens.css?v=8a0f394" />
+  <link rel="stylesheet" href="console-shell.css?v=8a0f394" />
+  <link rel="stylesheet" href="app.css?v=8a0f394" />
 </head>
-<body>
-  <p>正在跳转到正式工具页 <a href="upload-docs.html">upload-docs.html</a> …</p>
+<body class="ssc-console-body">
+  <div class="root-layout">
+    <header class="console-top-header">
+      <div class="console-brand">
+        <span class="console-brand-cn">SSC 薪酬福利工作台</span>
+        <span class="console-brand-en">Compensation & Benefits · P1</span>
+      </div>
+      <div class="console-header-spacer"></div>
+      <div class="console-header-meta">
+        <span class="status" id="healthChip">连接中</span>
+        <label class="user-pick-dev" id="operatorPickWrap">
+          <span>操作人</span>
+          <select id="currentUser" aria-label="选择操作人"><option value="">请选择</option></select>
+        </label>
+        <div class="user-badge guest" id="userBadge" hidden>
+          <img class="user-avatar" id="userAvatar" alt="" width="30" height="30" />
+          <div class="user-meta">
+            <span class="user-name" id="userDisplayName">识别中…</span>
+            <span class="user-sub" id="userStaffMeta">—</span>
+          </div>
+          <span class="user-role-tag" id="userRoleTag">—</span>
+        </div>
+        <span class="topbar-date" id="topbarDate"></span>
+        <button class="btn btn-sm" id="btnRefresh" type="button">刷新</button>
+      </div>
+    </header>
+
+    <div class="console-rails">
+      <div class="panel-rail-wrap">
+        <span class="panel-rail-eyebrow">功能板块 · PANELS · 5</span>
+        <nav class="panel-rail" id="panelRail" role="tablist" aria-label="功能板块">
+          <button type="button" class="panel-rail-btn" data-panel="tools" role="tab" aria-selected="false">
+            <span class="panel-rail-badge">P1</span>
+            <span class="panel-rail-label">
+              <span class="panel-rail-cn">区域工具</span>
+              <span class="panel-rail-en">Regional Tools</span>
+            </span>
+          </button>
+          <button type="button" class="panel-rail-btn" data-panel="knowledge" role="tab" aria-selected="false">
+            <span class="panel-rail-badge">P2</span>
+            <span class="panel-rail-label">
+              <span class="panel-rail-cn">知识库</span>
+              <span class="panel-rail-en">Knowledge</span>
+            </span>
+          </button>
+          <button type="button" class="panel-rail-btn active" data-panel="home" role="tab" aria-selected="true">
+            <span class="panel-rail-label">
+              <span class="panel-rail-cn">全局总览</span>
+              <span class="panel-rail-en">Overview</span>
+            </span>
+          </button>
+          <button type="button" class="panel-rail-btn" data-panel="collab" role="tab" aria-selected="false">
+            <span class="panel-rail-badge">P4</span>
+            <span class="panel-rail-label">
+              <span class="panel-rail-cn">协同</span>
+              <span class="panel-rail-en">Collaboration</span>
+            </span>
+          </button>
+          <button type="button" class="panel-rail-btn" data-panel="system" role="tab" aria-selected="false">
+            <span class="panel-rail-badge">P5</span>
+            <span class="panel-rail-label">
+              <span class="panel-rail-cn">系统管理</span>
+              <span class="panel-rail-en">Administration</span>
+            </span>
+          </button>
+        </nav>
+      </div>
+      <nav class="sub-rail console-tabs" id="subRail" role="tablist" aria-label="子功能" hidden>
+        <button type="button" class="console-tab" data-panel="tools" data-view="tools-americas" hidden>美国工作区 · 分摊 / 提单</button>
+        <button type="button" class="console-tab" data-panel="tools" data-view="tools-non-americas" hidden>加拿大工作区 · 分摊 / 提单</button>
+        <button type="button" class="console-tab" data-panel="tools" data-view="tools-sg" hidden>新加坡 · EE Listing</button>
+        <a class="console-tab console-tab-link" data-panel="knowledge" href="qa.html" hidden>知识问答 · Knot</a>
+        <button type="button" class="console-tab" data-panel="knowledge" data-view="knowledge" hidden>知识图书馆</button>
+        <button type="button" class="console-tab" data-panel="collab" data-view="projects" hidden>项目看板</button>
+        <button type="button" class="console-tab" data-panel="collab" data-view="issues" hidden>Issue</button>
+        <button type="button" class="console-tab" data-panel="collab" data-view="meetings" hidden>会议</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="admin-mgmt" data-registered-only hidden>管理看板</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="admin-users" data-admin-only hidden>用户管理</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="admin-perm" data-admin-only hidden>权限矩阵</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="admin-audit" data-admin-only hidden>操作日志</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="admin-access" hidden>权限申请</button>
+        <button type="button" class="console-tab" data-panel="system" data-view="agents" data-admin-only hidden>Knot · Agent</button>
+        <a class="console-tab console-tab-link" data-panel="system" href="portal.html" hidden>统一门户</a>
+      </nav>
+    </div>
+
+    <div class="console-body console-body-full">
+  <div class="shell console-legacy-shell console-full-main">
+    <div class="console-main">
+    <div class="console-main-inner">
+      <div class="console-page-head">
+        <div class="console-page-head-main">
+          <h2 id="pageTitle">工作台</h2>
+          <span class="ssc-page-sub" id="pageSubtitle">Command Overview</span>
+        </div>
+        <span class="status operator-hint" id="operatorHint" hidden></span>
+      </div>
+
+      <div class="operator-gate-banner" id="operatorGateBanner" hidden></div>
+
+      <!-- 全局总览层 -->
+      <div id="view-home" class="view active">
+        <section class="command-layer home-compact">
+          <div class="home-command-bar panel">
+            <div class="ai-insight ai-insight-inline" id="aiInsightBox">
+              <div class="ai-insight-head">
+                <span class="ai-insight-dot"></span>
+                <span class="ai-insight-label">AI · 指挥摘要</span>
+                <span class="muted" id="aiInsightTime" style="font-size:11px;margin-left:auto"></span>
+              </div>
+              <p class="ai-insight-body" id="aiInsightBody">加载中…</p>
+            </div>
+            <div class="employee-profile-card" id="employeeProfileCard">
+              <div class="employee-profile-head">
+                <strong>员工真实信息</strong>
+                <span class="muted" id="employeeProfileSource">session</span>
+              </div>
+              <div id="employeeProfileBody" class="employee-profile-body muted">识别中…</div>
+            </div>
+            <div class="command-domain-grid command-domain-compact" id="domainStatusGrid"></div>
+          </div>
+
+          <div class="console-tabs home-kpi-tabs" id="homeKpiTabs" role="tablist">
+            <button type="button" class="console-tab active" data-home-tab="overview" role="tab" aria-selected="true">指挥总览</button>
+            <button type="button" class="console-tab" data-home-tab="projects" role="tab" aria-selected="false">项目 KPI</button>
+            <button type="button" class="console-tab" data-home-tab="collab" role="tab" aria-selected="false">协同态势</button>
+            <button type="button" class="console-tab" data-home-tab="monitor" role="tab" aria-selected="false">监控信号</button>
+          </div>
+
+          <div class="home-kpi-panels">
+            <div class="home-kpi-panel active" data-home-panel="overview" role="tabpanel">
+              <div class="stat-row stat-row-compact">
+                <div class="stat"><div class="label">在跟项目</div><div class="val" id="kpiProjects">—</div></div>
+                <div class="stat"><div class="label">平均进度</div><div class="val" id="kpiProgress">—</div></div>
+                <div class="stat"><div class="label">开放 Issue</div><div class="val" id="kpiIssues">—</div></div>
+                <div class="stat"><div class="label">监控告警</div><div class="val" id="kpiAlerts">—</div></div>
+              </div>
+            </div>
+            <div class="home-kpi-panel" data-home-panel="projects" role="tabpanel" hidden>
+              <div class="stat-row stat-row-compact">
+                <div class="stat"><div class="label">在跟项目</div><div class="val" id="kpiProjActive">—</div></div>
+                <div class="stat"><div class="label">平均进度</div><div class="val" id="kpiProjProgress">—</div></div>
+                <div class="stat"><div class="label">近期里程碑</div><div class="val" id="kpiMilestones">—</div></div>
+                <div class="stat"><div class="label">逾期里程碑</div><div class="val" id="kpiMilestonesOverdue">—</div></div>
+              </div>
+            </div>
+            <div class="home-kpi-panel" data-home-panel="collab" role="tabpanel" hidden>
+              <div class="stat-row stat-row-compact">
+                <div class="stat"><div class="label">开放 Issue</div><div class="val" id="kpiCollabIssues">—</div></div>
+                <div class="stat"><div class="label">会议待办</div><div class="val" id="kpiMeetingTodos">—</div></div>
+                <div class="stat"><div class="label">小黑板待确认</div><div class="val" id="kpiBbPending">—</div></div>
+                <div class="stat"><div class="label">待办完成率</div><div class="val" id="kpiTodoPct">—</div></div>
+              </div>
+            </div>
+            <div class="home-kpi-panel" data-home-panel="monitor" role="tabpanel" hidden>
+              <div class="stat-row stat-row-compact">
+                <div class="stat"><div class="label">监控告警</div><div class="val" id="kpiMonAlerts">—</div></div>
+                <div class="stat"><div class="label">高优先级</div><div class="val" id="kpiMonCritical">—</div></div>
+                <div class="stat"><div class="label">累计任务</div><div class="val" id="kpiJobsTotal">—</div></div>
+                <div class="stat"><div class="label">近 14 天操作</div><div class="val" id="kpiRecentOps">—</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="console-tabs home-lane-tabs" id="homeLaneTabs" role="tablist">
+            <button type="button" class="console-tab active" data-home-lane-tab="ops" role="tab" aria-selected="true">运营协同功能区</button>
+            <button type="button" class="console-tab" data-home-lane-tab="blackboard" role="tab" aria-selected="false">团队小黑板</button>
+            <button type="button" class="console-tab" data-home-lane-tab="overview" role="tab" aria-selected="false">运行总览</button>
+          </div>
+
+          <section class="panel vv-demo-panel" data-home-section="overview collab" data-home-lane="ops">
+            <div class="panel-head ssc-block-head">
+              <div class="ssc-block-head-main">
+                <h3 class="ssc-block-head-cn">运营协同功能区</h3>
+                <p class="ssc-block-head-en">Top-down + Bottom-up + SOP Governance</p>
+              </div>
+              <div class="vv-head-actions">
+                <button type="button" class="btn btn-sm" id="vvIngestKnowledge">知识入库（占位）</button>
+                <button type="button" class="btn btn-sm" id="vvTriggerAgent">触发协同 Agent（占位）</button>
+              </div>
+            </div>
+            <p class="muted" style="font-size:11px;margin:0 0 10px">信息源唯一性：公告 / SOP / 质量月报统一收敛</p>
+            <div class="vv-action-msg muted" id="vvActionMsg"></div>
+            <div class="vv-demo-grid">
+              <section class="vv-card">
+                <h4>公告板</h4>
+                <p class="muted">发布 COE 规则、统一口径等 Top-down 信息</p>
+                <form id="vvAnnouncementForm" class="vv-inline-form">
+                  <input id="vvAnnouncementTitle" type="text" placeholder="公告标题（必填）" />
+                  <textarea id="vvAnnouncementBody" rows="2" placeholder="公告内容：规则更新、执行窗口、责任人…"></textarea>
+                  <button type="submit" class="btn btn-sm btn-primary">发布公告</button>
+                  <span class="muted" id="vvAnnouncementMsg"></span>
+                </form>
+                <div id="vvAnnouncementList" class="vv-list"></div>
+              </section>
+
+              <section class="vv-card">
+                <h4>需求收集箱</h4>
+                <p class="muted">接收运营 / Hub 的 Bottom-up 问题并跟踪状态</p>
+                <form id="vvDemandForm" class="vv-inline-form">
+                  <input id="vvDemandFrom" type="text" placeholder="提交方（如：SG Hub）" />
+                  <input id="vvDemandTopic" type="text" placeholder="问题主题（必填）" />
+                  <textarea id="vvDemandBody" rows="2" placeholder="问题描述、影响范围、期望时效"></textarea>
+                  <button type="submit" class="btn btn-sm">提交问题</button>
+                  <span class="muted" id="vvDemandMsg"></span>
+                </form>
+                <div class="vv-link-row">
+                  <button type="button" class="btn btn-sm" id="vvDemandToIssueBtn">一键转 Issue（最近一条）</button>
+                </div>
+                <div id="vvDemandList" class="vv-list"></div>
+              </section>
+
+              <section class="vv-card">
+                <h4>记事本</h4>
+                <p class="muted">沉淀内部会议决策，保留“谁决定了什么”</p>
+                <form id="vvNotebookForm" class="vv-inline-form">
+                  <input id="vvNotebookTopic" type="text" placeholder="会议 / 决策主题（必填）" />
+                  <textarea id="vvNotebookBody" rows="2" placeholder="记录关键决策、约定动作、上下文"></textarea>
+                  <button type="submit" class="btn btn-sm">记录</button>
+                  <span class="muted" id="vvNotebookMsg"></span>
+                </form>
+                <div class="vv-link-row">
+                  <button type="button" class="btn btn-sm" id="vvNotebookToMeetingBtn">关联会议（最近一条）</button>
+                  <button type="button" class="btn btn-sm" id="vvNotebookToProjectBtn">关联项目（最近一条）</button>
+                </div>
+                <div id="vvNotebookList" class="vv-list"></div>
+              </section>
+
+              <section class="vv-card vv-card-wide">
+                <div class="vv-sop-head">
+                  <div>
+                    <h4>SOP 管理与 Review 提醒</h4>
+                    <p class="muted">定期提醒负责人复核，保持 SOP 实时更新</p>
+                  </div>
+                  <button type="button" class="btn btn-sm" id="vvSopPushReminder">推提醒到团队小黑板</button>
+                </div>
+                <form id="vvSopForm" class="vv-inline-form vv-sop-form">
+                  <input id="vvSopName" type="text" placeholder="SOP 名称（必填）" />
+                  <input id="vvSopOwner" type="text" placeholder="负责人（必填）" />
+                  <input id="vvSopSource" type="text" placeholder="唯一信息源（如 Master Sheet URL）" />
+                  <input id="vvSopReviewDays" type="number" min="1" value="30" placeholder="复核周期(天)" />
+                  <button type="submit" class="btn btn-sm">新增 SOP</button>
+                  <span class="muted" id="vvSopMsg"></span>
+                </form>
+                <div id="vvSopReminderBar" class="vv-reminder"></div>
+                <div id="vvSopList" class="vv-list"></div>
+              </section>
+
+              <section class="vv-card">
+                <h4>项目进展同步</h4>
+                <p class="muted">自动读取项目看板，形成本周同步摘要</p>
+                <div id="vvProjectSync" class="vv-list"></div>
+              </section>
+
+              <section class="vv-card">
+                <h4>团队运营质量看板</h4>
+                <p class="muted">可挂接线下 Master Sheet，并联动质量月报</p>
+                <form id="vvQualityForm" class="vv-inline-form">
+                  <input id="vvQualityMasterSheet" type="text" placeholder="Master Sheet 链接" />
+                  <input id="vvQualityMonthlyReport" type="text" placeholder="质量月报链接" />
+                  <input id="vvQualityScore" type="number" min="0" max="100" placeholder="质量评分(0-100)" />
+                  <button type="submit" class="btn btn-sm">保存看板配置</button>
+                  <span class="muted" id="vvQualityMsg"></span>
+                </form>
+                <div class="vv-link-row">
+                  <button type="button" class="btn btn-sm" id="vvQualityToMgmtBtn">同步到管理看板指标区</button>
+                </div>
+                <div id="vvQualityBoard" class="vv-list"></div>
+              </section>
+            </div>
+          </section>
+
+          <div class="home-dashboard-grid" data-home-section="overview collab" data-home-lane="blackboard overview">
+            <div class="panel team-blackboard-panel" data-home-section="overview collab" data-home-lane="blackboard">
+              <div class="panel-head ssc-block-head">
+                <div class="ssc-block-head-main">
+                  <h3 class="ssc-block-head-cn">团队小黑板</h3>
+                  <p class="ssc-block-head-en">Team Blackboard · Cross-team ack</p>
+                </div>
+                <span class="muted" style="font-size:11px">含监控预警 · 自动入库</span>
+              </div>
+              <div id="teamBlackboardList" class="team-bb-list"></div>
+              <form id="teamBlackboardForm" class="team-bb-form">
+                <textarea id="teamBlackboardInput" rows="2" placeholder="发布跨部门消息…"></textarea>
+                <div class="team-bb-recipients" id="teamBlackboardRecipients">
+                  <span class="team-bb-rec-label">需确认（勾选后对应同事须点「收到」）</span>
+                  <div class="team-bb-rec-chips" id="teamBlackboardRecChips"></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">发布</button>
+                <span class="muted" id="teamBlackboardMsg" style="font-size:11px"></span>
+              </form>
+            </div>
+            <div class="panel alert-monitor-panel" data-home-section="monitor overview" data-home-lane="overview">
+              <div class="alert-panel-head">
+                <p class="section-title" style="margin:0">内部监控</p>
+                <div class="alert-panel-tools">
+                  <button type="button" class="btn btn-sm btn-primary" id="btnPushAllAlerts">推预警 → 小黑板</button>
+                  <span class="muted" id="alertPushMsg" style="font-size:11px"></span>
+                </div>
+              </div>
+              <p class="muted alert-panel-hint">Issue / 会议逾期 / 里程碑 · 一键推上方小黑板</p>
+              <div id="alertList"></div>
+            </div>
+          </div>
+
+          <details class="home-collapsible panel" data-home-section="projects overview" data-home-lane="overview">
+            <summary>近期里程碑</summary>
+            <div id="milestoneCards" class="milestone-cards-inner"></div>
+          </details>
+
+          <div class="panel home-heatmap-panel" data-home-section="monitor overview" data-home-lane="overview">
+            <div class="panel-head ssc-block-head">
+              <div class="ssc-block-head-main">
+                <h3 class="ssc-block-head-cn">操作热力图</h3>
+                <p class="ssc-block-head-en">Activity Heatmap · Last 14 days</p>
+              </div>
+              <span class="muted" style="font-size:11px">上传 / 脚本 / 知识同步</span>
+            </div>
+            <div class="heatmap-panel-inner">
+              <div id="activityHeatmap" class="activity-heatmap"></div>
+              <div id="weekPulseChart" class="week-pulse week-pulse-wrap"></div>
+            </div>
+          </div>
+
+          <details class="home-collapsible panel" data-home-lane="overview">
+            <summary>最近操作（上传 / 处理）</summary>
+            <div id="recentOpsList" class="recent-ops-list"></div>
+          </details>
+
+          <details class="home-collapsible panel home-demo-details" data-home-lane="overview">
+            <summary>现场演示 · 技术说明（汇报用，日常可折叠）</summary>
+            <div class="demo-showcase panel" style="box-shadow:none;border:none;padding:0;margin-top:12px">
+              <div class="demo-showcase-head">
+                <h3>现场怎么秀 · 约 3 分钟</h3>
+                <button type="button" class="btn btn-sm" data-view="agents">Agent 接入说明 →</button>
+              </div>
+              <ol class="demo-steps">
+                <li><strong>portal.html</strong> 或本页 — 选操作人</li>
+                <li><strong>团队小黑板</strong> 发布 / 监控推预警 → 点「收到」</li>
+                <li><strong>项目看板</strong> → 会议推小黑板 → qa.html 问一句</li>
+              </ol>
+            </div>
+            <div class="tech-capability-strip panel" style="box-shadow:none;border:none;padding:12px 0 0;margin:0">
+              <p class="muted" style="font-size:12px;margin:0">技术三层：过程沉淀 · 脚本算数 · Agent 编排 — 详见 Agent 页</p>
+            </div>
+          </details>
+        </section>
+        <div class="panel agent-live" id="agentLive-home"></div>
+      </div>
+
+      <!-- 项目看板：卡片列表 → 详情 -->
+      <div id="view-projects" class="view">
+        <div id="projectsList">
+          <!-- 顶部操作区：主理人 + 新建 + Agent（最显眼） -->
+          <div class="projects-command-bar">
+            <div class="command-bar-left">
+              <h3 class="command-title">项目看板</h3>
+              <p class="command-hint">新建项目 · 运行项目 Agent · 同步知识库</p>
+            </div>
+            <div class="command-bar-actions">
+              <button type="button" class="btn btn-command btn-new" id="btnNewProject">＋ 新建项目</button>
+              <button type="button" class="btn btn-command btn-agent" id="btnProjectAgentRun">▶ 项目 Agent</button>
+              <button type="button" class="btn btn-command" id="btnSyncKnowledge">⟳ 同步知识库</button>
+            </div>
+          </div>
+          <div class="panel agent-live agent-live-top" id="agentLive-projects"></div>
+          <div id="blackboardHero"></div>
+          <p class="section-title">在跟项目 · 点击卡片或「查看完整详情」进入详情页</p>
+          <div id="projectsEmpty" class="offline-banner" style="display:none"></div>
+          <div class="project-stack" id="projectCards"></div>
+          <div id="createProjectModal" class="modal-overlay" hidden>
+            <div class="modal-panel">
+              <h3>新建项目卡片</h3>
+              <label>项目名称 *</label>
+              <input type="text" id="newProjectName" placeholder="例如：CAN 假期扩展" />
+              <label>项目 ID（可选，留空自动生成）</label>
+              <input type="text" id="newProjectId" placeholder="can-leave-expand" />
+              <label>负责人</label>
+              <input type="text" id="newProjectOwner" placeholder="Core PM" />
+              <label>摘要</label>
+              <textarea id="newProjectSummary" rows="2" placeholder="一句话目标"></textarea>
+              <label>截止日期</label>
+              <input type="text" id="newProjectDue" placeholder="2026-Q4" />
+              <div class="modal-actions">
+                <button type="button" class="btn" id="btnCancelProject">取消</button>
+                <button type="button" class="btn btn-primary" id="btnSubmitProject">创建</button>
+                <span class="muted" id="createProjectMsg" style="font-size:12px"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="projectsDetail" class="project-detail-wrap">
+          <button type="button" class="btn btn-back" id="btnBackProjects">← 返回项目列表</button>
+          <div id="projectDetailRoot"></div>
+        </div>
+      </div>
+
+      <!-- Agent 配置（Knot 专用页） -->
+      <div id="view-agents" class="view">
+        <div class="deploy-banner" id="deployBanner"></div>
+        <div class="panel agent-topology-panel" id="agentConnectPanel"></div>
+        <div class="panel workstation-panel" id="workstationGuide"></div>
+        <div class="panel">
+          <div class="panel-head"><h3>总助手 · Knot Bot #1</h3><span class="badge">编排入口</span></div>
+          <div id="knotSetup"></div>
+        </div>
+        <div class="panel qa-agent-panel">
+          <div class="panel-head"><h3>知识问答 · Knot Bot #2</h3><span class="badge logic">只读 RAG</span></div>
+          <div id="qaAgentSetup"></div>
+        </div>
+        <p class="section-title">专科 Agent · Gateway 同一套路由（网页 / Knot 共用 API）</p>
+        <div class="agent-grid" id="agentRegistry"></div>
+        <p class="section-title">系统管理 Agent · 各 Tab 独立分管</p>
+        <div class="agent-grid" id="adminAgentRegistry"></div>
+        <div class="panel" id="agentDetailPanel" style="display:none">
+          <div class="panel-head"><h3 id="agentDetailTitle">Agent 配置</h3></div>
+          <pre class="prompt-box" id="agentDetailPrompt"></pre>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-primary" id="agentDetailRun">试运行</button>
+            <button class="btn" id="agentDetailTab">打开关联 Tab</button>
+            <button class="btn" id="agentDetailCopy">复制 Prompt</button>
+          </div>
+          <pre class="agent-result" id="agentDetailResult"></pre>
+        </div>
+      </div>
+
+      <!-- 系统管理 · 四页 + 每页 Agent -->
+      <div id="view-admin-users" class="view">
+        <header class="admin-page-hero console-perm-hero">
+          <div>
+            <p class="admin-page-eyebrow">System · User Management</p>
+            <h3>用户管理 · User Management</h3>
+            <p class="muted">与总作战工作室字段一致 · 数据源 <code>permissions.json</code> · 变更走 Git 或权限申请</p>
+          </div>
+          <div class="page-ai-actions">
+            <span class="console-access-badge">正式人员权限 · Formal Staff Access</span>
+            <button type="button" class="btn btn-primary" data-page-ai="admin-users" data-agent-q="已登记用户有哪些？各自什么角色？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="admin-users" data-agent-q="已登记用户有哪些？">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="console-perm-tabs" id="adminUsersTabs">
+          <button type="button" class="console-perm-tab active" data-staff-filter="formal">正式人员 · Formal</button>
+          <button type="button" class="console-perm-tab" data-staff-filter="intern">实习生 · Interns</button>
+        </div>
+        <div class="panel admin-gate" id="adminUsersGate" hidden></div>
+        <div class="panel" id="adminUsersPanel">
+          <div id="adminUsersTable">加载中…</div>
+        </div>
+        <div class="panel agent-live" id="agentLive-admin-users"></div>
+      </div>
+
+      <div id="view-admin-perm" class="view">
+        <header class="admin-page-hero console-perm-hero">
+          <div>
+            <p class="admin-page-eyebrow">System · Permission Matrix</p>
+            <h3>权限矩阵 · Permission Matrix</h3>
+            <p class="muted">三层授权：<strong>仅浏览</strong> / <strong>可操作</strong> / <strong>可操作+编辑</strong> · 板块 P1–P10 与总工作台一致</p>
+          </div>
+          <div class="page-ai-actions">
+            <span class="console-access-badge">正式人员权限 · Formal Staff Access</span>
+            <button type="button" class="btn btn-primary" data-page-ai="admin-perm" data-agent-q="解释当前权限矩阵，刘微和罗东明差异？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="admin-perm" data-agent-q="P1 Function PM 谁能 SUPER ADMIN？">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="console-perm-tabs" id="adminPermTabs">
+          <button type="button" class="console-perm-tab active" data-staff-filter="formal">正式人员 · Formal</button>
+          <button type="button" class="console-perm-tab" data-staff-filter="intern">实习生 · Interns</button>
+        </div>
+        <div class="panel admin-gate" id="adminPermGate" hidden></div>
+        <div class="panel panel-rw-matrix">
+          <div class="panel-head">
+            <h3>板块矩阵 P1–P10</h3>
+            <span class="muted">SA · SUPER ADMIN · W · R · -</span>
+          </div>
+          <div id="panelMatrixGrid" class="panel-matrix-wrap">加载中…</div>
+          <p class="panel-matrix-legend muted">图例：<span class="pw-sa">SA</span> SUPER ADMIN · <span class="pw-w">W</span> 可操作 · <span class="pw-r">R</span> 仅浏览 · <span class="pw-none">-</span> 无</p>
+        </div>
+        <div class="panel" id="adminPermPanel">
+          <div class="panel-head"><h3>业务权限明细 · 薪酬福利工作台</h3></div>
+          <div id="adminPermMatrix">加载中…</div>
+        </div>
+        <div class="panel agent-live" id="agentLive-admin-perm"></div>
+      </div>
+
+      <div id="view-admin-audit" class="view">
+        <header class="admin-page-hero">
+          <div>
+            <p class="admin-page-eyebrow">System · Audit</p>
+            <h3>操作日志</h3>
+            <p class="muted">audit 留痕 + jobs 脚本 + 项目动态 · Agent 调用自动记入</p>
+          </div>
+          <div class="admin-toolbar-inline">
+            <select id="adminAuditFilter" class="btn">
+              <option value="">全部 view</option>
+              <option value="admin-access">权限申请</option>
+              <option value="admin-users">用户管理</option>
+              <option value="projects">项目</option>
+              <option value="jobs">jobs</option>
+            </select>
+            <button type="button" class="btn btn-primary" data-page-ai="admin-audit" data-agent-q="总结最近操作日志，谁做了什么？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="admin-audit" data-agent-q="最近谁批过权限？">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="panel admin-gate" id="adminAuditGate" hidden></div>
+        <div class="panel admin-audit-panel" style="padding:0;overflow:hidden">
+          <table class="admin-audit-table">
+            <thead><tr><th>时间</th><th>操作人</th><th>类型</th><th>view</th><th>内容</th></tr></thead>
+            <tbody id="adminAuditBody"></tbody>
+          </table>
+        </div>
+        <div class="panel agent-live" id="agentLive-admin-audit"></div>
+      </div>
+
+      <div id="view-admin-access" class="view">
+        <header class="admin-page-hero">
+          <div>
+            <p class="admin-page-eyebrow">System · Access Request</p>
+            <h3>权限申请</h3>
+            <p class="muted">同事提交 desired 权限 · admin 批准后在 permissions.json 落地（v1 人工改文件）</p>
+          </div>
+          <div class="page-ai-actions">
+            <button type="button" class="btn btn-primary" data-page-ai="admin-access" data-agent-q="待审权限申请有哪些？如何处理？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="admin-access" data-agent-q="待审权限申请">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="admin-access-layout">
+          <div class="panel">
+            <p class="section-title">提交申请</p>
+            <form id="accessRequestForm" class="admin-form">
+              <label>期望角色</label>
+              <select id="accessDesiredRole">
+                <option value="viewer">viewer · 只读</option>
+                <option value="pm">pm · 项目主理</option>
+                <option value="ops">ops · 运营</option>
+              </select>
+              <label>期望可见项目（逗号分隔，* 表示全部）</label>
+              <input type="text" id="accessDesiredProjects" placeholder="benefits-module 或 *" />
+              <label>期望 Tab（逗号分隔）</label>
+              <input type="text" id="accessDesiredTabs" value="home,projects,knowledge" />
+              <label>申请理由 *</label>
+              <textarea id="accessReason" rows="3" placeholder="说明工作需要…" required></textarea>
+              <button type="submit" class="btn btn-primary">提交申请</button>
+              <span class="muted" id="accessFormMsg"></span>
+            </form>
+          </div>
+          <div class="panel">
+            <p class="section-title">申请列表</p>
+            <div id="adminAccessList">加载中…</div>
+          </div>
+        </div>
+        <div class="panel agent-live" id="agentLive-admin-access"></div>
+      </div>
+
+      <div id="view-admin-mgmt" class="view">
+        <header class="admin-page-hero">
+          <div>
+            <p class="admin-page-eyebrow">System · SSC Operations</p>
+            <h3 id="mgmtBoardTitle">管理看板 · SSC 运营自检</h3>
+            <p class="muted" id="mgmtBoardSubtitle">海外 HRSSC 福利并薪 · FPP · 假期 · Issue · 按我们业务定义的 8 项指标 · Gateway 实时计算</p>
+          </div>
+          <div class="page-ai-actions">
+            <button type="button" class="btn btn-primary" id="btnMorningBrief">生成工作台汇总</button>
+            <button type="button" class="btn" data-page-ai="monitor" data-agent-q="当前监控告警与整体风险？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="home" data-agent-q="整体风险">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="panel mgmt-honesty" id="mgmtHonestyBanner">
+          <p><strong>现状说明（避免过度包装）</strong></p>
+          <p class="muted" style="margin:6px 0 0;font-size:12px;line-height:1.6">
+            当前约 <strong>阶段 2→2.5</strong>：网页操作台 + Knot 对话 + 脚本算数已打通；知识库与 MCP 钩子部分上线。
+            <strong>没有固定晨会</strong>，也<strong>未常态化 Multi-Agent 圆桌协同</strong>——「生成工作台汇总」只是拉一次项目/Issue/告警 JSON，供月结前人工查看。
+            <code>#agents</code> 页主要给 <strong>管理员配置 Knot</strong>，日常运营请用项目/Issue/知识问答。
+          </p>
+        </div>
+        <div class="mgmt-summary-row panel" id="mgmtSummaryRow">
+          <p class="muted">加载中…</p>
+        </div>
+        <p class="section-title">SSC 运营 8 指标</p>
+        <div class="mgmt-indicator-grid" id="mgmtIndicatorGrid"></div>
+        <p class="section-title">路线图 P0 → P2</p>
+        <div class="mgmt-roadmap" id="mgmtRoadmap"></div>
+        <div class="mgmt-two-col">
+          <div class="panel">
+            <p class="section-title">固定 Pipeline（新人按序）</p>
+            <div id="mgmtPipelines" class="mgmt-pipelines"></div>
+          </div>
+          <div class="panel">
+            <p class="section-title">组织记忆 · 目录 ↔ MCP</p>
+            <div id="mgmtOrgMemory"></div>
+          </div>
+        </div>
+        <div class="panel" id="mgmtMorningBriefPanel" hidden>
+          <p class="section-title">工作台汇总（总助手 · 整体风险 · 非会议录音）</p>
+          <pre class="mgmt-brief-pre" id="mgmtMorningBriefPre"></pre>
+          <p class="muted" id="mgmtMorningBriefLink"></p>
+        </div>
+      </div>
+
+      <div id="view-issues" class="view">
+        <header class="admin-page-hero" style="margin-bottom:12px">
+          <div>
+            <h3 style="margin:0">Issue 跟踪</h3>
+            <p class="muted" style="margin:6px 0 0">运营台账 · 可推团队小黑板 · 关联项目 reminders · 状态变更记 audit</p>
+          </div>
+          <div class="issue-hero-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="btnIssueNew">新建 Issue</button>
+            <button type="button" class="btn btn-sm" id="btnIssueSyncKb">同步知识库</button>
+            <button type="button" class="btn btn-sm" id="btnIssuesToHome">去首页推预警 →</button>
+          </div>
+        </header>
+        <div class="issue-toolbar">
+          <select id="issueFilterCountry" class="btn">
+            <option value="">全部国家</option>
+            <option>SG</option><option>APAC</option><option>MY</option><option>Global</option>
+          </select>
+          <select id="issueFilterStatus" class="btn">
+            <option value="">全部状态</option>
+            <option value="open">open</option>
+            <option value="coe_review">coe_review</option>
+            <option value="review">review</option>
+            <option value="closed">closed</option>
+            <option value="backlog">backlog</option>
+          </select>
+          <span class="muted" id="issueListMeta">—</span>
+        </div>
+        <details class="panel issue-import-panel">
+          <summary>CSV 导入 · COE 月报</summary>
+          <p class="muted" style="font-size:12px;margin:8px 0">表头：title, country, severity, status, owner, summary, impact, category, raise_date, project_ids</p>
+          <form id="issueImportForm" class="issue-import-form">
+            <input type="file" id="issueImportFile" accept=".csv,text/csv" />
+            <label class="issue-import-opt"><input type="checkbox" id="issueImportPushBb" /> 导入后推团队小黑板（COE 月报条目请勾选）</label>
+            <button type="submit" class="btn btn-sm">导入 CSV</button>
+            <span class="muted" id="issueImportMsg"></span>
+          </form>
+        </details>
+        <div class="panel" style="padding:0;overflow:hidden">
+          <table class="issue-table">
+            <thead><tr><th>严重度</th><th>国家</th><th>Issue</th><th>状态</th><th>Owner</th><th></th></tr></thead>
+            <tbody id="issueTableBody"></tbody>
+          </table>
+        </div>
+        <div id="issueDrawer" class="issue-drawer" hidden>
+          <div class="issue-drawer-backdrop" id="issueDrawerBackdrop"></div>
+          <aside class="issue-drawer-panel panel">
+            <header class="issue-drawer-head">
+              <h4 id="issueDrawerTitle">Issue 详情</h4>
+              <button type="button" class="btn btn-sm" id="issueDrawerClose">关闭</button>
+            </header>
+            <form id="issueEditForm" class="issue-edit-form">
+              <input type="hidden" id="issueEditId" />
+              <label>标题<input type="text" id="issueEditTitle" required /></label>
+              <div class="issue-form-row">
+                <label>国家<select id="issueEditCountry"><option>SG</option><option>APAC</option><option>MY</option><option>Global</option></select></label>
+                <label>严重度<select id="issueEditSeverity"><option>high</option><option>medium</option><option>low</option></select></label>
+                <label>状态<select id="issueEditStatus"><option>open</option><option>coe_review</option><option>review</option><option>closed</option><option>backlog</option></select></label>
+              </div>
+              <label>Owner<input type="text" id="issueEditOwner" /></label>
+              <label>登记日期<input type="date" id="issueEditRaiseDate" /></label>
+              <label>分类<input type="text" id="issueEditCategory" placeholder="Prepayroll / Onboarding …" /></label>
+              <label>关联项目<input type="text" id="issueEditProjects" placeholder="benefits-module, ssc-workbench-v1" /></label>
+              <label>摘要<textarea id="issueEditSummary" rows="3"></textarea></label>
+              <label>影响<textarea id="issueEditImpact" rows="2"></textarea></label>
+              <div class="issue-drawer-actions">
+                <button type="submit" class="btn btn-primary btn-sm">保存</button>
+                <button type="button" class="btn btn-sm" id="btnIssuePushBb">推团队小黑板</button>
+                <button type="button" class="btn btn-sm" id="btnIssueSyncProj">同步项目 reminders</button>
+                <button type="button" class="btn btn-sm" id="btnIssueClose">关单 (closed)</button>
+              </div>
+              <span class="muted" id="issueEditMsg"></span>
+            </form>
+          </aside>
+        </div>
+        <div id="issueNewModal" class="issue-drawer" hidden>
+          <div class="issue-drawer-backdrop" id="issueNewBackdrop"></div>
+          <aside class="issue-drawer-panel panel">
+            <header class="issue-drawer-head">
+              <h4>新建 Issue</h4>
+              <button type="button" class="btn btn-sm" id="issueNewClose">关闭</button>
+            </header>
+            <form id="issueNewForm" class="issue-edit-form">
+              <label>标题<input type="text" id="issueNewTitle" required /></label>
+              <div class="issue-form-row">
+                <label>国家<select id="issueNewCountry"><option>SG</option><option>APAC</option><option>MY</option><option selected>Global</option></select></label>
+                <label>严重度<select id="issueNewSeverity"><option>high</option><option selected>medium</option><option>low</option></select></label>
+              </div>
+              <label>Owner<input type="text" id="issueNewOwner" /></label>
+              <label>摘要<textarea id="issueNewSummary" rows="3"></textarea></label>
+              <button type="submit" class="btn btn-primary btn-sm">创建</button>
+              <span class="muted" id="issueNewMsg"></span>
+            </form>
+          </aside>
+        </div>
+        <div class="panel agent-live" id="agentLive-issues"></div>
+      </div>
+
+      <div id="view-knowledge" class="view">
+        <header class="library-hero">
+          <div class="library-hero-inner">
+            <p class="library-hero-eyebrow">Knowledge Library</p>
+            <h3 class="library-hero-title">知识图书馆</h3>
+            <p class="library-hero-desc">书架按权限过滤 · 问答 Agent 只检索您可见范围 · 算数仍走脚本</p>
+            <div class="library-stat-pills">
+              <span class="library-stat-pill"><b id="libStatDocs">—</b> 文献</span>
+              <span class="library-stat-pill"><b id="libStatShelves">—</b> 书架</span>
+              <span class="library-stat-pill"><b id="libStatOps">—</b> 运营项</span>
+              <span class="library-stat-pill accent"><b id="libStatIndex">—</b> 索引</span>
+            </div>
+            <div class="library-hero-actions">
+              <button type="button" class="btn btn-primary" id="btnKnowledgeSync">同步项目知识</button>
+              <button type="button" class="btn" id="btnLibraryReindex">重建索引</button>
+              <a class="btn btn-ghost" href="qa.html">Knot 问答 →</a>
+            </div>
+            <span class="muted library-sync-line" id="knowledgeSyncStatus"></span>
+          </div>
+        </header>
+
+        <div class="panel wecom-docs-auth-panel" id="wecomDocsAuthPanel">
+          <div class="wecom-auth-head">
+            <div>
+              <h4>企业微信文档 · iOA 授权</h4>
+              <p class="muted wecom-auth-lead">以你的 iOA 身份授权工作台只读同步企业微信文档，用于知识库索引与问答（不保存密码、不代你编辑文档）。</p>
+            </div>
+            <span class="wecom-auth-badge muted" id="wecomAuthBadge">检测中…</span>
+          </div>
+          <div class="wecom-auth-identity" id="wecomAuthIdentity">
+            <span class="muted">身份识别中…</span>
+          </div>
+          <ul class="wecom-auth-scopes">
+            <li><label><input type="checkbox" id="wecomScopeList" checked disabled /> 读取你可访问的文档列表</label></li>
+            <li><label><input type="checkbox" id="wecomScopeContent" checked disabled /> 读取文档正文用于索引（只读）</label></li>
+            <li><label><input type="checkbox" id="wecomScopeQa" checked disabled /> 供知识问答 Agent 检索（仍按你的权限过滤）</label></li>
+          </ul>
+          <div class="wecom-auth-folder">
+            <label for="wecomFolderHint">可选 · 优先同步的文件夹/空间说明</label>
+            <input type="text" id="wecomFolderHint" placeholder="例：海外 HRSSC 福利并薪 SOP、2026 运营清单" />
+          </div>
+          <div class="wecom-auth-actions">
+            <button type="button" class="btn btn-primary" id="btnWecomDocsConsent" disabled>打开授权验证</button>
+            <button type="button" class="btn" id="btnWecomDocsSync" hidden disabled>立即同步文档</button>
+            <button type="button" class="btn" id="btnWecomDocsRevoke" hidden disabled>撤销授权</button>
+          </div>
+          <p class="wecom-auth-status muted" id="wecomAuthStatus"></p>
+        </div>
+
+        <div class="panel library-viz-panel library-viz-compact">
+          <div class="library-viz-head"><h4>书架分布</h4><span class="muted">当前操作人可见</span></div>
+          <div id="libraryBarChart" class="library-bar-chart"></div>
+          <div id="libraryDonutChart" hidden aria-hidden="true"></div>
+          <ul id="libraryDonutLegend" hidden></ul>
+        </div>
+
+        <div class="library-layout library-layout-v2">
+          <aside class="panel library-shelves">
+            <div class="library-shelf-search-wrap">
+              <input type="search" id="libraryShelfSearch" class="library-search" placeholder="搜索书架…" autocomplete="off" />
+            </div>
+            <p class="section-title">书架</p>
+            <div id="libraryShelvesNav" class="library-shelf-grid">加载中…</div>
+            <button type="button" class="btn btn-sm library-all-docs-btn" id="btnLibraryAllDocs">📋 全部文献</button>
+          </aside>
+          <section class="panel library-main">
+            <div class="library-doc-toolbar" id="libraryDocToolbar" hidden>
+              <input type="search" id="libraryDocSearch" class="library-search" placeholder="筛选本书架文献…" autocomplete="off" />
+            </div>
+            <div id="libraryShelfDetail">
+              <div class="library-empty-state">
+                <div class="library-empty-icon">📚</div>
+                <p>选择左侧书架查看文献</p>
+              </div>
+            </div>
+            <div id="libraryOpsPanel" class="library-ops-panel">
+              <div id="libraryWorkflowBanner" class="library-workflow-banner" hidden></div>
+              <div class="library-ops-head">
+                <h4>运营清单（1–10）</h4>
+                <span class="muted">有权可见条目 · 完整工作流见上方</span>
+              </div>
+              <div id="opsList" class="library-ops-grid"></div>
+            </div>
+          </section>
+        </div>
+        <div class="panel agent-live" id="agentLive-knowledge"></div>
+      </div>
+
+      <div id="view-tools-americas" class="view">
+        <div class="tools-region-banner americas">
+          <h3>美国工作区 · 分摊 / 提单</h3>
+          <p>美洲业务下美国工作区，处理分摊与提单流程。</p>
+        </div>
+        <div class="panel allocation-ops-panel">
+          <div class="allocation-ops-head">
+            <h3>FPP 分摊执行闭环（美洲）</h3>
+            <span class="allocation-ops-tag">仅保留自动分摊 + 提单</span>
+          </div>
+          <p class="muted" style="margin:0 0 10px">
+            流程：更新台账 → 根据台账下载供应商 invoice → 自动生成分摊结果表 → 在付款平台提单 → 将单号回填至台账。
+          </p>
+          <div class="allocation-calendar">
+            <span class="allocation-calendar-item"><strong>节点 1</strong> 每月 20 日更新台账并处理当月批次</span>
+            <span class="allocation-calendar-item"><strong>节点 2</strong> 次月 11 日复核补单并完成回填</span>
+          </div>
+          <div class="allocation-risk-callout">
+            <strong>人工核对点（必须）</strong>
+            <ul>
+              <li>台账可能存在重复记录（同一笔扣款更新两次），AI 处理前后均需人工核对，确保最终数据准确。</li>
+              <li>成本中心失效：部门列表非实时更新，与财经系统校验时可能出现部门已取消或更名，常在提单报错后才发现。</li>
+              <li>不同供应商提单模板与字段要求差异大，提单前需确认模板映射无误。</li>
+            </ul>
+          </div>
+          <div class="allocation-pain-grid">
+            <div class="allocation-pain-card">
+              <h4>主要痛点</h4>
+              <p>成本分摊计算复杂耗时（需从海外人力数据表制作 Pivot Table）；成本中心易失效导致提单失败；不同供应商提单模板和要求差异大。</p>
+            </div>
+            <div class="allocation-pain-card">
+              <h4>核心优化目标</h4>
+              <p>利用 AI 自动化成本分摊计算：输入 invoice 和人力数据后，直接输出 FTP / 付款平台所需的分摊结果表，省去中间 Pivot Table 制作步骤。</p>
+            </div>
+          </div>
+          <div class="rt-auto-bar">
+            <span class="rt-auto-label">自动化</span>
+            <button type="button" class="btn btn-primary" id="usBtnAlloc">⚡ 动作1 · 批量自动分摊</button>
+            <button type="button" class="btn" id="usBtnSubmit">📋 动作2 · 生成提单文本</button>
+          </div>
+          <div class="rt-workspace">
+            <div class="rt-panel">
+              <h4>动作1 · 自动分摊</h4>
+              <p class="muted rt-hint">上传台账 + P1 人数 CSV，按供应商批量输出分摊结果表</p>
+              <div class="rt-form-grid">
+                <label class="rt-field">账单月 YYYYMM<input type="text" id="usPeriod" maxlength="6" placeholder="202607" inputmode="numeric" /></label>
+                <label class="rt-field rt-span2">① 台账 CSV<input type="file" id="usLedger" accept=".csv,text/csv" /></label>
+                <label class="rt-field rt-span2">② P1 人数 CSV<input type="file" id="usP1" accept=".csv,text/csv" /></label>
+                <label class="rt-field rt-span2">部门映射 CSV（可选）<input type="file" id="usVendorMap" accept=".csv,text/csv" /></label>
+              </div>
+            </div>
+            <div class="rt-panel">
+              <h4>动作2 · 提单输出</h4>
+              <label class="rt-field rt-span2">提单 CSV<input type="file" id="usSubmission" accept=".csv,text/csv" /></label>
+            </div>
+            <div class="rt-status muted" id="usResult">等待执行…</div>
+          </div>
+        </div>
+        <div class="panel agent-live" id="agentLive-tools-americas"></div>
+      </div>
+
+      <div id="view-tools-sg" class="view">
+        <div class="tools-region-banner non-americas">
+          <h3>新加坡工作区 · EE Listing</h3>
+          <p>非美洲业务下新加坡工作区，处理 EE Listing 月度生成。</p>
+        </div>
+        <div class="panel allocation-ops-panel">
+          <div class="allocation-ops-head">
+            <h3>新加坡 FPP 前置：EE Listing 清洗</h3>
+            <span class="allocation-ops-tag">同事交付包 · cleaner.py</span>
+          </div>
+          <p class="muted" style="margin:0 0 10px">
+            痛点：每月约 18–20 笔付款、4–5 个付款周期；付款前需整合法定姓名与 WeCom 姓名并对齐成本中心。本工具自动合并三份 Workday 导出，标注新增/离职/冲突行。
+          </p>
+          <div class="allocation-pain-grid">
+            <div class="allocation-pain-card">
+              <h4>三个输入</h4>
+              <p>① Active Employee Report · ② Terminated Report · ③ 上月 EE Listing（均为 .xlsx）</p>
+            </div>
+            <div class="allocation-pain-card">
+              <h4>输出</h4>
+              <p>例如 <code>APR_eelisting.xlsx</code>：带颜色标记的新增成员、离职、冲突与缺 probation 日期等异常行。</p>
+            </div>
+          </div>
+          <div class="rt-auto-bar">
+            <span class="rt-auto-label">自动化</span>
+            <button type="button" class="btn btn-primary" id="sgBtnRun">⚡ 一键生成 EE Listing</button>
+          </div>
+          <div class="rt-workspace">
+            <div class="rt-panel">
+              <div class="rt-form-grid">
+                <label class="rt-field rt-span2">① Active Employee Report (.xlsx)<input type="file" id="sgActive" accept=".xlsx" /></label>
+                <label class="rt-field rt-span2">② Terminated Report (.xlsx)<input type="file" id="sgTerminated" accept=".xlsx" /></label>
+                <label class="rt-field rt-span2">③ 上月 EE Listing (.xlsx)<input type="file" id="sgLastEe" accept=".xlsx" /></label>
+              </div>
+              <div class="rt-preview" id="sgOutputPreview" style="display:none">预计输出：<strong id="sgOutputName">—</strong></div>
+            </div>
+            <div class="rt-status muted" id="sgResult">等待执行…</div>
+          </div>
+        </div>
+        <div class="panel agent-live" id="agentLive-tools-sg"></div>
+      </div>
+
+      <div id="view-tools-non-americas" class="view">
+        <div class="tools-region-banner americas">
+          <h3>加拿大工作区 · 分摊 / 提单</h3>
+          <p>美洲业务下加拿大工作区，处理与美国一致的分摊与提单流程。</p>
+        </div>
+        <div class="panel allocation-ops-panel">
+          <div class="allocation-ops-head">
+            <h3>加拿大月度流程（与美国同动作）</h3>
+            <span class="allocation-ops-tag">CAN Workspace</span>
+          </div>
+          <p class="muted" style="margin:0 0 10px">
+            在区域工具台中切到「加拿大工作区」，执行与美国同一套流程：台账 + 人力数据分摊 → 提单输出 → 单号回填。
+          </p>
+          <div class="rt-auto-bar">
+            <span class="rt-auto-label">自动化</span>
+            <button type="button" class="btn btn-primary" id="caBtnAlloc">⚡ 动作1 · 批量自动分摊</button>
+            <button type="button" class="btn" id="caBtnSubmit">📋 动作2 · 生成提单文本</button>
+          </div>
+          <div class="rt-workspace">
+            <div class="rt-panel">
+              <h4>动作1 · 自动分摊</h4>
+              <p class="muted rt-hint">与美国相同流程，区域固定为 CAN</p>
+              <div class="rt-form-grid">
+                <label class="rt-field">账单月 YYYYMM<input type="text" id="caPeriod" maxlength="6" placeholder="202607" inputmode="numeric" /></label>
+                <label class="rt-field rt-span2">① 台账 CSV<input type="file" id="caLedger" accept=".csv,text/csv" /></label>
+                <label class="rt-field rt-span2">② P1 人数 CSV<input type="file" id="caP1" accept=".csv,text/csv" /></label>
+                <label class="rt-field rt-span2">部门映射 CSV（可选）<input type="file" id="caVendorMap" accept=".csv,text/csv" /></label>
+              </div>
+            </div>
+            <div class="rt-panel">
+              <h4>动作2 · 提单输出</h4>
+              <label class="rt-field rt-span2">提单 CSV<input type="file" id="caSubmission" accept=".csv,text/csv" /></label>
+            </div>
+            <div class="rt-status muted" id="caResult">等待执行…</div>
+          </div>
+        </div>
+        <div class="panel agent-live" id="agentLive-tools-non-americas"></div>
+      </div>
+
+      <div id="view-tools" class="view" hidden aria-hidden="true"></div>
+
+      <div id="view-meetings" class="view">
+        <header class="admin-page-hero meeting-hero">
+          <div>
+            <p class="admin-page-eyebrow">Collaboration · Meetings</p>
+            <h3>会议纪要与待办</h3>
+            <p class="muted">纪要 JSON → 关联项目 → 一键推项目小黑板 · 监控 Agent 跟踪待办逾期</p>
+          </div>
+          <div class="page-ai-actions">
+            <a class="btn btn-primary" id="btnTencentMeetingEntry" href="https://meeting.tencent.com/login.html?redirect_link=https%3A%2F%2Fmeeting.tencent.com%2Fuser-center%2Fschedule%3Freload%3D1" target="_blank" rel="noopener">腾讯会议 · 直接约会</a>
+            <a class="btn" id="btnWecomCalendarEntry" href="https://work.weixin.qq.com/wework_admin/frame#calendar" target="_blank" rel="noopener">企业微信日程 · 直接约会</a>
+            <button type="button" class="btn btn-primary" data-page-ai="meetings" data-agent-q="开放会议待办有哪些？跟哪些项目相关？">AI 解答</button>
+            <button type="button" class="btn" data-page-knot="meetings" data-agent-q="6/18 会议决策和待办">在 Knot 问</button>
+          </div>
+        </header>
+        <div class="panel meeting-upload-panel">
+          <p class="section-title" style="margin:0 0 8px">上传 / 粘贴会议纪要 · 会议 Agent</p>
+          <p class="muted" style="font-size:12px;margin:0 0 10px">支持 JSON / Markdown / 纯文本 · 自动解析待办 · 可选上传后推送小黑板</p>
+          <form id="meetingUploadForm" class="meeting-upload-form">
+            <input type="file" id="meetingUploadFile" accept=".json,.md,.txt,application/json,text/plain" />
+            <input type="text" id="meetingUploadProjects" class="meeting-proj-input" placeholder="关联项目ID，逗号分隔，如 ssc-workbench-v1" />
+            <label class="meeting-upload-opt"><input type="checkbox" id="meetingAutoPushProject" /> 上传后推项目小黑板</label>
+            <label class="meeting-upload-opt"><input type="checkbox" id="meetingAutoPushTeam" /> 上传后推团队小黑板</label>
+            <button type="submit" class="btn btn-primary btn-sm">上传并解析</button>
+            <button type="button" class="btn btn-sm" id="btnMeetingParsePreview">预览解析</button>
+            <span class="muted" id="meetingUploadMsg" style="font-size:11px"></span>
+          </form>
+          <textarea id="meetingPasteText" class="meeting-paste" rows="4" placeholder="或直接粘贴纪要正文… 支持 ## 待办 / ## 关键决策 段落"></textarea>
+        </div>
+        <div class="meeting-layout">
+          <aside class="panel meeting-list-panel">
+            <div class="panel-head"><h3>会议列表</h3><span class="muted" id="meetingListCount">—</span></div>
+            <div id="meetingList" class="meeting-list">加载中…</div>
+          </aside>
+          <div id="meetingDetail" class="meeting-detail-wrap">
+            <div class="panel muted" style="padding:24px">← 选择左侧会议查看详情</div>
+          </div>
+        </div>
+        <div class="panel agent-live" id="agentLive-meetings"></div>
+      </div>
+    </div><!-- console-main-inner -->
+    </div><!-- console-main -->
+  </div><!-- shell -->
+    </div><!-- console-body -->
+  </div><!-- root-layout -->
+
+  <!-- 总助手 · 网页对话（与 Knot 同一 orchestrate API） -->
+  <div class="chat-dock" id="chatDock">
+    <div class="chat-head" id="chatToggle">
+      <span>SSC 工作台总助手</span>
+      <span class="chat-hint">与 Knot 同一 API · /api/orchestrate</span>
+      <button class="btn btn-ghost chat-close" id="chatMinimize" type="button">—</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-chips" id="chatChips"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="问总助手：主菜单 / 项目进展 / 监控告警 …" />
+        <button class="btn btn-primary" id="chatSend" type="button">发送</button>
+      </div>
+    </div>
+  </div>
+  <button class="chat-fab" id="chatFab" type="button">总助手</button>
+
+  <div id="wecomAuthModal" class="modal-overlay wecom-auth-modal" hidden role="dialog" aria-modal="true" aria-labelledby="wecomAuthModalTitle">
+    <div class="modal-panel wecom-auth-modal-panel">
+      <h3 id="wecomAuthModalTitle">企业微信文档 · iOA 身份验证</h3>
+      <p class="muted" style="margin:0 0 12px;font-size:13px">请确认下方身份与授权范围。验证通过后，系统将以<strong>你的 iOA 身份</strong>只读同步企业微信文档到知识库索引。</p>
+      <div class="wecom-modal-verify-box" id="wecomModalVerifyBox">
+        <div class="wecom-modal-verify-row"><span class="label">iOA 状态</span><span id="wecomModalIoaBadge" class="wecom-auth-badge">—</span></div>
+        <div class="wecom-modal-verify-row"><span class="label">操作人</span><strong id="wecomModalUser">—</strong></div>
+        <div class="wecom-modal-verify-row"><span class="label">身份来源</span><span id="wecomModalSource">—</span></div>
+      </div>
+      <ul class="wecom-auth-scopes wecom-modal-scopes">
+        <li>读取你可访问的文档列表</li>
+        <li>读取文档正文用于索引（只读）</li>
+        <li>供知识问答 Agent 检索（仍按你的权限过滤）</li>
+      </ul>
+      <label for="wecomModalFolderHint">优先同步的文件夹/空间（可选）</label>
+      <input type="text" id="wecomModalFolderHint" placeholder="例：海外 HRSSC 福利并薪 SOP、2026 运营清单" />
+      <label class="wecom-modal-agree">
+        <input type="checkbox" id="wecomModalAgree" />
+        <span>我确认以上身份正确，并授权 SSC 工作台以只读方式同步我在企业微信中可见的文档；可随时撤销。</span>
+      </label>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="btnWecomModalCancel">取消</button>
+        <button type="button" class="btn btn-primary" id="btnWecomModalConfirm" disabled>验证通过 · 确认授权</button>
+      </div>
+      <p class="muted" id="wecomModalMsg" style="margin:12px 0 0;font-size:12px"></p>
+    </div>
+  </div>
+
+  <script src="regional-tools.js?v=8a0f394"></script>
+  <script src="app.js?v=8a0f394"></script>
 </body>
 </html>

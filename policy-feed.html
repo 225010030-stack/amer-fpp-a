@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>政策资讯墙 | SSC 海外薪酬福利</title>
+  <style>
+    :root { --brand: #1677ff; --bg: #eef2f8; --card: #fff; --border: #e5eaf2; --text: #1f2937; --muted: #6b7280; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "PingFang SC", -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 20px 48px; }
+    .top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .top h1 { margin: 0; font-size: 22px; flex: 1; }
+    .btn { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-size: 13px; text-decoration: none; color: var(--text); }
+    .btn-p { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .panel h2 { margin: 0 0 12px; font-size: 16px; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .filters select, .filters input { border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; }
+    .feed-list { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow: auto; }
+    .feed-item { border: 1px solid #f1f5f9; border-radius: 10px; padding: 12px 14px; background: #fafbfc; }
+    .feed-item.high { border-color: #c7d2fe; background: #eef2ff; }
+    .feed-title { font-weight: 600; line-height: 1.45; margin-bottom: 6px; }
+    .feed-title a { color: #0f172a; text-decoration: none; }
+    .feed-title a:hover { color: var(--brand); }
+    .feed-meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #eef2ff; color: #4338ca; }
+    .tag.score { background: #fef3c7; color: #92400e; }
+    .digest-box { border: 1px dashed #dbeafe; background: #f8fbff; border-radius: 10px; padding: 12px; white-space: pre-wrap; line-height: 1.55; font-size: 13px; margin-bottom: 12px; }
+    .empty { color: var(--muted); text-align: center; padding: 24px; }
+    .chart-mini { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .chart-chip { background: #f1f5f9; border-radius: 8px; padding: 8px 12px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <h1>薪酬福利政策资讯墙</h1>
+      <a class="btn" href="workbench.html">← 操作台</a>
+      <a class="btn" href="index.html">门户</a>
+      <button class="btn btn-p" onclick="syncFeed()">同步 RSS</button>
+      <button class="btn" onclick="loadAll()">刷新</button>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <h2>资讯流</h2>
+        <div class="filters">
+          <select id="fRegion" onchange="loadFeed()"><option value="">全部区域</option><option>US</option><option>CA</option><option>UK</option><option>EU</option></select>
+          <select id="fCategory" onchange="loadFeed()"><option value="">全部类别</option><option>tax</option><option>leave</option><option>benefits</option></select>
+          <input id="fMinScore" type="number" min="0" value="0" placeholder="最低分" style="width:90px;" onchange="loadFeed()" />
+        </div>
+        <div id="feedList" class="feed-list"><div class="empty">加载中…</div></div>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:16px;">
+          <h2>今日 digest</h2>
+          <div id="digestBox" class="digest-box">—</div>
+          <button class="btn btn-p" onclick="runWeekly()">生成周报</button>
+        </div>
+        <div class="panel">
+          <h2>周报摘要</h2>
+          <div id="weeklyBox" class="digest-box">—</div>
+          <div id="weeklyChart" class="chart-mini"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const API = localStorage.getItem("ssc_api_base") || (location.origin.includes("18180") ? location.origin : "http://127.0.0.1:18180");
+
+    async function loadFeed() {
+      const region = document.getElementById("fRegion").value;
+      const category = document.getElementById("fCategory").value;
+      const min_score = document.getElementById("fMinScore").value || 0;
+      const qs = new URLSearchParams({ limit: 40, min_score });
+      if (region) qs.set("region", region);
+      if (category) qs.set("category", category);
+      const res = await fetch(`${API}/api/policy-feed?${qs}`);
+      const data = await res.json();
+      const items = data.items || [];
+      document.getElementById("feedList").innerHTML = items.length ? items.map(it => `
+        <div class="feed-item ${it.score >= 5 ? 'high' : ''}">
+          <div class="feed-title"><a href="${it.link}" target="_blank" rel="noopener">${it.title}</a></div>
+          <div class="feed-meta">
+            <span class="tag">${it.region || '—'}</span>
+            <span class="tag">${it.category || '—'}</span>
+            <span class="tag score">${it.score || 0} 分</span>
+            <span>${it.published_at || ''}</span>
+          </div>
+          <div style="margin-top:8px;font-size:13px;color:#475569;">${(it.summary || '').slice(0, 160)}</div>
+        </div>`).join("") : '<div class="empty">暂无条目。点击「同步 RSS」抓取。</div>';
+    }
+
+    async function loadDigest() {
+      const res = await fetch(`${API}/api/policy-feed/digest`);
+      const data = await res.json();
+      document.getElementById("digestBox").textContent = data.digest?.summary_text || "（暂无 digest，同步后自动生成）";
+    }
+
+    async function loadWeekly() {
+      const res = await fetch(`${API}/api/policy-feed/weekly`);
+      const data = await res.json();
+      const r = data.review;
+      document.getElementById("weeklyBox").textContent = r?.summary_text || "（暂无周报）";
+      if (r?.by_region) {
+        document.getElementById("weeklyChart").innerHTML = Object.entries(r.by_region).map(([k,v]) =>
+          `<span class="chart-chip">${k}: ${v}</span>`).join("");
+      }
+    }
+
+    async function syncFeed() {
+      await fetch(`${API}/api/policy-feed/sync`, { method: "POST" });
+      await loadAll();
+    }
+
+    async function runWeekly() {
+      await fetch(`${API}/api/policy-feed/weekly/run`, { method: "POST" });
+      await loadWeekly();
+    }
+
+    async function loadAll() {
+      try {
+        await Promise.all([loadFeed(), loadDigest(), loadWeekly()]);
+      } catch (e) {
+        document.getElementById("feedList").innerHTML = '<div class="empty" style="color:#ef4444">Gateway 未启动</div>';
+      }
+    }
+    loadAll();
+  </script>
+</body>
+</html>
