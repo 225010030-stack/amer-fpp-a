@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SSC 工作台 · 无 IOA 共享版</title>
+  <title>SSC 工作台 · 无 IOA 高仿版</title>
   <link rel="stylesheet" href="tokens.css?v=8a0f394" />
   <link rel="stylesheet" href="console-shell.css?v=8a0f394" />
   <link rel="stylesheet" href="app.css?v=8a0f394" />
@@ -18,14 +18,6 @@
       padding: 4px 10px;
       font-weight: 600;
     }
-    .lite-only-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: 8px;
-      font-size: 11px;
-      color: #64748b;
-    }
     .lite-warning {
       margin: 10px 0 14px;
       padding: 12px 14px;
@@ -36,30 +28,24 @@
       font-size: 12px;
       line-height: 1.6;
     }
-    .lite-actions {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
+    .panel-section,
+    .sub-view,
+    .lite-view {
+      display: none;
     }
-    .lite-log {
-      margin-top: 10px;
-      min-height: 42px;
-      border: 1px dashed #cbd5e1;
-      border-radius: 10px;
-      padding: 10px 12px;
-      background: #f8fafc;
-      font-size: 12px;
-      color: #334155;
-      white-space: pre-wrap;
+    .panel-section.active,
+    .sub-view.active,
+    .lite-view.active {
+      display: block;
     }
+    .sub-tabs,
     .tools-switch-tabs {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin: 2px 0 14px;
     }
+    .sub-tab,
     .tools-switch-tab {
       border: 1px solid #cbd5e1;
       border-radius: 999px;
@@ -70,39 +56,20 @@
       color: #0f172a;
       font-weight: 600;
     }
+    .sub-tab.active,
     .tools-switch-tab.active {
       background: #2563eb;
       color: #fff;
       border-color: #2563eb;
     }
-    .panel-section { display: none; }
-    .panel-section.active { display: block; }
-    .lite-view { display: none; }
-    .lite-view.active { display: block; }
     .lite-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 12px;
     }
-    .lite-card {
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 12px 14px;
-    }
-    .lite-card h4 {
-      margin: 0 0 6px;
-      font-size: 14px;
-    }
-    .lite-card p {
-      margin: 0;
-      color: #475569;
-      font-size: 12px;
-      line-height: 1.6;
-    }
     .lite-kpis {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
       margin: 0 0 12px;
     }
@@ -121,6 +88,22 @@
       font-weight: 700;
       color: #0f172a;
       font-size: 18px;
+    }
+    .lite-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .lite-card h4 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+    .lite-card p {
+      margin: 0;
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.6;
     }
     .lite-table {
       width: 100%;
@@ -141,20 +124,58 @@
       color: #334155;
       font-weight: 700;
     }
-    .lite-pill-row {
+    .lite-actions {
+      margin-top: 10px;
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      align-items: center;
     }
-    .lite-pill {
-      border: 1px solid #cbd5e1;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 11px;
-      background: #fff;
+    .lite-log {
+      margin-top: 10px;
+      min-height: 42px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      font-size: 12px;
       color: #334155;
-      font-weight: 600;
+      white-space: pre-wrap;
+    }
+    .lite-form-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .lite-form-row input,
+    .lite-form-row select,
+    .lite-form-row textarea {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+    .lite-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+    .lite-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fff;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid #dbeafe;
+      background: #eff6ff;
+      color: #1e40af;
+      margin-right: 6px;
     }
   </style>
 </head>
@@ -163,7 +184,7 @@
     <header class="console-top-header">
       <div class="console-brand">
         <span class="console-brand-cn">SSC 薪酬福利工作台</span>
-        <span class="console-brand-en">Compensation & Benefits · P1</span>
+        <span class="console-brand-en">Compensation & Benefits · Clone</span>
       </div>
       <span class="lite-top-note">公开共享版 · 无 IOA / 无登录</span>
       <div class="console-header-spacer"></div>
@@ -175,40 +196,21 @@
     <div class="console-rails">
       <div class="panel-rail-wrap">
         <span class="panel-rail-eyebrow">功能板块 · PANELS · 5</span>
-        <nav class="panel-rail" role="tablist" aria-label="功能板块" id="mainPanelRail">
-          <button type="button" class="panel-rail-btn active" aria-selected="true" data-panel="tools">
-            <span class="panel-rail-badge">P1</span>
-            <span class="panel-rail-label">
-              <span class="panel-rail-cn">区域工具</span>
-              <span class="panel-rail-en">Regional Tools</span>
-            </span>
+        <nav class="panel-rail" role="tablist" id="mainPanelRail">
+          <button type="button" class="panel-rail-btn active" data-panel="tools">
+            <span class="panel-rail-badge">P1</span><span class="panel-rail-label"><span class="panel-rail-cn">区域工具</span><span class="panel-rail-en">Regional Tools</span></span>
           </button>
           <button type="button" class="panel-rail-btn" data-panel="knowledge">
-            <span class="panel-rail-badge">P2</span>
-            <span class="panel-rail-label">
-              <span class="panel-rail-cn">知识库</span>
-              <span class="panel-rail-en">Knowledge</span>
-            </span>
+            <span class="panel-rail-badge">P2</span><span class="panel-rail-label"><span class="panel-rail-cn">知识库</span><span class="panel-rail-en">Knowledge</span></span>
           </button>
           <button type="button" class="panel-rail-btn" data-panel="home">
-            <span class="panel-rail-label">
-              <span class="panel-rail-cn">全局总览</span>
-              <span class="panel-rail-en">Overview</span>
-            </span>
+            <span class="panel-rail-label"><span class="panel-rail-cn">全局总览</span><span class="panel-rail-en">Overview</span></span>
           </button>
           <button type="button" class="panel-rail-btn" data-panel="collab">
-            <span class="panel-rail-badge">P4</span>
-            <span class="panel-rail-label">
-              <span class="panel-rail-cn">协同</span>
-              <span class="panel-rail-en">Collaboration</span>
-            </span>
+            <span class="panel-rail-badge">P4</span><span class="panel-rail-label"><span class="panel-rail-cn">协同</span><span class="panel-rail-en">Collaboration</span></span>
           </button>
           <button type="button" class="panel-rail-btn" data-panel="system">
-            <span class="panel-rail-badge">P5</span>
-            <span class="panel-rail-label">
-              <span class="panel-rail-cn">系统管理</span>
-              <span class="panel-rail-en">Administration</span>
-            </span>
+            <span class="panel-rail-badge">P5</span><span class="panel-rail-label"><span class="panel-rail-cn">系统管理</span><span class="panel-rail-en">Administration</span></span>
           </button>
         </nav>
       </div>
@@ -223,15 +225,14 @@
                 <h2 id="mainTitle">区域工具 · 共享版</h2>
                 <span class="ssc-page-sub">NO AUTH MODE · Pure Frontend</span>
               </div>
-              <span class="lite-only-badge">当前无需 iOA / 无账号限制</span>
             </div>
 
             <div class="lite-warning">
-              该页面是你当前工作台界面的公开克隆版：样式和流程说明保持一致。<br />
-              为避免同事受权限影响，已移除 iOA 登录和内网 API 依赖；自动化动作改为前端示例处理（可上传文件、可导出演示结果）。
+              这是“高仿可操作克隆页”：保留五大板块与二级页签交互，所有数据存储在浏览器本地。<br />
+              不接入 iOA、无任何鉴权依赖；关闭浏览器后数据仍会保留（localStorage）。
             </div>
 
-            <div id="panelTools" class="panel-section active">
+            <section id="panelTools" class="panel-section active">
               <div class="tools-switch-tabs">
                 <button type="button" class="tools-switch-tab active" data-target="usView">美国工作区 · 分摊 / 提单</button>
                 <button type="button" class="tools-switch-tab" data-target="caView">加拿大工作区 · 分摊 / 提单</button>
@@ -239,242 +240,105 @@
               </div>
 
               <div id="usView" class="lite-view active">
-              <div class="tools-region-banner americas">
-                <h3>美国工作区 · 分摊 / 提单</h3>
-                <p>美洲业务下美国工作区，处理分摊与提单流程。</p>
-              </div>
-              <div class="panel allocation-ops-panel">
-                <div class="allocation-ops-head">
-                  <h3>FPP 分摊执行闭环（美洲）</h3>
-                  <span class="allocation-ops-tag">仅保留自动分摊 + 提单</span>
-                </div>
-                <p class="muted" style="margin:0 0 10px">
-                  流程：更新台账 → 根据台账下载供应商 invoice → 自动生成分摊结果表 → 在付款平台提单 → 将单号回填至台账。
-                </p>
-                <div class="allocation-calendar">
-                  <span class="allocation-calendar-item"><strong>节点 1</strong> 每月 20 日更新台账并处理当月批次</span>
-                  <span class="allocation-calendar-item"><strong>节点 2</strong> 次月 11 日复核补单并完成回填</span>
-                </div>
-                <div class="allocation-risk-callout">
-                  <strong>人工核对点（必须）</strong>
-                  <ul>
-                    <li>台账可能存在重复记录，自动处理后需人工核对最终数据。</li>
-                    <li>成本中心可能失效，提单前需校验最新组织信息。</li>
-                    <li>不同供应商模板字段差异较大，提交前确认模板映射。</li>
-                  </ul>
-                </div>
-                <div class="rt-auto-bar">
-                  <span class="rt-auto-label">自动化</span>
-                  <button type="button" class="btn btn-primary" id="usBtnAlloc">⚡ 动作1 · 批量自动分摊</button>
-                  <button type="button" class="btn" id="usBtnSubmit">📋 动作2 · 生成提单文本</button>
-                </div>
-                <div class="rt-workspace">
-                  <div class="rt-panel">
-                    <h4>动作1 · 自动分摊</h4>
-                    <p class="muted rt-hint">上传台账 + P1 人数 CSV，前端示例生成分摊结果表</p>
+                <div class="tools-region-banner americas"><h3>美国工作区 · 分摊 / 提单</h3><p>与原版一致的操作结构，示例执行不依赖后端。</p></div>
+                <div class="panel allocation-ops-panel">
+                  <div class="rt-auto-bar"><span class="rt-auto-label">自动化</span><button type="button" class="btn btn-primary" id="usBtnAlloc">⚡ 动作1 · 批量自动分摊</button><button type="button" class="btn" id="usBtnSubmit">📋 动作2 · 生成提单文本</button></div>
+                  <div class="rt-workspace">
                     <div class="rt-form-grid">
-                      <label class="rt-field">账单月 YYYYMM<input type="text" id="usPeriod" maxlength="6" placeholder="202607" inputmode="numeric" /></label>
-                      <label class="rt-field rt-span2">① 台账 CSV<input type="file" id="usLedger" accept=".csv,text/csv" /></label>
-                      <label class="rt-field rt-span2">② P1 人数 CSV<input type="file" id="usP1" accept=".csv,text/csv" /></label>
+                      <label class="rt-field">账单月 YYYYMM<input type="text" id="usPeriod" maxlength="6" placeholder="202607" /></label>
+                      <label class="rt-field rt-span2">台账 CSV<input type="file" id="usLedger" accept=".csv,text/csv" /></label>
+                      <label class="rt-field rt-span2">P1 人数 CSV<input type="file" id="usP1" accept=".csv,text/csv" /></label>
+                      <label class="rt-field rt-span2">提单 CSV<input type="file" id="usSubmission" accept=".csv,text/csv" /></label>
                     </div>
+                    <div class="lite-actions"><button type="button" class="btn btn-sm" id="usDownloadSample">下载示例结果 CSV</button></div>
+                    <div class="lite-log" id="usLog">等待执行…</div>
                   </div>
-                  <div class="rt-panel">
-                    <h4>动作2 · 提单输出</h4>
-                    <label class="rt-field rt-span2">提单 CSV<input type="file" id="usSubmission" accept=".csv,text/csv" /></label>
-                  </div>
-                  <div class="lite-actions">
-                    <button type="button" class="btn btn-sm" id="usDownloadSample">下载示例结果 CSV</button>
-                  </div>
-                  <div class="lite-log" id="usLog">等待执行…</div>
                 </div>
               </div>
-            </div>
 
-            <div id="caView" class="lite-view">
-              <div class="tools-region-banner americas">
-                <h3>加拿大工作区 · 分摊 / 提单</h3>
-                <p>美洲业务下加拿大工作区，处理与美国一致的分摊与提单流程。</p>
-              </div>
-              <div class="panel allocation-ops-panel">
-                <div class="allocation-ops-head">
-                  <h3>加拿大月度流程（与美国同动作）</h3>
-                  <span class="allocation-ops-tag">CAN Workspace</span>
-                </div>
-                <p class="muted" style="margin:0 0 10px">
-                  在区域工具台中切到「加拿大工作区」，执行与美国同一套流程：台账 + 人力数据分摊 → 提单输出 → 单号回填。
-                </p>
-                <div class="rt-auto-bar">
-                  <span class="rt-auto-label">自动化</span>
-                  <button type="button" class="btn btn-primary" id="caBtnAlloc">⚡ 动作1 · 批量自动分摊</button>
-                  <button type="button" class="btn" id="caBtnSubmit">📋 动作2 · 生成提单文本</button>
-                </div>
-                <div class="rt-workspace">
-                  <div class="rt-panel">
-                    <h4>动作1 · 自动分摊</h4>
+              <div id="caView" class="lite-view">
+                <div class="tools-region-banner americas"><h3>加拿大工作区 · 分摊 / 提单</h3><p>与美国同动作，区域固定 CAN。</p></div>
+                <div class="panel allocation-ops-panel">
+                  <div class="rt-auto-bar"><span class="rt-auto-label">自动化</span><button type="button" class="btn btn-primary" id="caBtnAlloc">⚡ 动作1 · 批量自动分摊</button><button type="button" class="btn" id="caBtnSubmit">📋 动作2 · 生成提单文本</button></div>
+                  <div class="rt-workspace">
                     <div class="rt-form-grid">
-                      <label class="rt-field">账单月 YYYYMM<input type="text" id="caPeriod" maxlength="6" placeholder="202607" inputmode="numeric" /></label>
-                      <label class="rt-field rt-span2">① 台账 CSV<input type="file" id="caLedger" accept=".csv,text/csv" /></label>
-                      <label class="rt-field rt-span2">② P1 人数 CSV<input type="file" id="caP1" accept=".csv,text/csv" /></label>
+                      <label class="rt-field">账单月 YYYYMM<input type="text" id="caPeriod" maxlength="6" placeholder="202607" /></label>
+                      <label class="rt-field rt-span2">台账 CSV<input type="file" id="caLedger" accept=".csv,text/csv" /></label>
+                      <label class="rt-field rt-span2">P1 人数 CSV<input type="file" id="caP1" accept=".csv,text/csv" /></label>
+                      <label class="rt-field rt-span2">提单 CSV<input type="file" id="caSubmission" accept=".csv,text/csv" /></label>
                     </div>
+                    <div class="lite-actions"><button type="button" class="btn btn-sm" id="caDownloadSample">下载示例结果 CSV</button></div>
+                    <div class="lite-log" id="caLog">等待执行…</div>
                   </div>
-                  <div class="rt-panel">
-                    <h4>动作2 · 提单输出</h4>
-                    <label class="rt-field rt-span2">提单 CSV<input type="file" id="caSubmission" accept=".csv,text/csv" /></label>
-                  </div>
-                  <div class="lite-actions">
-                    <button type="button" class="btn btn-sm" id="caDownloadSample">下载示例结果 CSV</button>
-                  </div>
-                  <div class="lite-log" id="caLog">等待执行…</div>
                 </div>
               </div>
-            </div>
 
-            <div id="sgView" class="lite-view">
-              <div class="tools-region-banner non-americas">
-                <h3>新加坡工作区 · EE Listing</h3>
-                <p>非美洲业务下新加坡工作区，处理 EE Listing 月度生成。</p>
-              </div>
-              <div class="panel allocation-ops-panel">
-                <div class="allocation-ops-head">
-                  <h3>新加坡 FPP 前置：EE Listing 清洗</h3>
-                  <span class="allocation-ops-tag">同事交付包 · cleaner.py</span>
-                </div>
-                <p class="muted" style="margin:0 0 10px">
-                  上传 Active / Terminated / 上月 EE Listing 三份 xlsx，前端示例生成“清洗摘要”并支持导出说明。
-                </p>
-                <div class="rt-auto-bar">
-                  <span class="rt-auto-label">自动化</span>
-                  <button type="button" class="btn btn-primary" id="sgBtnRun">⚡ 一键生成 EE Listing 摘要</button>
-                </div>
-                <div class="rt-workspace">
-                  <div class="rt-panel">
+              <div id="sgView" class="lite-view">
+                <div class="tools-region-banner non-americas"><h3>新加坡工作区 · EE Listing</h3><p>前端示例生成清洗摘要和模板说明。</p></div>
+                <div class="panel allocation-ops-panel">
+                  <div class="rt-auto-bar"><span class="rt-auto-label">自动化</span><button type="button" class="btn btn-primary" id="sgBtnRun">⚡ 一键生成 EE Listing 摘要</button></div>
+                  <div class="rt-workspace">
                     <div class="rt-form-grid">
-                      <label class="rt-field rt-span2">① Active Employee Report (.xlsx)<input type="file" id="sgActive" accept=".xlsx" /></label>
-                      <label class="rt-field rt-span2">② Terminated Report (.xlsx)<input type="file" id="sgTerminated" accept=".xlsx" /></label>
-                      <label class="rt-field rt-span2">③ 上月 EE Listing (.xlsx)<input type="file" id="sgLastEe" accept=".xlsx" /></label>
+                      <label class="rt-field rt-span2">① Active Employee Report<input type="file" id="sgActive" accept=".xlsx" /></label>
+                      <label class="rt-field rt-span2">② Terminated Report<input type="file" id="sgTerminated" accept=".xlsx" /></label>
+                      <label class="rt-field rt-span2">③ 上月 EE Listing<input type="file" id="sgLastEe" accept=".xlsx" /></label>
                     </div>
+                    <div class="lite-actions"><button type="button" class="btn btn-sm" id="sgDownloadTemplate">下载提交模板说明</button></div>
+                    <div class="lite-log" id="sgLog">等待执行…</div>
                   </div>
-                  <div class="lite-actions">
-                    <button type="button" class="btn btn-sm" id="sgDownloadTemplate">下载提交模板说明</button>
-                  </div>
-                  <div class="lite-log" id="sgLog">等待执行…</div>
                 </div>
               </div>
-            </div>
-            </div>
+            </section>
 
-            <div id="panelHome" class="panel-section">
-              <div class="lite-kpis">
-                <div class="lite-kpi"><div class="k">在跟项目</div><div class="v">6</div></div>
-                <div class="lite-kpi"><div class="k">平均进度</div><div class="v">68%</div></div>
-                <div class="lite-kpi"><div class="k">开放 Issue</div><div class="v">14</div></div>
-                <div class="lite-kpi"><div class="k">监控告警</div><div class="v">3</div></div>
+            <section id="panelHome" class="panel-section">
+              <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-sub="home-overview">指挥总览</button>
+                <button type="button" class="sub-tab" data-sub="home-projects">项目 KPI</button>
+                <button type="button" class="sub-tab" data-sub="home-collab">协同态势</button>
+                <button type="button" class="sub-tab" data-sub="home-monitor">监控信号</button>
               </div>
-              <div class="panel">
-                <div class="panel-head"><h3>AI · 指挥摘要</h3></div>
-                <p class="muted">本周重点：US/CAN 月结分摊进入复核窗口；SG EE Listing 完成预清洗，待确认异常 4 条。</p>
-              </div>
-              <div class="lite-grid">
-                <div class="lite-card">
-                  <h4>团队小黑板</h4>
-                  <p>可发布跨部门消息并跟踪“收到”确认。共享版展示样例消息，不绑定账号权限。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>监控预警</h4>
-                  <p>聚合 Issue 超期、会议待办超期、里程碑超期。共享版展示结构与说明。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>操作热力图</h4>
-                  <p>展示近 14 天上传、脚本、知识同步行为趋势。共享版提供静态示例。</p>
-                </div>
-              </div>
-            </div>
+              <div id="home-overview" class="sub-view active"></div>
+              <div id="home-projects" class="sub-view"></div>
+              <div id="home-collab" class="sub-view"></div>
+              <div id="home-monitor" class="sub-view"></div>
+            </section>
 
-            <div id="panelKnowledge" class="panel-section">
-              <div class="lite-pill-row">
-                <span class="lite-pill">Knowledge Library</span>
-                <span class="lite-pill">Bookshelves</span>
-                <span class="lite-pill">Q&A Ready</span>
+            <section id="panelKnowledge" class="panel-section">
+              <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-sub="kb-shelves">书架</button>
+                <button type="button" class="sub-tab" data-sub="kb-ops">运营清单</button>
+                <button type="button" class="sub-tab" data-sub="kb-qa">问答入口</button>
               </div>
-              <div class="lite-grid">
-                <div class="lite-card">
-                  <h4>书架分布</h4>
-                  <p>按 SOP、运营清单、项目文档、会议纪要分层展示；共享版保留布局，不依赖内网索引服务。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>知识问答入口</h4>
-                  <p>可跳转 `qa.html` 进行问答（若后端可用）；在纯静态场景可作为知识导航页使用。</p>
-                </div>
-              </div>
-              <div class="panel" style="margin-top:12px">
-                <div class="panel-head"><h3>运营清单（示例）</h3></div>
-                <table class="lite-table">
-                  <thead><tr><th>编号</th><th>主题</th><th>状态</th><th>更新时间</th></tr></thead>
-                  <tbody>
-                    <tr><td>OPS-01</td><td>US 月结分摊 SOP</td><td>已入库</td><td>2026-06-30</td></tr>
-                    <tr><td>OPS-02</td><td>CAN 提单检查清单</td><td>待复核</td><td>2026-06-28</td></tr>
-                    <tr><td>OPS-03</td><td>SG EE Listing 异常规则</td><td>已更新</td><td>2026-06-29</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              <div id="kb-shelves" class="sub-view active"></div>
+              <div id="kb-ops" class="sub-view"></div>
+              <div id="kb-qa" class="sub-view"></div>
+            </section>
 
-            <div id="panelCollab" class="panel-section">
-              <div class="lite-grid">
-                <div class="lite-card">
-                  <h4>项目看板</h4>
-                  <p>保留“项目卡片 → 详情页”信息结构；共享版使用静态样例，便于对外演示流程。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>Issue 跟踪</h4>
-                  <p>支持严重度、状态、国家维度查看；共享版展示典型字段和状态流转。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>会议纪要</h4>
-                  <p>覆盖会议列表、待办提取、关联项目动作。共享版可用作培训演示页面。</p>
-                </div>
+            <section id="panelCollab" class="panel-section">
+              <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-sub="collab-projects">项目</button>
+                <button type="button" class="sub-tab" data-sub="collab-issues">Issue</button>
+                <button type="button" class="sub-tab" data-sub="collab-meetings">会议</button>
               </div>
-              <div class="panel" style="margin-top:12px">
-                <div class="panel-head"><h3>协同任务样例</h3></div>
-                <table class="lite-table">
-                  <thead><tr><th>类型</th><th>标题</th><th>负责人</th><th>状态</th></tr></thead>
-                  <tbody>
-                    <tr><td>项目</td><td>SSC workbench v1 rollout</td><td>Anna</td><td>进行中</td></tr>
-                    <tr><td>Issue</td><td>成本中心失效导致提单失败</td><td>COE Ops</td><td>待复核</td></tr>
-                    <tr><td>会议待办</td><td>更新 CAN 月结检查表</td><td>PMO</td><td>待完成</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              <div id="collab-projects" class="sub-view active"></div>
+              <div id="collab-issues" class="sub-view"></div>
+              <div id="collab-meetings" class="sub-view"></div>
+            </section>
 
-            <div id="panelSystem" class="panel-section">
-              <div class="lite-grid">
-                <div class="lite-card">
-                  <h4>管理看板</h4>
-                  <p>展示 8 项运营指标、路线图、固定 Pipeline。共享版保留结构与关键说明。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>用户与权限矩阵</h4>
-                  <p>原版支持正式人员/实习生权限分层。共享版只展示矩阵样式和字段，不含真实权限数据。</p>
-                </div>
-                <div class="lite-card">
-                  <h4>操作日志与权限申请</h4>
-                  <p>保留日志台账与申请流程说明，便于演示治理流程。</p>
-                </div>
+            <section id="panelSystem" class="panel-section">
+              <div class="sub-tabs">
+                <button type="button" class="sub-tab active" data-sub="sys-mgmt">管理看板</button>
+                <button type="button" class="sub-tab" data-sub="sys-users">用户管理</button>
+                <button type="button" class="sub-tab" data-sub="sys-perm">权限矩阵</button>
+                <button type="button" class="sub-tab" data-sub="sys-audit">操作日志</button>
+                <button type="button" class="sub-tab" data-sub="sys-access">权限申请</button>
               </div>
-              <div class="panel" style="margin-top:12px">
-                <div class="panel-head"><h3>系统管理样例矩阵</h3></div>
-                <table class="lite-table">
-                  <thead><tr><th>模块</th><th>Viewer</th><th>Operator</th><th>Admin</th></tr></thead>
-                  <tbody>
-                    <tr><td>P1 区域工具</td><td>R</td><td>W</td><td>SA</td></tr>
-                    <tr><td>P2 知识库</td><td>R</td><td>W</td><td>SA</td></tr>
-                    <tr><td>P4 协同</td><td>R</td><td>W</td><td>SA</td></tr>
-                    <tr><td>P5 系统管理</td><td>-</td><td>R</td><td>SA</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              <div id="sys-mgmt" class="sub-view active"></div>
+              <div id="sys-users" class="sub-view"></div>
+              <div id="sys-perm" class="sub-view"></div>
+              <div id="sys-audit" class="sub-view"></div>
+              <div id="sys-access" class="sub-view"></div>
+            </section>
           </div>
         </div>
       </div>
@@ -482,26 +346,58 @@
   </div>
 
   <script>
+    const STORE_KEY = "ssc_no_ioa_clone_v2";
+    const defaultState = {
+      projects: [
+        { id: "P-001", name: "SSC workbench rollout", owner: "Anna", status: "进行中", progress: 72 },
+        { id: "P-002", name: "CAN monthly allocation", owner: "COE Ops", status: "待复核", progress: 58 }
+      ],
+      issues: [
+        { id: "I-001", title: "成本中心失效", country: "US", severity: "high", status: "open", owner: "Finance Ops" },
+        { id: "I-002", title: "模板字段映射差异", country: "CAN", severity: "medium", status: "review", owner: "PMO" }
+      ],
+      meetings: [
+        { id: "M-001", topic: "6/30 月结对齐", owner: "Anna", todo: "更新分摊口径并回填台账", status: "进行中" }
+      ],
+      users: [
+        { id: "U-001", name: "Anna", role: "admin", staffType: "formal" },
+        { id: "U-002", name: "Liu Wei", role: "operator", staffType: "formal" }
+      ],
+      accessRequests: [],
+      audit: []
+    };
+
+    function loadState() {
+      try {
+        const v = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+        return v ? { ...defaultState, ...v } : { ...defaultState };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+    function saveState() {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    }
+    let state = loadState();
+
     function nowText() {
       const d = new Date();
       const p = (n) => String(n).padStart(2, "0");
       return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
     }
-
-    function switchLiteView(targetId) {
-      document.querySelectorAll(".tools-switch-tab").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.target === targetId);
-      });
-      document.querySelectorAll(".lite-view").forEach((view) => {
-        view.classList.toggle("active", view.id === targetId);
-      });
+    function esc(s) {
+      return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function addAudit(action, detail) {
+      state.audit.unshift({ ts: nowText(), action, detail });
+      state.audit = state.audit.slice(0, 60);
+      saveState();
     }
 
     function fileName(id) {
       const f = document.getElementById(id)?.files?.[0];
       return f ? f.name : "未上传";
     }
-
     function csvDownload(filename, header, rows) {
       const content = [header.join(","), ...rows.map((r) => r.join(","))].join("\n");
       const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
@@ -513,104 +409,251 @@
       URL.revokeObjectURL(url);
     }
 
-    function bindTabEvents() {
-      document.querySelectorAll(".tools-switch-tab").forEach((btn) => {
-        btn.addEventListener("click", () => switchLiteView(btn.dataset.target));
-      });
-    }
-
-    function bindMainPanels() {
+    function switchMainPanel(panel) {
       const titleMap = {
         tools: "区域工具 · 共享版",
         home: "全局总览 · 共享版",
         knowledge: "知识库 · 共享版",
         collab: "协同 · 共享版",
-        system: "系统管理 · 共享版",
+        system: "系统管理 · 共享版"
       };
       document.querySelectorAll("#mainPanelRail .panel-rail-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const panel = btn.dataset.panel;
-          document.querySelectorAll("#mainPanelRail .panel-rail-btn").forEach((n) => {
-            n.classList.toggle("active", n === btn);
-          });
-          document.querySelectorAll(".panel-section").forEach((sec) => {
-            sec.classList.remove("active");
-          });
-          const target = document.getElementById(`panel${panel.charAt(0).toUpperCase()}${panel.slice(1)}`);
-          if (target) target.classList.add("active");
-          document.getElementById("mainTitle").textContent = titleMap[panel] || "共享版";
-        });
+        btn.classList.toggle("active", btn.dataset.panel === panel);
+      });
+      document.querySelectorAll(".panel-section").forEach((sec) => sec.classList.remove("active"));
+      document.getElementById(`panel${panel.charAt(0).toUpperCase()}${panel.slice(1)}`).classList.add("active");
+      document.getElementById("mainTitle").textContent = titleMap[panel] || "共享版";
+    }
+
+    function switchSubView(targetId, rootSelector) {
+      const root = document.querySelector(rootSelector);
+      root.querySelectorAll(".sub-tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.sub === targetId);
+      });
+      root.querySelectorAll(".sub-view").forEach((view) => {
+        view.classList.toggle("active", view.id === targetId);
       });
     }
 
-    function bindUS() {
-      const usLog = document.getElementById("usLog");
+    function switchToolView(targetId) {
+      document.querySelectorAll(".tools-switch-tab").forEach((btn) => btn.classList.toggle("active", btn.dataset.target === targetId));
+      document.querySelectorAll(".lite-view").forEach((v) => v.classList.toggle("active", v.id === targetId));
+    }
+
+    function renderHome() {
+      const doneProjects = state.projects.filter((p) => p.status === "完成").length;
+      const openIssues = state.issues.filter((i) => i.status !== "closed").length;
+      const openMeetings = state.meetings.filter((m) => m.status !== "完成").length;
+
+      document.getElementById("home-overview").innerHTML = `
+        <div class="lite-kpis">
+          <div class="lite-kpi"><div class="k">在跟项目</div><div class="v">${state.projects.length}</div></div>
+          <div class="lite-kpi"><div class="k">开放 Issue</div><div class="v">${openIssues}</div></div>
+          <div class="lite-kpi"><div class="k">会议待办</div><div class="v">${openMeetings}</div></div>
+          <div class="lite-kpi"><div class="k">已完成项目</div><div class="v">${doneProjects}</div></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>AI 指挥摘要（示例）</h3></div><p class="muted">当前月结处于分摊复核窗口，建议优先处理高优先级 Issue 并同步会议待办。</p></div>
+      `;
+      document.getElementById("home-projects").innerHTML = `<div class="panel"><table class="lite-table"><thead><tr><th>ID</th><th>项目</th><th>负责人</th><th>状态</th><th>进度</th></tr></thead><tbody>${state.projects.map((p) => `<tr><td>${esc(p.id)}</td><td>${esc(p.name)}</td><td>${esc(p.owner)}</td><td>${esc(p.status)}</td><td>${esc(p.progress)}%</td></tr>`).join("")}</tbody></table></div>`;
+      document.getElementById("home-collab").innerHTML = `<div class="lite-grid"><div class="lite-card"><h4>团队协同态势</h4><p>Issue 未关闭 ${openIssues} 条；会议待办未完成 ${openMeetings} 条。</p></div><div class="lite-card"><h4>建议动作</h4><p>优先清理 high issue，并将会议待办转项目行动项。</p></div></div>`;
+      document.getElementById("home-monitor").innerHTML = `<div class="panel"><div class="panel-head"><h3>监控信号（示例）</h3></div><div class="lite-list"><div class="lite-item"><span class="tag">high</span> 成本中心失效风险持续 2 天</div><div class="lite-item"><span class="tag">medium</span> CAN 模板字段变更待确认</div></div></div>`;
+    }
+
+    function renderKnowledge() {
+      document.getElementById("kb-shelves").innerHTML = `
+        <div class="lite-grid">
+          <div class="lite-card"><h4>SOP 书架</h4><p>US/CAN/SG 流程说明、回填规范、截止时间规则。</p></div>
+          <div class="lite-card"><h4>项目书架</h4><p>项目方案、变更记录、里程碑决策。</p></div>
+          <div class="lite-card"><h4>会议书架</h4><p>会议纪要与待办沉淀。</p></div>
+        </div>`;
+      document.getElementById("kb-ops").innerHTML = `
+        <div class="panel">
+          <table class="lite-table">
+            <thead><tr><th>编号</th><th>主题</th><th>状态</th><th>更新</th></tr></thead>
+            <tbody>
+              <tr><td>OPS-01</td><td>US 月结分摊 SOP</td><td>已入库</td><td>2026-06-30</td></tr>
+              <tr><td>OPS-02</td><td>CAN 提单检查清单</td><td>待复核</td><td>2026-06-28</td></tr>
+              <tr><td>OPS-03</td><td>SG EE Listing 规则</td><td>已更新</td><td>2026-06-29</td></tr>
+            </tbody>
+          </table>
+        </div>`;
+      document.getElementById("kb-qa").innerHTML = `<div class="panel"><div class="panel-head"><h3>问答入口</h3></div><p class="muted">该无 IOA 版本不调用内网问答 API，可将这里作为知识目录导航。</p><div class="lite-actions"><a class="btn btn-sm" href="qa.html">打开原 qa.html（若后端可用）</a></div></div>`;
+    }
+
+    function renderCollab() {
+      document.getElementById("collab-projects").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>项目看板</h3></div>
+          <div class="lite-form-row">
+            <input id="newProjName" placeholder="项目名称" />
+            <input id="newProjOwner" placeholder="负责人" />
+            <select id="newProjStatus"><option>进行中</option><option>待复核</option><option>完成</option></select>
+            <button class="btn btn-sm btn-primary" id="btnAddProject">新增项目</button>
+          </div>
+          <div class="lite-list">${state.projects.map((p) => `<div class="lite-item"><strong>${esc(p.name)}</strong> · ${esc(p.owner)} · ${esc(p.status)} · ${esc(p.progress)}%</div>`).join("")}</div>
+        </div>`;
+
+      document.getElementById("collab-issues").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>Issue 跟踪</h3></div>
+          <div class="lite-form-row">
+            <input id="newIssueTitle" placeholder="Issue 标题" />
+            <select id="newIssueCountry"><option>US</option><option>CAN</option><option>SG</option></select>
+            <select id="newIssueSeverity"><option>high</option><option>medium</option><option>low</option></select>
+            <button class="btn btn-sm btn-primary" id="btnAddIssue">新增 Issue</button>
+          </div>
+          <table class="lite-table" style="margin-top:10px">
+            <thead><tr><th>ID</th><th>标题</th><th>国家</th><th>严重度</th><th>状态</th></tr></thead>
+            <tbody>${state.issues.map((i) => `<tr><td>${esc(i.id)}</td><td>${esc(i.title)}</td><td>${esc(i.country)}</td><td>${esc(i.severity)}</td><td>${esc(i.status)}</td></tr>`).join("")}</tbody>
+          </table>
+        </div>`;
+
+      document.getElementById("collab-meetings").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>会议纪要</h3></div>
+          <div class="lite-form-row">
+            <input id="newMeetingTopic" placeholder="会议主题" />
+            <input id="newMeetingOwner" placeholder="主持人" />
+            <input id="newMeetingTodo" placeholder="待办事项" />
+            <button class="btn btn-sm btn-primary" id="btnAddMeeting">新增会议</button>
+          </div>
+          <div class="lite-list">${state.meetings.map((m) => `<div class="lite-item"><strong>${esc(m.topic)}</strong> · ${esc(m.owner)}<br/>待办：${esc(m.todo)} · 状态：${esc(m.status)}</div>`).join("")}</div>
+        </div>`;
+
+      document.getElementById("btnAddProject").onclick = () => {
+        const name = document.getElementById("newProjName").value.trim();
+        if (!name) return;
+        state.projects.unshift({ id: `P-${String(Date.now()).slice(-4)}`, name, owner: document.getElementById("newProjOwner").value.trim() || "未指定", status: document.getElementById("newProjStatus").value, progress: 0 });
+        addAudit("project.create", name);
+        saveState();
+        renderAll();
+      };
+      document.getElementById("btnAddIssue").onclick = () => {
+        const title = document.getElementById("newIssueTitle").value.trim();
+        if (!title) return;
+        state.issues.unshift({ id: `I-${String(Date.now()).slice(-4)}`, title, country: document.getElementById("newIssueCountry").value, severity: document.getElementById("newIssueSeverity").value, status: "open", owner: "未指定" });
+        addAudit("issue.create", title);
+        saveState();
+        renderAll();
+      };
+      document.getElementById("btnAddMeeting").onclick = () => {
+        const topic = document.getElementById("newMeetingTopic").value.trim();
+        if (!topic) return;
+        state.meetings.unshift({ id: `M-${String(Date.now()).slice(-4)}`, topic, owner: document.getElementById("newMeetingOwner").value.trim() || "未指定", todo: document.getElementById("newMeetingTodo").value.trim() || "待补充", status: "进行中" });
+        addAudit("meeting.create", topic);
+        saveState();
+        renderAll();
+      };
+    }
+
+    function renderSystem() {
+      document.getElementById("sys-mgmt").innerHTML = `
+        <div class="lite-kpis">
+          <div class="lite-kpi"><div class="k">项目数</div><div class="v">${state.projects.length}</div></div>
+          <div class="lite-kpi"><div class="k">Issue 数</div><div class="v">${state.issues.length}</div></div>
+          <div class="lite-kpi"><div class="k">会议数</div><div class="v">${state.meetings.length}</div></div>
+          <div class="lite-kpi"><div class="k">日志条数</div><div class="v">${state.audit.length}</div></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>管理看板说明</h3></div><p class="muted">无 IOA 版本仅用于演示流程与交互，管理数据均为本地可编辑数据。</p></div>`;
+
+      document.getElementById("sys-users").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>用户管理</h3></div>
+          <div class="lite-form-row">
+            <input id="newUserName" placeholder="用户名" />
+            <select id="newUserRole"><option>viewer</option><option>operator</option><option>admin</option></select>
+            <select id="newUserType"><option>formal</option><option>intern</option></select>
+            <button class="btn btn-sm btn-primary" id="btnAddUser">新增用户</button>
+          </div>
+          <table class="lite-table" style="margin-top:10px"><thead><tr><th>ID</th><th>姓名</th><th>角色</th><th>人员类型</th></tr></thead><tbody>${state.users.map((u) => `<tr><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${esc(u.role)}</td><td>${esc(u.staffType)}</td></tr>`).join("")}</tbody></table>
+        </div>`;
+
+      document.getElementById("sys-perm").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>权限矩阵（示例）</h3></div>
+          <table class="lite-table"><thead><tr><th>模块</th><th>Viewer</th><th>Operator</th><th>Admin</th></tr></thead><tbody><tr><td>P1 区域工具</td><td>R</td><td>W</td><td>SA</td></tr><tr><td>P2 知识库</td><td>R</td><td>W</td><td>SA</td></tr><tr><td>P4 协同</td><td>R</td><td>W</td><td>SA</td></tr><tr><td>P5 系统管理</td><td>-</td><td>R</td><td>SA</td></tr></tbody></table>
+        </div>`;
+
+      document.getElementById("sys-audit").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>操作日志</h3></div>
+          <table class="lite-table"><thead><tr><th>时间</th><th>动作</th><th>详情</th></tr></thead><tbody>${(state.audit.length ? state.audit : [{ ts: nowText(), action: "system.init", detail: "初始化无 IOA 克隆页" }]).map((a) => `<tr><td>${esc(a.ts)}</td><td>${esc(a.action)}</td><td>${esc(a.detail)}</td></tr>`).join("")}</tbody></table>
+        </div>`;
+
+      document.getElementById("sys-access").innerHTML = `
+        <div class="panel">
+          <div class="panel-head"><h3>权限申请</h3></div>
+          <div class="lite-form-row">
+            <input id="reqName" placeholder="申请人" />
+            <select id="reqRole"><option>viewer</option><option>operator</option><option>admin</option></select>
+            <input id="reqReason" placeholder="申请理由" style="min-width:260px" />
+            <button class="btn btn-sm btn-primary" id="btnAddRequest">提交申请</button>
+          </div>
+          <table class="lite-table" style="margin-top:10px"><thead><tr><th>时间</th><th>申请人</th><th>目标角色</th><th>理由</th><th>状态</th></tr></thead><tbody>${state.accessRequests.map((r) => `<tr><td>${esc(r.ts)}</td><td>${esc(r.name)}</td><td>${esc(r.role)}</td><td>${esc(r.reason)}</td><td>${esc(r.status)}</td></tr>`).join("") || '<tr><td colspan="5">暂无申请</td></tr>'}</tbody></table>
+        </div>`;
+
+      document.getElementById("btnAddUser").onclick = () => {
+        const name = document.getElementById("newUserName").value.trim();
+        if (!name) return;
+        state.users.unshift({ id: `U-${String(Date.now()).slice(-4)}`, name, role: document.getElementById("newUserRole").value, staffType: document.getElementById("newUserType").value });
+        addAudit("user.create", name);
+        saveState();
+        renderAll();
+      };
+      document.getElementById("btnAddRequest").onclick = () => {
+        const name = document.getElementById("reqName").value.trim();
+        if (!name) return;
+        const req = { ts: nowText(), name, role: document.getElementById("reqRole").value, reason: document.getElementById("reqReason").value.trim() || "未填写", status: "pending" };
+        state.accessRequests.unshift(req);
+        addAudit("access.request", `${req.name} -> ${req.role}`);
+        saveState();
+        renderAll();
+      };
+    }
+
+    function renderAll() {
+      renderHome();
+      renderKnowledge();
+      renderCollab();
+      renderSystem();
+    }
+
+    function bindBaseEvents() {
+      document.querySelectorAll("#mainPanelRail .panel-rail-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchMainPanel(btn.dataset.panel));
+      });
+      document.querySelectorAll(".tools-switch-tab").forEach((btn) => btn.addEventListener("click", () => switchToolView(btn.dataset.target)));
+
+      document.querySelectorAll("#panelHome .sub-tab").forEach((btn) => btn.addEventListener("click", () => switchSubView(btn.dataset.sub, "#panelHome")));
+      document.querySelectorAll("#panelKnowledge .sub-tab").forEach((btn) => btn.addEventListener("click", () => switchSubView(btn.dataset.sub, "#panelKnowledge")));
+      document.querySelectorAll("#panelCollab .sub-tab").forEach((btn) => btn.addEventListener("click", () => switchSubView(btn.dataset.sub, "#panelCollab")));
+      document.querySelectorAll("#panelSystem .sub-tab").forEach((btn) => btn.addEventListener("click", () => switchSubView(btn.dataset.sub, "#panelSystem")));
+
       document.getElementById("usBtnAlloc").addEventListener("click", () => {
         const period = document.getElementById("usPeriod").value || "未填写";
-        usLog.textContent =
-          `[${nowText()}] 动作1已执行（前端示例）\n` +
-          `账单月: ${period}\n台账: ${fileName("usLedger")}\nP1人数: ${fileName("usP1")}\n` +
-          `结果: 已生成“分摊结果预览”（示例模式，不调用内网 API）`;
+        document.getElementById("usLog").textContent = `[${nowText()}] US 自动分摊示例执行\n账单月: ${period}\n台账: ${fileName("usLedger")}\nP1人数: ${fileName("usP1")}`;
       });
       document.getElementById("usBtnSubmit").addEventListener("click", () => {
-        usLog.textContent =
-          `[${nowText()}] 动作2已执行（前端示例）\n` +
-          `提单文件: ${fileName("usSubmission")}\n` +
-          `结果: 已生成提单文本草稿（示例模式）`;
+        document.getElementById("usLog").textContent = `[${nowText()}] US 提单文本示例执行\n提单文件: ${fileName("usSubmission")}`;
       });
       document.getElementById("usDownloadSample").addEventListener("click", () => {
-        csvDownload(
-          "US_allocation_sample.csv",
-          ["vendor", "period", "amount_usd", "cost_center", "status"],
-          [
-            ["Vendor_A", "202607", "12400.00", "CC-1001", "ready"],
-            ["Vendor_B", "202607", "8600.00", "CC-1002", "ready"],
-          ],
-        );
+        csvDownload("US_allocation_sample.csv", ["vendor", "period", "amount_usd", "cost_center", "status"], [["Vendor_A", "202607", "12400.00", "CC-1001", "ready"], ["Vendor_B", "202607", "8600.00", "CC-1002", "ready"]]);
       });
-    }
-
-    function bindCA() {
-      const caLog = document.getElementById("caLog");
       document.getElementById("caBtnAlloc").addEventListener("click", () => {
         const period = document.getElementById("caPeriod").value || "未填写";
-        caLog.textContent =
-          `[${nowText()}] 动作1已执行（前端示例）\n` +
-          `账单月: ${period}\n台账: ${fileName("caLedger")}\nP1人数: ${fileName("caP1")}\n` +
-          `结果: 已生成 CAN 分摊结果预览`;
+        document.getElementById("caLog").textContent = `[${nowText()}] CAN 自动分摊示例执行\n账单月: ${period}\n台账: ${fileName("caLedger")}\nP1人数: ${fileName("caP1")}`;
       });
       document.getElementById("caBtnSubmit").addEventListener("click", () => {
-        caLog.textContent =
-          `[${nowText()}] 动作2已执行（前端示例）\n` +
-          `提单文件: ${fileName("caSubmission")}\n` +
-          `结果: 已生成 CAN 提单文本草稿`;
+        document.getElementById("caLog").textContent = `[${nowText()}] CAN 提单文本示例执行\n提单文件: ${fileName("caSubmission")}`;
       });
       document.getElementById("caDownloadSample").addEventListener("click", () => {
-        csvDownload(
-          "CAN_allocation_sample.csv",
-          ["vendor", "period", "amount_cad", "cost_center", "status"],
-          [
-            ["Vendor_CA_1", "202607", "5300.00", "CA-CC-01", "ready"],
-            ["Vendor_CA_2", "202607", "4875.00", "CA-CC-07", "ready"],
-          ],
-        );
+        csvDownload("CAN_allocation_sample.csv", ["vendor", "period", "amount_cad", "cost_center", "status"], [["Vendor_CA_1", "202607", "5300.00", "CA-CC-01", "ready"], ["Vendor_CA_2", "202607", "4875.00", "CA-CC-07", "ready"]]);
       });
-    }
-
-    function bindSG() {
-      const sgLog = document.getElementById("sgLog");
       document.getElementById("sgBtnRun").addEventListener("click", () => {
-        sgLog.textContent =
-          `[${nowText()}] EE Listing 摘要已生成（前端示例）\n` +
-          `Active: ${fileName("sgActive")}\nTerminated: ${fileName("sgTerminated")}\n上月EE: ${fileName("sgLastEe")}\n` +
-          `输出: 已标注新增/离职/异常行（演示说明版）`;
+        document.getElementById("sgLog").textContent = `[${nowText()}] SG EE Listing 摘要示例执行\nActive: ${fileName("sgActive")}\nTerminated: ${fileName("sgTerminated")}\n上月EE: ${fileName("sgLastEe")}`;
       });
       document.getElementById("sgDownloadTemplate").addEventListener("click", () => {
-        const text =
-          "SG EE Listing 模板说明\n" +
-          "1) 上传三份源文件：Active / Terminated / Last Month\n" +
-          "2) 字段建议：employee_id, legal_name, wecom_name, cost_center, probation_date\n" +
-          "3) 输出建议：新增/离职/冲突/缺失四类标签";
+        const text = "SG EE Listing 模板说明\n1) 上传 Active/Terminated/Last Month\n2) 字段建议: employee_id, legal_name, cost_center\n3) 输出标签: 新增/离职/冲突/缺失";
         const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -622,11 +665,9 @@
     }
 
     document.getElementById("topbarDate").textContent = nowText();
-    bindMainPanels();
-    bindTabEvents();
-    bindUS();
-    bindCA();
-    bindSG();
+    setInterval(() => { document.getElementById("topbarDate").textContent = nowText(); }, 60000);
+    bindBaseEvents();
+    renderAll();
   </script>
 </body>
 </html>
