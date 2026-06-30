@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新加坡 · EE Listing 月度生成</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card: #fff;
+      --primary: #0d6efd;
+      --primary-dark: #0a58ca;
+      --ok: #198754;
+      --warn: #f57c00;
+      --err: #c62828;
+      --border: #dee2e6;
+      --text: #212529;
+      --muted: #6c757d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 24px 16px 48px; }
+    .hero {
+      background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .hero h1 { margin: 0 0 6px; font-size: 1.5rem; }
+    .hero p { margin: 0; opacity: 0.92; font-size: 14px; }
+    .auto-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+    .auto-label {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .btn-auto {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-auto:hover { background: var(--primary-dark); }
+    .btn-auto:disabled { background: #adb5bd; cursor: not-allowed; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+    }
+    .upload-group {
+      margin: 14px 0;
+      padding: 14px 16px;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      background: #fafbfc;
+    }
+    .upload-group.has-file { border-color: var(--ok); background: #f1f8e9; }
+    .upload-group label { display: block; font-weight: 600; margin-bottom: 4px; }
+    .upload-group .desc { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .upload-group input[type="file"] { display: block; width: 100%; }
+    .preview {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #e7f1ff;
+      border-radius: 8px;
+      color: #0a58ca;
+      font-size: 14px;
+      display: none;
+    }
+    .status {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      display: none;
+    }
+    .status.processing { background: #fff8e1; color: var(--warn); display: block; }
+    .status.success { background: #e8f5e9; color: var(--ok); display: block; }
+    .status.error { background: #ffebee; color: var(--err); display: block; }
+    .download-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 18px;
+      background: var(--ok);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .steps { font-size: 13px; color: var(--muted); margin: 0 0 16px; padding-left: 18px; }
+    .steps li { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>🇸🇬 新加坡 · EE Listing 月度生成</h1>
+      <p>上传 Active / Terminated / 上月 EE Listing 三份 xlsx，一键生成当月名单（来源：同事交付包 cleaner.py）</p>
+    </header>
+
+    <div class="auto-bar">
+      <span class="auto-label">自动化</span>
+      <button type="button" class="btn-auto" id="btnAutoRun">⚡ 一键生成 EE Listing</button>
+    </div>
+
+    <div class="card">
+      <ol class="steps">
+        <li>从 Workday 导出当月 Active、Terminated 报告（.xlsx）</li>
+        <li>准备上月最终 EE Listing（.xlsx）</li>
+        <li>选齐三份文件后点「一键生成」，下载 <code>{月份}_eelisting.xlsx</code></li>
+      </ol>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="upload-group" id="group-active">
+          <label for="file-active">① Active Employee Report *</label>
+          <div class="desc">当月在岗员工报告</div>
+          <input type="file" id="file-active" name="active" accept=".xlsx" required />
+        </div>
+        <div class="upload-group" id="group-terminated">
+          <label for="file-terminated">② Terminated Report *</label>
+          <div class="desc">当月离职员工报告</div>
+          <input type="file" id="file-terminated" name="terminated" accept=".xlsx" required />
+        </div>
+        <div class="upload-group" id="group-last_ee">
+          <label for="file-last_ee">③ 上月 EE Listing *</label>
+          <div class="desc">上月最终名单</div>
+          <input type="file" id="file-last_ee" name="last_ee" accept=".xlsx" required />
+        </div>
+        <div class="preview" id="output-preview">
+          📌 预计输出：<strong id="output-name">—</strong>
+        </div>
+      </form>
+
+      <div class="status" id="status"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_PROCESS = "/api/sg/eelisting/process";
+
+    function predictOutputName(activeName) {
+      if (!activeName) return "";
+      const stem = activeName.replace(/\.xlsx$/i, "");
+      const m = stem.match(/^([A-Za-z]{3,4})[_\-\s]*(?:Active|Terminated|EElisting|eelisting|Listing|EE)/i);
+      if (m) return m[1].toUpperCase() + "_eelisting.xlsx";
+      const d = stem.match(/^(\d{6})/);
+      if (d) return d[1] + "_eelisting.xlsx";
+      return "";
+    }
+
+    document.querySelectorAll('input[type="file"]').forEach((input) => {
+      input.addEventListener("change", (e) => {
+        e.target.closest(".upload-group").classList.toggle("has-file", !!e.target.files[0]);
+        if (e.target.name === "active") {
+          const p = predictOutputName(e.target.files[0]?.name || "");
+          document.getElementById("output-name").textContent = p || "—";
+          document.getElementById("output-preview").style.display = p ? "block" : "none";
+        }
+      });
+    });
+
+    const btnAuto = document.getElementById("btnAutoRun");
+    const statusDiv = document.getElementById("status");
+
+    function runProcess() {
+      const files = {
+        active: document.getElementById("file-active").files[0],
+        terminated: document.getElementById("file-terminated").files[0],
+        last_ee: document.getElementById("file-last_ee").files[0],
+      };
+      for (const [k, v] of Object.entries(files)) {
+        if (!v) {
+          statusDiv.className = "status error";
+          statusDiv.textContent = "请先选择文件：" + k;
+          return;
+        }
+      }
+      const formData = new FormData();
+      Object.entries(files).forEach(([k, v]) => formData.append(k, v));
+      btnAuto.disabled = true;
+      btnAuto.textContent = "⏳ 处理中…";
+      statusDiv.className = "status processing";
+      statusDiv.textContent = "⏳ 正在清洗并生成 EE Listing，请稍候…";
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", API_PROCESS, true);
+      xhr.timeout = 180000;
+      xhr.onload = function () {
+        btnAuto.disabled = false;
+        btnAuto.textContent = "⚡ 一键生成 EE Listing";
+        if (xhr.status >= 200 && xhr.status < 300) {
+          let r;
+          try { r = JSON.parse(xhr.responseText); } catch (_) {
+            statusDiv.className = "status error";
+            statusDiv.textContent = "响应解析失败";
+            return;
+          }
+          if (r.status === "ok") {
+            statusDiv.className = "status success";
+            statusDiv.innerHTML =
+              "✅ 处理完成<br>输出：<strong>" + r.output_filename + "</strong><br>" +
+              '<a href="' + r.download_url + '" download class="download-link">📥 下载 ' + r.output_filename + "</a>";
+          } else {
+            statusDiv.className = "status error";
+            statusDiv.textContent = r.detail || "处理失败";
+          }
+        } else {
+          let msg = "处理失败（HTTP " + xhr.status + "）";
+          try {
+            const err = JSON.parse(xhr.responseText);
+            if (err.detail) msg = typeof err.detail === "string" ? err.detail : JSON.stringify(err.detail);
+          } catch (_) {}
+          statusDiv.className = "status error";
+          statusDiv.textContent = msg;
+        }
+      };
+      xhr.onerror = function () {
+        btnAuto.disabled = false;
+        btnAuto.textContent = "⚡ 一键生成 EE Listing";
+        statusDiv.className = "status error";
+        statusDiv.textContent = "网络请求失败，请确认 bot-gateway 已启动";
+      };
+      xhr.send(formData);
+    }
+
+    btnAuto.addEventListener("click", runProcess);
+    document.getElementById("uploadForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      runProcess();
+    });
+
+    if (new URLSearchParams(location.search).get("action") === "run") {
+      setTimeout(() => btnAuto.click(), 300);
+    }
+  </script>
+</body>
+</html>

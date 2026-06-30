@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    (function () {
+      if (/[?&]v=/.test(location.search)) return;
+      const u = new URL(location.href);
+      u.searchParams.set("v", "portal20260630a");
+      location.replace(u.toString());
+    })();
+  </script>
+  <title>统一门户 · SSC 海外薪酬福利</title>
+  <link rel="stylesheet" href="portal.css?v=portal20260630a" />
+</head>
+<body>
+  <div class="portal-shell">
+    <header class="portal-hero">
+      <span class="hero-tag">Unified Portal</span>
+      <h1>SSC 海外薪酬福利 · 统一门户</h1>
+      <p>按你要求：横向侧边栏、知识与区域工具前置、美洲双动作闭环、非美洲同事交付包接入。</p>
+    </header>
+
+    <section class="portal-priority">
+      <h2>优先入口（靠前）</h2>
+      <div class="priority-grid">
+        <a class="priority-card" href="upload-docs.html">
+          <strong>知识</strong>
+          <span>知识资料、说明文档、流程入口</span>
+          <em>运行中</em>
+        </a>
+        <a class="priority-card" href="upload-docs.html#tools-americas">
+          <strong>区域工具</strong>
+          <span>先保障美洲与非美洲分摊提单主流程</span>
+          <em>运行中</em>
+        </a>
+      </div>
+    </section>
+
+    <section class="portal-dev">
+      <div class="dev-head">
+        <h2>开发区（横向侧边栏）</h2>
+        <p>从左到右逐块迭代</p>
+      </div>
+      <nav class="dev-bar" aria-label="开发区横向侧边栏">
+        <a href="#americas">美洲工具更新</a>
+        <a href="#non-americas">非美洲工具</a>
+        <a href="#ops-board">运营看板</a>
+        <a href="upload-docs.html">网页工具主界面</a>
+        <a href="chat-menu.html">SOP 导航</a>
+      </nav>
+    </section>
+
+    <section class="panel" id="americas">
+      <h3>美洲工具更新（只保留双动作）</h3>
+      <ul>
+        <li>人工核对点：同一笔扣款可能重复更新，AI 处理前后都必须做去重核对。</li>
+        <li>月度节奏：每月20日与次月11日更新台账，按台账下载 invoice，生成分摊结果，提单后回填单号。</li>
+        <li>痛点：分摊计算依赖 Pivot Table、成本中心失效导致提单失败、供应商模板差异大。</li>
+        <li>优化目标：输入 invoice + 人力数据，直接输出 FTP/付款平台可用分摊结果表，省去中间 Pivot。</li>
+        <li>成本中心风险：部门列表非实时，需在提单前做校验，不等报错后再发现。</li>
+      </ul>
+      <div class="actions">
+        <a class="btn primary" href="upload-docs.html#usPageAllocate">动作1：自动分摊</a>
+        <a class="btn" href="upload-docs.html#usPageOutput">动作2：提单</a>
+      </div>
+      <p class="tip">已按要求移除 0/1/2/3/4 动作入口，只保留自动分摊与提单。</p>
+    </section>
+
+    <section class="panel" id="non-americas">
+      <h3>非美洲工具（同事交付包）</h3>
+      <p>已接入你提供的压缩包内容：`AI 实现说明.md` + `cleaner.py`。</p>
+      <ul>
+        <li>采用同一套 Web 外壳（FastAPI + 上传页 + 启动脚本），`cleaner.py` 作为黑盒调用。</li>
+        <li>输入：active / terminated / last_ee 三个 xlsx；输出：`{前缀}_eelisting.xlsx`。</li>
+        <li>可与美洲共用页面框架，按区域模板映射与字段约束分流。</li>
+      </ul>
+      <div class="actions">
+        <a class="btn primary" href="upload-docs.html">打开网页工具</a>
+      </div>
+    </section>
+
+    <section class="panel" id="ops-board">
+      <h3>运营看板</h3>
+      <p>保留，不删。仍通过 `upload-docs.html` 顶部“运营看板”按钮进入。</p>
+    </section>
+  </div>
+</body>
+</html>
