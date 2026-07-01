@@ -209,6 +209,126 @@
       padding: 1px 8px;
       font-weight: 700;
     }
+    .kgf-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 10px 0 14px;
+    }
+    .kgf-kpi-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
+    .kgf-kpi-card .k {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .kgf-kpi-card .v {
+      margin-top: 5px;
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      color: #0f172a;
+    }
+    .kgf-three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .kgf-source-card {
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      min-height: 98px;
+    }
+    .kgf-source-card.bot {
+      border-top: 3px solid #818cf8;
+    }
+    .kgf-source-card.ex {
+      border-top: 3px solid #f87171;
+    }
+    .kgf-source-card.pm {
+      border-top: 3px solid #60a5fa;
+    }
+    .kgf-main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 12px;
+    }
+    .kgf-step {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .kgf-step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+    .kgf-queue-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .kgf-queue-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+    }
+    .kgf-bar {
+      margin-top: 8px;
+      height: 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+    .kgf-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+    }
+    .bot-panel {
+      margin-top: 14px;
+      border: 1px solid #c7d2fe;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
+      padding: 12px;
+    }
+    .bot-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .bot-row input {
+      flex: 1;
+      min-width: 260px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    .bot-log {
+      margin-top: 10px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fff;
+      white-space: pre-wrap;
+      font-size: 12px;
+      color: #334155;
+      min-height: 54px;
+    }
     .sub-rail.console-tabs {
       display: flex;
       gap: 8px;
@@ -286,6 +406,11 @@
       }
       .admin-page-hero {
         padding: 12px;
+      }
+      .kgf-three-grid,
+      .kgf-main-grid,
+      .kgf-queue-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -507,6 +632,12 @@
         { id: "ALT-001", severity: "high", title: "成本中心失效风险", source: "Issue", status: "open" },
         { id: "ALT-002", severity: "medium", title: "会议待办临近超期", source: "Meeting", status: "open" }
       ],
+      knowledgeGaps: [
+        { id: "KG-001", title: "某国际产假政策 FAQ", severity: "high", owner: "Chatbot", progress: 16 },
+        { id: "KG-002", title: "入职材料上传 SOP", severity: "high", owner: "PM", progress: 22 },
+        { id: "KG-003", title: "新薪酬结构说明", severity: "medium", owner: "PM", progress: 42 },
+        { id: "KG-004", title: "加班费计算口径稽核表", severity: "medium", owner: "Policy", progress: 39 }
+      ],
       audit: []
     };
 
@@ -566,6 +697,23 @@
         .filter((l) => /待办|todo|action|^\-|\*/i.test(l))
         .map((l) => l.replace(/^[-*]\s*/, ""));
       return { topic, todos: todos.length ? todos : ["待补充行动项"] };
+    }
+    async function runBotQuery(text) {
+      const q = String(text || "").trim();
+      if (!q) return "请输入问题";
+      try {
+        const res = await fetch(KNOT_LINKS.orchestrateApi, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: q })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const msg = data?.message || data?.summary || JSON.stringify(data);
+        return `[在线 Bot]\n${msg}`;
+      } catch {
+        return `[本地兜底]\n已记录你的问题：“${q}”\n建议下一步：\n1) 在系统管理中确认待审权限与日志\n2) 在协同模块检查项目里程碑和 Issue`;
+      }
     }
 
     function switchMainPanel(panel) {
@@ -759,11 +907,56 @@
     }
 
     function renderKnowledge() {
+      const gaps = state.knowledgeGaps || [];
+      const highCnt = gaps.filter((g) => g.severity === "high").length;
+      const mediumCnt = gaps.filter((g) => g.severity === "medium").length;
+      const totalCnt = gaps.length;
+      const inProgress = gaps.filter((g) => g.progress > 0 && g.progress < 100).length;
       document.getElementById("kb-shelves").innerHTML = `
-        <div class="lite-grid">
-          <div class="lite-card"><h4>SOP 书架</h4><p>US/CAN/SG 流程说明、回填规范、截止时间规则。</p></div>
-          <div class="lite-card"><h4>项目书架</h4><p>项目方案、变更记录、里程碑决策。</p></div>
-          <div class="lite-card"><h4>会议书架</h4><p>会议纪要与待办沉淀。</p></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>知识缺口识别与生产 · Knowledge Gap Finder</h3>
+          </div>
+          <p class="muted" style="margin:0 0 8px">从“知识缺失导致问题”到“主动补齐知识缺口”。</p>
+
+          <div class="kgf-kpi-grid">
+            <div class="kgf-kpi-card"><div class="k">待补缺口</div><div class="v">${totalCnt}</div><div class="muted">高优 ${highCnt}</div></div>
+            <div class="kgf-kpi-card"><div class="k">生产中</div><div class="v">${inProgress}</div><div class="muted">AI 初稿 + 审核</div></div>
+            <div class="kgf-kpi-card"><div class="k">本月已入库</div><div class="v">${23 + mediumCnt}</div><div class="muted">较上月 +8</div></div>
+            <div class="kgf-kpi-card"><div class="k">缺口闭合后未命中率</div><div class="v">6<span style="font-size:20px">%</span></div><div class="muted">目标 < 10%</div></div>
+          </div>
+
+          <p class="section-title">知识缺口的 3 个识别来源</p>
+          <div class="kgf-three-grid">
+            <div class="kgf-source-card bot"><strong>Chatbot 未命中</strong><p class="muted">员工提问无法匹配知识，未命中率高即触发补缺。</p></div>
+            <div class="kgf-source-card ex"><strong>Exception Case</strong><p class="muted">同类工单反复出现，说明操作指引不清晰。</p></div>
+            <div class="kgf-source-card pm"><strong>PM 经验判断</strong><p class="muted">新政策刚上线，需预建知识沉淀。</p></div>
+          </div>
+
+          <div class="kgf-main-grid">
+            <div class="panel" style="padding:12px">
+              <div class="panel-head"><h3>知识生产流水线</h3></div>
+              <div class="kgf-step"><span class="kgf-step-dot" style="background:#22c55e"></span><div><strong>知识缺口识别</strong><div class="muted">3 类来源自动汇入</div></div></div>
+              <div class="kgf-step"><span class="kgf-step-dot" style="background:#facc15"></span><div><strong>知识类型判定</strong><div class="muted">FAQ / SOP / 政策拆行</div></div></div>
+              <div class="kgf-step"><span class="kgf-step-dot" style="background:#3b82f6"></span><div><strong>知识生产</strong><div class="muted">AI 起草 -> PM 审核 -> COE 定稿</div></div></div>
+            </div>
+            <div class="panel" style="padding:12px">
+              <div class="panel-head">
+                <h3>缺口清单</h3>
+                <button class="btn btn-sm btn-primary" id="btnDraftGap">AI 起草</button>
+              </div>
+              <div class="kgf-queue-grid">
+                ${gaps.map((g) => {
+                  const color = g.severity === "high" ? "#ef4444" : "#f59e0b";
+                  return `<div class="kgf-queue-card">
+                    <strong>${esc(g.title)}</strong>
+                    <div class="muted" style="font-size:11px;margin-top:4px">${esc(g.owner)} · ${esc(g.severity)}</div>
+                    <div class="kgf-bar"><span style="width:${Math.max(2, g.progress)}%;background:${color}"></span></div>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
+          </div>
         </div>`;
       document.getElementById("kb-ops").innerHTML = `
         <div class="panel">
@@ -785,9 +978,39 @@
             <button class="btn btn-sm" id="btnOpenKnotQaChat">打开 Knot 问答 Chat</button>
             <button class="btn btn-sm" id="btnOpenKnotQaAgent">打开 Knot 问答 Agent</button>
           </div>
+          <div class="bot-panel">
+            <div class="panel-head"><h3>Bot 对话（迁移可用代码）</h3></div>
+            <div class="bot-row">
+              <input id="botInput" placeholder="问：当前缺口最高优先级是什么？" />
+              <button class="btn btn-sm btn-primary" id="btnBotAsk">发送</button>
+            </div>
+            <div class="bot-log" id="botLog">等待提问…</div>
+          </div>
         </div>`;
       document.getElementById("btnOpenKnotQaChat").onclick = () => openLink(KNOT_LINKS.knotQaChat);
       document.getElementById("btnOpenKnotQaAgent").onclick = () => openLink(KNOT_LINKS.knotQaAgent);
+      const btnDraft = document.getElementById("btnDraftGap");
+      if (btnDraft) {
+        btnDraft.onclick = () => {
+          addAudit("knowledge.gap_draft", "AI 起草");
+          const target = state.knowledgeGaps.find((g) => g.progress < 100);
+          if (target) target.progress = Math.min(100, target.progress + 18);
+          saveState();
+          renderAll();
+        };
+      }
+      const btnBotAsk = document.getElementById("btnBotAsk");
+      if (btnBotAsk) {
+        btnBotAsk.onclick = async () => {
+          const input = document.getElementById("botInput");
+          const log = document.getElementById("botLog");
+          if (!input || !log) return;
+          log.textContent = "处理中...";
+          const ans = await runBotQuery(input.value);
+          log.textContent = ans;
+          addAudit("bot.ask", input.value.trim() || "(empty)");
+        };
+      }
     }
 
     function renderCollab() {
